@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="cz.milandufek.dluzniceklite.MainActivity">
+
+    <item
+        android:id="@+id/action_manage_groups"
+        android:orderInCategory="101"
+        android:title="@string/action_manage_groups"
+        android:icon="@drawable/ic_group_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_export_data"
+        android:icon="@drawable/round_share_white_24"
+        android:orderInCategory="101"
+        android:title="@string/title_activity_export_data"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_manage_currencies"
+        android:orderInCategory="101"
+        android:title="@string/title_manage_currency"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="101"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,132 @@
+package cz.milandufek.dluzniceklite;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.milandufek.dluzniceklite.models.ExpenseItem;
+import cz.milandufek.dluzniceklite.models.ExpenseSummary;
+import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
+import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.utils.ExpenseRecyclerViewAdapter;
+import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+
+public class ListExpense extends Fragment {
+    private static final String TAG = "ListExpense";
+
+    private Context context;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.tab_main_expenses, container, false);
+
+        context = getActivity();
+
+        TextView summary = view.findViewById(R.id.tv_expense_summary);
+        ExpenseSummary summaryValues = initDataSummary();
+        String summaryTitle = getString(R.string.total_spent);
+        String currencyName = summaryValues.getCurrencyName();
+        String sumSpent = String.valueOf(summaryValues.getSumSpent());
+        summary.setText(summaryTitle + " " + sumSpent + " " + currencyName);
+
+        RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
+        ExpenseRecyclerViewAdapter adapter = new ExpenseRecyclerViewAdapter(context, recViewDataSet());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        return view;
+    }
+
+    /**
+     *  Load data from database and prepare them to display
+     */
+    private List<ExpenseItem> recViewDataSet() {
+        Log.d(TAG, "recViewDataSet: for Rec View");
+
+        List<ExpenseItem> expenseItems = new ArrayList<>();
+        int groupId = new MySharedPreferences(context).getActiveGroupId();
+        Cursor cursorExpenseItems = new ExpenseRepo().selectExpenseItems(groupId);
+        while (cursorExpenseItems.moveToNext()) {
+            ExpenseItem expenseItem = new ExpenseItem();
+            expenseItem.setId(cursorExpenseItems.getInt(0));
+            expenseItem.setPayer(cursorExpenseItems.getString(1));
+            expenseItem.setCurrency(cursorExpenseItems.getString(2));
+            expenseItem.setReason(cursorExpenseItems.getString(3));
+            expenseItem.setDate(cursorExpenseItems.getString(4));
+            expenseItem.setTime(cursorExpenseItems.getString(5));
+
+            // select all transactions related to the expense
+            String debtors = "";
+            double sum = 0;
+            Cursor selectTransactions = new TransactionRepo()
+                    .selectTransactionForExpense(expenseItem.getId());
+            while (selectTransactions.moveToNext()) {
+                debtors += selectTransactions.getString(0) + ", ";
+                sum += selectTransactions.getDouble(1);
+            }
+            selectTransactions.close();
+
+            debtors = debtors.substring(0, debtors.length() - 2);
+            expenseItem.setDebtors(debtors);
+            expenseItem.setAmount(sum);
+
+            expenseItems.add(expenseItem);
+        }
+        cursorExpenseItems.close();
+
+        return expenseItems;
+    }
+
+    /**
+     * TODO Summary table
+     * @return
+     */
+    private ExpenseSummary initDataSummary() {
+        MySharedPreferences sp = new MySharedPreferences(context);
+        int groupId = sp.getActiveGroupId();
+        int currencyId = sp.getActiveGroupCurrency();
+
+        String currencyName = new CurrencyRepo().getCurrencyName(currencyId);
+        Cursor cursorSummary = new ExpenseRepo().selectTotalSpent(groupId);
+
+        double sumAmountInBaseCurrency = 0;
+        while (cursorSummary.moveToNext()) {
+            int cId = cursorSummary.getInt(0);
+            if (cId != currencyId) {
+                int quantity = cursorSummary.getInt(2);
+                int exchangeRate = cursorSummary.getInt(3);
+                double amount = cursorSummary.getDouble(4);
+                sumAmountInBaseCurrency += ( amount / quantity * exchangeRate );
+            } else {
+                sumAmountInBaseCurrency += cursorSummary.getDouble(4);
+            }
+            Log.d(TAG, "initDataSummary: sum is: " + sumAmountInBaseCurrency);
+        }
+
+        sumAmountInBaseCurrency = new BigDecimal(sumAmountInBaseCurrency)
+                .setScale(2, RoundingMode.HALF_UP).doubleValue();
+        ExpenseSummary expenseSummary = new ExpenseSummary();
+        expenseSummary.setCurrencyName(currencyName);
+        expenseSummary.setSumSpent(sumAmountInBaseCurrency);
+
+        return expenseSummary;
+    }
+
+
+}

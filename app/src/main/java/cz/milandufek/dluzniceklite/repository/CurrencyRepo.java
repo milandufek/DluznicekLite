@@ -1,0 +1,147 @@
+package cz.milandufek.dluzniceklite.repository;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
+
+import cz.milandufek.dluzniceklite.models.Currency;
+import cz.milandufek.dluzniceklite.utils.DbHelper;
+
+public class CurrencyRepo implements BaseColumns {
+    private static final String TAG = "CurrencyRepo";
+
+    private Context context;
+
+    public static final String TABLE_NAME = "currencies";
+    static final String _NAME = "name";
+    private static final String _COUNTRY = "country";
+    static final String _QUANTITY = "quantity";
+    static final String _EXCHANGE_RATE = "exchange_rate";
+    private static final String _BASE_CURRENCY = "base_currency";
+    private static final String _IS_BASE_CURRENCY = "is_base_currency";
+    private static final String _IS_DELETABLE = "is_deletable";
+
+    private static final String[] ALL_COLS = { _ID, _NAME, _COUNTRY, _QUANTITY,
+            _EXCHANGE_RATE, _BASE_CURRENCY, _IS_BASE_CURRENCY, _IS_DELETABLE };
+
+    public static final String CREATE_TABLE_CURRENCY = "CREATE TABLE " + TABLE_NAME + " ( " +
+            _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            _NAME + " TEXT NOT NULL, " +
+            _COUNTRY + " TEXT NOT NULL, " +
+            _QUANTITY + " TEXT, " +
+            _EXCHANGE_RATE + " REAL NOT NULL, " +
+            _BASE_CURRENCY + " INTEGER NOT NULL, " +
+            _IS_BASE_CURRENCY + " INTEGER, " +
+            _IS_DELETABLE + " INTEGER " +
+            ");";
+
+    /**
+     * Insert a new row_currency into the database
+     * @param currency
+     * @return row id or -1 if error
+     */
+    public long insertCurrency(Currency currency) {
+        ContentValues values = new ContentValues();
+        // _ID
+        values.put(_NAME, currency.getName());
+        values.put(_COUNTRY, currency.getCountry());
+        values.put(_QUANTITY, currency.getQuantity());
+        values.put(_EXCHANGE_RATE, currency.getExchangeRate());
+        values.put(_BASE_CURRENCY, currency.getBaseCurrency());
+        values.put(_IS_BASE_CURRENCY, currency.getIsBaseCurrency());
+        values.put(_IS_DELETABLE, currency.getIsDeletable());
+
+        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        long id = db.insert(TABLE_NAME,null, values);
+
+        return id;
+    }
+
+    /**
+     *  Retrieve all data from row_currency table
+     * @return currencies
+     */
+    public Cursor getAllCurrency() {
+        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        return db.query(TABLE_NAME, ALL_COLS,null, null,null, null, _ID);
+    }
+
+    /**
+     * Select currency name based on its id
+     * @param id
+     * @return
+     */
+    public String getCurrencyName(int id) {
+        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        String[] cols = { _NAME };
+        String[] selectionArgs = { String.valueOf(id) };
+
+        Cursor cursor = db.query(TABLE_NAME, cols, _ID + " = ?", selectionArgs,
+                null, null, null, null);
+        cursor.moveToFirst();
+        String name = cursor.getString(0);
+        cursor.close();
+
+        return name;
+    }
+
+    /**
+     * Update a item_currency by given item_currency COL_ID
+     * Replace the current row_currency with @param 'contact'
+     * @param id
+     * @return
+     */
+    public Integer deleteCurrency(int id) {
+        String selection = _ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
+
+        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        int rows = db.delete(TABLE_NAME, selection, selectionArgs);
+
+        return rows;
+    }
+
+    /** TODO update
+     * Update a item_currency by given item_currency COL_ID
+     * Replace the current row_currency with @param 'contact'
+     * @param currency
+     * @return
+     */
+    public boolean updateCurrency(Currency currency) {
+        ContentValues values = new ContentValues();
+        int id = currency.getId();
+        values.put(_NAME, currency.getName());
+        values.put(_COUNTRY, currency.getCountry());
+        values.put(_QUANTITY, currency.getQuantity());
+        values.put(_EXCHANGE_RATE, currency.getExchangeRate());
+        values.put(_BASE_CURRENCY, currency.getBaseCurrency());
+        values.put(_IS_BASE_CURRENCY, currency.getIsBaseCurrency());
+        values.put(_IS_DELETABLE, currency.getIsDeletable());
+
+        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        int update = db.update(TABLE_NAME, values,
+                _ID + " = ? ", new String[] { String.valueOf(id) } );
+
+        return update == 1;
+    }
+
+    /**
+     * Check if currency with @param name exists in the database
+     * @param name
+     * @return
+     */
+    public boolean checkIfCurrencyExists(String name) {
+        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        String[] column = { _NAME };
+        String selection = _NAME + " = ?";
+        String[] selectionArgs = { name };
+
+        Cursor cursor = db.query(TABLE_NAME, column, selection, selectionArgs,null,null, null);
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+
+        return exists;
+    }
+}

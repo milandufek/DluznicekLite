@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding"
+    tools:context=".AddGroup">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_group_name2add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/group_name"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/et_group_name2add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_group_name2add"
+            android:hint="@string/group_name_hint"
+            android:textSize="26sp"
+            android:inputType="textCapSentences" />
+
+        <TextView
+            android:id="@+id/tv_group_member2add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_group_name2add"
+            android:text="@string/group_member_names"
+            android:textColor="@color/colorBlack" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btn_group_member2add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="?attr/actionBarItemBackground"
+            android:src="@drawable/round_add_circle_black_36" />
+
+        <EditText
+            android:id="@+id/et_group_member2add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@id/btn_group_member2add"
+            android:hint="@string/group_member_names_hint"
+            android:inputType="textCapSentences" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_group_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_group_selectcurrency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/select_currency"
+            android:textColor="@color/colorBlack" />
+
+        <Spinner
+            android:id="@+id/spinner_group_currency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_group_selectcurrency"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/btn_group_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/spinner_group_currency"
+            android:background="?attr/actionBarItemBackground"
+            android:drawableLeft="@drawable/round_check_black_36"
+            android:text="@string/save" />
+
+    </RelativeLayout>
+
+</LinearLayout>
+</ScrollView>
