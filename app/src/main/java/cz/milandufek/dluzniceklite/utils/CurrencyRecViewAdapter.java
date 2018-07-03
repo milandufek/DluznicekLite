@@ -21,14 +21,14 @@ import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Currency;
 
-public class CurrencyRecyclerViewAdapter
-        extends RecyclerView.Adapter<CurrencyRecyclerViewAdapter.ViewHolder> {
-    private static final String TAG = "CurrencyRecyclerViewAdapter";
+public class CurrencyRecViewAdapter
+        extends RecyclerView.Adapter<CurrencyRecViewAdapter.ViewHolder> {
+    private static final String TAG = "CurrencyRecViewAdapter";
 
     private Context context;
     private List<Currency> currency;
 
-    public CurrencyRecyclerViewAdapter(Context context, List<Currency> currency) {
+    public CurrencyRecViewAdapter(Context context, List<Currency> currency) {
         this.context = context;
         this.currency = currency;
     }

@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.R;
@@ -24,15 +23,15 @@ import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 
-public class GroupRecyclerViewAdapter
-        extends RecyclerView.Adapter<GroupRecyclerViewAdapter.ViewHolder> {
+public class GroupRecViewAdapter
+        extends RecyclerView.Adapter<GroupRecViewAdapter.ViewHolder> {
 
-    private static final String TAG = "GroupRecyclerViewAdapter";
+    private static final String TAG = "GroupRecViewAdapter";
 
     private Context context;
     private List<Group> groups;
 
-    public GroupRecyclerViewAdapter(Context context, List<Group> groups) {
+    public GroupRecViewAdapter(Context context, List<Group> groups) {
         this.context = context;
         this.groups = groups;
     }

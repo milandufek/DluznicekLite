@@ -15,22 +15,22 @@ import java.util.List;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 
-public class ExpenseRecyclerViewAdapter
-        extends RecyclerView.Adapter<ExpenseRecyclerViewAdapter.ViewHolder> {
+public class ExpenseRecViewAdapter
+        extends RecyclerView.Adapter<ExpenseRecViewAdapter.ViewHolder> {
 
     private static final String TAG = "ExpenseRecyclerViewAdap";
 
     private Context context;
     private List<ExpenseItem> expensesItems;
 
-    public ExpenseRecyclerViewAdapter(Context context, List<ExpenseItem> expensesItems) {
+    public ExpenseRecViewAdapter(Context context, List<ExpenseItem> expensesItems) {
         this.context = context;
         this.expensesItems = expensesItems;
     }
 
     @NonNull
     @Override
-    public ExpenseRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ExpenseRecViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: ");
 
         View view = LayoutInflater.from(parent.getContext())
@@ -39,7 +39,7 @@ public class ExpenseRecyclerViewAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExpenseRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ExpenseRecViewAdapter.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
         holder.expenseReason.setText(expensesItems.get(position).getReason());

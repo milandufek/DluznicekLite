@@ -23,7 +23,7 @@ import cz.milandufek.dluzniceklite.models.ExpenseSummary;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
-import cz.milandufek.dluzniceklite.utils.ExpenseRecyclerViewAdapter;
+import cz.milandufek.dluzniceklite.utils.ExpenseRecViewAdapter;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 
 public class ListExpense extends Fragment {
@@ -48,7 +48,7 @@ public class ListExpense extends Fragment {
         summarySum.setText(sumSpent);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
-        ExpenseRecyclerViewAdapter adapter = new ExpenseRecyclerViewAdapter(context, recViewDataSet());
+        ExpenseRecViewAdapter adapter = new ExpenseRecViewAdapter(context, recViewDataSet());
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

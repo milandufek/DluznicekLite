@@ -1,7 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,15 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.GroupRecyclerViewAdapter;
+import cz.milandufek.dluzniceklite.utils.GroupRecViewAdapter;
 
 public class ListGroups extends AppCompatActivity {
     private static final String TAG = "ListGroups";
@@ -50,7 +46,7 @@ public class ListGroups extends AppCompatActivity {
 
         List<Group> groups = new GroupRepo().getAllGroups();
 
-        GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groups);
+        GroupRecViewAdapter adapter = new GroupRecViewAdapter(this, groups);
 
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);
         recyclerView.setHasFixedSize(true);
