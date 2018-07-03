@@ -3,6 +3,7 @@ package cz.milandufek.dluzniceklite;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,18 +32,20 @@ public class ListExpense extends Fragment {
     private Context context;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_main_expenses, container, false);
 
         context = getActivity();
 
-        TextView summary = view.findViewById(R.id.tv_expense_summary);
+        TextView summaryTitle = view.findViewById(R.id.tv_expense_summary_title);
         ExpenseSummary summaryValues = initDataSummary();
-        String summaryTitle = getString(R.string.total_spent);
-        String currencyName = summaryValues.getCurrencyName();
-        String sumSpent = String.valueOf(summaryValues.getSumSpent());
-        summary.setText(summaryTitle + " " + sumSpent + " " + currencyName);
+        String titleText = getString(R.string.total_spent);
+        summaryTitle.setText(titleText);
+
+        TextView summarySum = view.findViewById(R.id.tv_expense_summary_amount);
+        String sumSpent = String.valueOf(summaryValues.getSumSpent()) + " " + summaryValues.getCurrencyName();
+        summarySum.setText(sumSpent);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
         ExpenseRecyclerViewAdapter adapter = new ExpenseRecyclerViewAdapter(context, recViewDataSet());
@@ -94,8 +97,8 @@ public class ListExpense extends Fragment {
     }
 
     /**
-     * TODO Summary table
-     * @return
+     * Select currency name and total amount spent, converted to active group base currency
+     * @return ExpenseSummary [ currencyName, totalSpent ]
      */
     private ExpenseSummary initDataSummary() {
         MySharedPreferences sp = new MySharedPreferences(context);
@@ -116,7 +119,7 @@ public class ListExpense extends Fragment {
             } else {
                 sumAmountInBaseCurrency += cursorSummary.getDouble(4);
             }
-            Log.d(TAG, "initDataSummary: sum is: " + sumAmountInBaseCurrency);
+            Log.d(TAG, "initDataSummary: sum = " + sumAmountInBaseCurrency);
         }
 
         sumAmountInBaseCurrency = new BigDecimal(sumAmountInBaseCurrency)

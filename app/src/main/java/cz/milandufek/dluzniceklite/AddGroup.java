@@ -24,6 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
@@ -110,7 +111,7 @@ public class AddGroup extends AppCompatActivity {
     private void saveBtnOnClick() {
         Log.d(TAG, "onClick: save button");
         String groupName = AddGroup.this.groupName.getText().toString();
-        if (checkIfStringIsEmpty(groupName)) {
+        if (groupName.equals("")) {
             Log.d(TAG, "onClick: item_group name empty " + groupName);
             Toast.makeText(context, "Název skupiny je prázdný...",
                     Toast.LENGTH_SHORT).show();
@@ -159,15 +160,10 @@ public class AddGroup extends AppCompatActivity {
         final ArrayList<Integer> currencyIds = new ArrayList<>();
         final ArrayList<String> currencyNames = new ArrayList<>();
 
-        // call DB and get all currencies
-        Cursor cursor = new CurrencyRepo().getAllCurrency();
-        if (cursor == null) {
-            Log.d(TAG, "onCreate: no currencies...");
-        } else {
-            while (cursor.moveToNext()) {
-                currencyIds.add(cursor.getInt(0));
-                currencyNames.add(cursor.getString(1));
-            }
+        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        for (int i = 0; currencies.size() > i; i++) {
+            currencyIds.add(currencies.get(i).getId());
+            currencyNames.add(currencies.get(i).getName());
         }
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
@@ -209,22 +205,13 @@ public class AddGroup extends AppCompatActivity {
      */
     private boolean checkIfGroupExists(String groupName) {
         ArrayList<String> groupsInDb = new ArrayList<>();
-        Cursor cursor = new CurrencyRepo().getAllCurrency();
-
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
-                    groupsInDb.add(cursor.getString(1));
-            }
-            cursor.close();
-            return groupsInDb.contains(groupName);
+        List<Group> groups = new GroupRepo().getAllGroups();
+        for (int i = 0; groups.size() > i; i++) {
+            groupsInDb.add(groups.get(i).getName());
         }
-        else {
-            return false;
-        }
-    }
-
-    private boolean checkIfStringIsEmpty(String string) {
-        return string.equals("");
+        // TODO direct compare?
+        //return groups.contains(groupName);
+        return groupsInDb.contains(groupName);
     }
 
     /**

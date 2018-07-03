@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Group;
@@ -21,16 +22,12 @@ import cz.milandufek.dluzniceklite.utils.GroupRecyclerViewAdapter;
 public class ListGroups extends AppCompatActivity {
     private static final String TAG = "ListGroups";
 
-    private ArrayList<Group> mGroup = new ArrayList<Group>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_groups);
         Log.d(TAG, "onCreate: started.");
 
-        // init data
-        initData();
         initRecyclerView();
 
         // Floating Button
@@ -46,36 +43,16 @@ public class ListGroups extends AppCompatActivity {
     }
 
     /**
-     * Load data from database and prepare then to display
-     */
-    private void initData() {
-        Log.d(TAG, "initData: listing groups...");
-
-        Cursor cursor = new GroupRepo().getAllGroups();
-
-        if (cursor == null) {
-            Log.d(TAG, "initData: No groups in DB...");
-            Toast.makeText(this, getString(R.string.toast_no_groups_found), Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                mGroup.add(new Group(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getInt(2),
-                        cursor.getString(3)));
-            }
-            cursor.close();
-        }
-    }
-
-    /**
      * Setup RecyclerView
      */
     public void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: settings up adapter...");
 
+        List<Group> groups = new GroupRepo().getAllGroups();
+
+        GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groups);
+
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);
-        GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, mGroup);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

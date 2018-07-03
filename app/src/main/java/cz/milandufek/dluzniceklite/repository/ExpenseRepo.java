@@ -109,7 +109,7 @@ public class ExpenseRepo implements BaseColumns {
                 " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                 " ORDER BY " + _DATE + ", " + _TIME +
-                ";";
+                " DESC;";
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
 
         return db.rawQuery(query, null, null);
@@ -119,6 +119,12 @@ public class ExpenseRepo implements BaseColumns {
      * Select summary
      */
     public Cursor selectTotalSpent(int groupId) {
+//        SELECT currencies._id, currencies.name, currencies.quantity, currencies.exchange_rate, SUM(transactions.amount)
+//        FROM expenses
+//        INNER JOIN currencies ON expenses.currency_id = currencies._id
+//        INNER JOIN transactions ON expenses._id = transactions.expense_id
+//        WHERE expenses.group_id = 1
+//        GROUP BY currencies.name;
         String query = "SELECT " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID + ", " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + ", " +

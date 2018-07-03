@@ -19,7 +19,7 @@ public class GroupMemberRepo implements BaseColumns {
     private Context context;
 
     public static final String TABLE_NAME = "group_members";
-    private static final String _GROUP_ID = "group_id";
+    static final String _GROUP_ID = "group_id";
     static final String _NAME = "name";
     private static final String _EMAIL = "email";
     private static final String _CONTACT = "contact";
@@ -101,6 +101,7 @@ public class GroupMemberRepo implements BaseColumns {
      * @param groupId
      * @return members of group
      */
+    // TODO predelat aby metoda vracela List<GroupMemebrs>
     public Cursor selectGroupMembers(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
@@ -148,8 +149,6 @@ public class GroupMemberRepo implements BaseColumns {
         String[] selectionArgs = { String.valueOf(id) };
 
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
-        int result = db.delete(TABLE_NAME, selection, selectionArgs);
-
-        return result;
+        return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 }

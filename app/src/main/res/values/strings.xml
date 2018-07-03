@@ -79,6 +79,6 @@
     <string name="howmuch_is_null">Částka není správně</string>
     <string name="toast_no_expense">Nejsou tu žádné výdaje</string>
 
-    <string name="total_spent">Celkem utraceno:</string>
+    <string name="total_spent">Celkem utraceno</string>
 
 </resources>

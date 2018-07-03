@@ -32,7 +32,7 @@ public class GroupRecyclerViewAdapter
     private Context context;
     private List<Group> groups;
 
-    public GroupRecyclerViewAdapter(Context context, ArrayList<Group> groups) {
+    public GroupRecyclerViewAdapter(Context context, List<Group> groups) {
         this.context = context;
         this.groups = groups;
     }
@@ -66,7 +66,7 @@ public class GroupRecyclerViewAdapter
         }
         groupInfo = groupInfo.substring(0, groupInfo.length() - 2);
 
-        // TODO dependency on the scree resolution
+        // TODO dependency on the screen resolution
         int maxInfoLength = 55;
         if (groupInfo.length() > maxInfoLength) {
             groupInfo = groupInfo.substring(0, maxInfoLength - 3);
@@ -133,16 +133,12 @@ public class GroupRecyclerViewAdapter
      * Change id and name of active group to first in the list
      */
     private void changeActiveGroupToFirstAvailable() {
-        Cursor cursor = new GroupRepo().getAllGroups();
-        cursor.moveToFirst();
-        int newActiveGroupId = cursor.getInt(0);
-        String newActiveGroupName = cursor.getString(1);
-        int newActiveGroupCurrency = cursor.getInt(2);
+        List<Group> groups = new GroupRepo().getAllGroups();
 
         MySharedPreferences sp = new MySharedPreferences(context);
-        sp.setActiveGroupId(newActiveGroupId);
-        sp.setActiveGroupName(newActiveGroupName);
-        sp.setActiveGroupCurrencyId(newActiveGroupCurrency);
+        sp.setActiveGroupId(groups.get(0).getId());
+        sp.setActiveGroupName(groups.get(0).getName());
+        sp.setActiveGroupCurrencyId(groups.get(0).getCurrency());
     }
 
     @Override

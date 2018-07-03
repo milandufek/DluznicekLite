@@ -85,7 +85,7 @@ public class AboutActivity extends AppCompatActivity {
                 GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
                 long gId;
 
-                Group group = new Group(1, "Runners", 1,"Prostě běžci...");
+                Group group = new Group(1, "Běžci", 1,"Prostě běžci...");
                 gId = groupRepo.insertGroup(group);
                 groupMembers.clear();
                 groupMembers.add(new GroupMember(0, (int)gId, "Milan", null, null, "Ironman", 1));
@@ -185,11 +185,11 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 1,1,1,"Kino", "10.6.2018", "23:26");
+                expense = new Expense(0, 1,1,2,"Závod", "10.6.2018", "23:26");
                 expensesId = expenseRepo.insertExpense(expense);
-                transactions.add(new Transaction(0, 1, (int)expensesId, 110));
-                transactions.add(new Transaction(0, 2, (int)expensesId, 110));
-                transactions.add(new Transaction(0, 4, (int)expensesId, 110));
+                transactions.add(new Transaction(0, 1, (int)expensesId, 11));
+                transactions.add(new Transaction(0, 2, (int)expensesId, 11));
+                transactions.add(new Transaction(0, 4, (int)expensesId, 11));
                 for (int i = 0; transactions.size() > i; i++) {
                     transactionRepo.insertTransaction(transactions.get(i));
                 }

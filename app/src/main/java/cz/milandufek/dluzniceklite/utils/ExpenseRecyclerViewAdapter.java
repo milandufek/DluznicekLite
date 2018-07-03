@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.R;
-import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 
 public class ExpenseRecyclerViewAdapter

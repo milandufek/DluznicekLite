@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 
@@ -54,18 +57,32 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_DELETABLE, currency.getIsDeletable());
 
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
-        long id = db.insert(TABLE_NAME,null, values);
-
-        return id;
+        return db.insert(TABLE_NAME,null, values);
     }
 
     /**
-     *  Retrieve all data from row_currency table
-     * @return currencies
+     * Retrieve all data from row_currency table
+     * @return List<Currency>
      */
-    public Cursor getAllCurrency() {
+    public List<Currency> getAllCurrency() {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        return db.query(TABLE_NAME, ALL_COLS,null, null,null, null, _ID);
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS,null, null,null, null, _ID);
+
+        List<Currency> currency = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            currency.add(new Currency(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getDouble(4),
+                    cursor.getInt(5),
+                    cursor.getInt(6),
+                    cursor.getInt(7)));
+        }
+        cursor.close();
+
+        return currency;
     }
 
     /**

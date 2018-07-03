@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 
@@ -69,13 +72,25 @@ public class GroupRepo implements BaseColumns {
     }
 
     /**
-     *  Retrieve all data
+     * Select all groups from database
      * @return
      */
-    public Cursor getAllGroups() {
+    public List<Group> getAllGroups() {
+        List<Group> groups = new ArrayList<>();
         SQLiteDatabase db =  DbHelper.getInstance(context).getReadableDatabase();
-        Cursor groups = db.query(TABLE_NAME, ALL_COLS, null, null,
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null,
                 null, null, _ID);
+
+        Group group;
+        while (cursor.moveToNext()) {
+            group = new Group();
+            group.setId(cursor.getInt(0));
+            group.setName(cursor.getString(1));
+            group.setCurrency(cursor.getInt(2));
+            group.setDescription(cursor.getString(3));
+            groups.add(group);
+        }
+        cursor.close();
 
         return groups;
     }
