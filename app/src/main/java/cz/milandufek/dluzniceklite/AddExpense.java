@@ -201,6 +201,12 @@ public class AddExpense extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item,
                 currencyNames);
         currency.setAdapter(spinnerAdapter);
+
+        // select active currency for group
+        int selectedItem = new MySharedPreferences(context).getActiveGroupCurrency();
+        currencySelectedId = currencyIds.indexOf(selectedItem);
+        currency.setSelection(currencySelectedId);
+
         currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -215,7 +221,7 @@ public class AddExpense extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // will not happen, hopefully...
+                // nothing
             }
         });
     }

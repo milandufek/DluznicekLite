@@ -48,7 +48,7 @@ public class GroupRecViewAdapter
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
         final String groupName = groups.get(position).getName();
         holder.groupName.setText(groupName);
@@ -93,8 +93,8 @@ public class GroupRecViewAdapter
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: " + groups.get(position).getName());
-                Toast.makeText(context, groups.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onClick: " + groups.get(holder.getAdapterPosition()).getName());
+                Toast.makeText(context, groups.get(holder.getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -102,7 +102,7 @@ public class GroupRecViewAdapter
         holder.groupDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: delete ID " + groups.get(position).getId());
+                Log.d(TAG, "onClick: delete ID " + groups.get(holder.getAdapterPosition()).getId());
                 AlertDialog.Builder builder = new AlertDialog.Builder(context)
                         .setTitle(R.string.really_want_to_delete_group)
                         .setMessage(groupName)
@@ -110,10 +110,10 @@ public class GroupRecViewAdapter
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 GroupRepo repo = new GroupRepo();
-                                repo.deleteGroup(groups.get(position).getId());
-                                groups.remove(position);
-                                notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, groups.size());
+                                repo.deleteGroup(groups.get(holder.getAdapterPosition()).getId());
+                                groups.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
+                                notifyItemRangeChanged(holder.getAdapterPosition(), groups.size());
                                 changeActiveGroupToFirstAvailable();
                             }
                         })

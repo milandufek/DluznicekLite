@@ -45,7 +45,7 @@ public class CurrencyRecViewAdapter
 
     @SuppressLint("LongLogTag")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called...");
 
         holder.parentLayout.setId(currency.get(position).getId());
@@ -57,10 +57,10 @@ public class CurrencyRecViewAdapter
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: item ID " + currency.get(position).getName());
+                Log.d(TAG, "onClick: item ID " + currency.get(holder.getAdapterPosition()).getName());
 
-                Toast.makeText(context,currency.get(position).getName()
-                                + " ID(" + currency.get(position).getId() + ")",
+                Toast.makeText(context,currency.get(holder.getAdapterPosition()).getName()
+                                + " ID(" + currency.get(holder.getAdapterPosition()).getId() + ")",
                         Toast.LENGTH_SHORT).show();
 
                 // TODO open to edit
@@ -79,18 +79,18 @@ public class CurrencyRecViewAdapter
         holder.currencyDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final int currencyId = currency.get(position).getId();
+                final int currencyId = currency.get(holder.getAdapterPosition()).getId();
                 Log.d(TAG, "onClick: delete ID " + currencyId);
                 AlertDialog.Builder builder = new AlertDialog.Builder(context)
                         .setTitle(R.string.really_want_to_delete_currency)
-                        .setMessage(currency.get(position).getName())
+                        .setMessage(currency.get(holder.getAdapterPosition()).getName())
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 CurrencyRepo db = new CurrencyRepo();
                                 db.deleteCurrency(currencyId);
-                                currency.remove(position);
-                                notifyItemRemoved(position);
+                                currency.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(holder.getAdapterPosition());
                                 notifyItemRangeChanged(0, currency.size());
                             }
                         })
@@ -114,6 +114,7 @@ public class CurrencyRecViewAdapter
      *  Recycler View Holder
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
+    //protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView currencyName;
         TextView currencyValue;
         ImageButton currencyDelete;
@@ -122,14 +123,54 @@ public class CurrencyRecViewAdapter
         private ViewHolder(View itemView) {
             super(itemView);
 
+            parentLayout = itemView.findViewById(R.id.itemCurrency);
+            //parentLayout.setOnClickListener(this);
+
             currencyName = itemView.findViewById(R.id.tv_currency_name);
-            //currencyName.setOnClickListener(this);
+
             currencyValue = itemView.findViewById(R.id.tv_currency_value);
+
             currencyDelete = itemView.findViewById(R.id.ibtn_currency_remove);
             //currencyDelete.setOnClickListener(this);
-            parentLayout = itemView.findViewById(R.id.itemCurrency);
         }
 
-        // TODO predelat ViewHolder aby implementoval View.OnClickListener
+        // TODO doesn't work
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()) {
+//                case R.id.ibtn_currency_remove:
+//                    final int currencyId = currency.get(getAdapterPosition()).getId();
+//                    Log.d(TAG, "onClick: delete ID " + currencyId);
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(context)
+//                            .setTitle(R.string.really_want_to_delete_currency)
+//                            .setMessage(currency.get(getAdapterPosition()).getName())
+//                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    CurrencyRepo db = new CurrencyRepo();
+//                                    db.deleteCurrency(currencyId);
+//                                    currency.remove(getAdapterPosition());
+//                                    notifyItemRemoved(getAdapterPosition());
+//                                    notifyItemRangeChanged(0, currency.size());
+//                                }
+//                            })
+//                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    // nothing
+//                                }
+//                            });
+//                    builder.show();
+//                    break;
+//
+//                case R.id.tv_currency_name:
+//                    Log.d(TAG, "onClick: item ID " + currency.get(this.getAdapterPosition()).getName());
+//
+//                    Toast.makeText(context,currency.get(this.getAdapterPosition()).getName()
+//                                    + " ID(" + currency.get(this.getAdapterPosition()).getId() + ")",
+//                            Toast.LENGTH_SHORT).show();
+//                    break;
+//            }
+//        }
     }
 }
