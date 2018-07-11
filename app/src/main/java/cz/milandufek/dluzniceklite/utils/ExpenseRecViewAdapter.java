@@ -3,6 +3,7 @@ package cz.milandufek.dluzniceklite.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +53,8 @@ public class ExpenseRecViewAdapter
         String debtors = expensesItems.get(position).getDebtors();
         String date = expensesItems.get(position).getDate();
         String time = expensesItems.get(position).getTime();
-        String info = date + " " + time + " @ " + payer + " zaplatil(a) za ( " + debtors + " )";
+
+        String info = date + " " + time + " \u2022 " + payer + " zaplatil(a) za " + debtors + " ";
         holder.expenseInfo.setText(info);
     }
 

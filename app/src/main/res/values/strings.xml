@@ -80,5 +80,6 @@
     <string name="toast_no_expense">Nejsou tu žádné výdaje</string>
 
     <string name="total_spent">Celkem utraceno</string>
+    <string name="paid_for">zaplatil(a) za</string>
 
 </resources>

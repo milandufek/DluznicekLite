@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <CheckBox
-        android:id="@+id/chbox_payment_member"
+        android:id="@+id/chbox_expense_member"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -14,10 +14,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".30"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack" />
 
     <EditText
-        android:id="@+id/et_payment_ratio"
+        android:id="@+id/et_expense_ratio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="viewEnd"
@@ -25,15 +26,16 @@
         android:inputType="number" />
 
     <TextView
-        android:id="@+id/tv_payment_ratio"
+        android:id="@+id/tv_expense_ratio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
         android:layout_weight=".10"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack" />
 
     <EditText
-        android:id="@+id/et_payment_amount"
+        android:id="@+id/et_expense_amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".20"
@@ -42,11 +44,12 @@
         android:textAlignment="viewEnd" />
 
     <TextView
-        android:id="@+id/tv_payment_currency"
+        android:id="@+id/tv_expense_currency"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".10"
         android:textAlignment="viewStart"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/colorBlack" />
 
 </LinearLayout>

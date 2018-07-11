@@ -2,7 +2,6 @@ package cz.milandufek.dluzniceklite;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,9 +29,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 
@@ -56,7 +57,7 @@ public class AddExpense extends AppCompatActivity {
     private TextView forAllInfo;
     private RadioGroup typeCalculation;
     private RadioButton rbtnRatio, rbtnPercent;
-    private LinearLayout container;
+    private LinearLayout whoPaysContainer;
     private EditText reason;
     private TextView date;
     private DatePickerDialog.OnDateSetListener dateSetListener;
@@ -71,11 +72,11 @@ public class AddExpense extends AppCompatActivity {
         howMuch = (EditText)       findViewById(R.id.et_payment_howmuch);
         currency = (Spinner)       findViewById(R.id.spinner_payment_currency);
         forAll = (CheckBox)        findViewById(R.id.chbox_payment_forall);
-        forAllInfo = (TextView)    findViewById(R.id.tv_playment_forallinfo);
+        forAllInfo = (TextView)    findViewById(R.id.tv_payment_forallinfo);
         typeCalculation = (RadioGroup) findViewById(R.id.rbtng_payment_ratio);
         rbtnRatio = (RadioButton)  findViewById(R.id.rbtn_payment_ratio);
         rbtnPercent = (RadioButton)findViewById(R.id.rbtn_payment_percentage);
-        container = (LinearLayout) findViewById(R.id.ll_payment_container);
+        whoPaysContainer = (LinearLayout) findViewById(R.id.ll_payment_container);
         reason = (EditText)        findViewById(R.id.et_payment_reason);
         date = (TextView)          findViewById(R.id.et_payment_date);
         btnAdd = (Button)          findViewById(R.id.btn_payment_add);
@@ -87,20 +88,22 @@ public class AddExpense extends AppCompatActivity {
         howMuch.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String forAllInfoText = getString(R.string.payment_for_all);
+                forAllInfoText += " ( " + String.valueOf(memberNames.size());
                 if (s.toString().trim().length() > 0) {
                     float amount = Float.valueOf(s.toString()) / memberNames.size();
                     amount = Math.round(amount * 100f) / 100f;
-                    // rewrite items in LL container
-                    for (int i = 0; i < memberNames.size(); i++) {
-                        View thisChild = container.getChildAt(i);
-                        EditText child = thisChild.findViewById(R.id.et_payment_amount);
-                        child.setText(String.valueOf(amount));
-                    }
+                    // rewrite items in LL whoPaysContainer
+                    updateWhoPaysContainer();
                     // update summary in TextView
-                    String forAllInfo = getString(R.string.payment_for_all);
-                    forAllInfo += " ( " + String.valueOf(memberNames.size()) + " x ";
-                    forAllInfo += String.valueOf(amount) + " " + currencySelectedName + " )";
-                    AddExpense.this.forAllInfo.setText(forAllInfo);
+                    forAllInfoText += " x ";
+                    forAllInfoText += String.valueOf(amount) + " " + currencySelectedName;
+                }
+                forAllInfoText += " )";
+                forAllInfo.setText(forAllInfoText);
+
+                if (! forAll.isChecked()) {
+                    updateWhoPaysContainer();
                 }
             }
 
@@ -125,8 +128,8 @@ public class AddExpense extends AppCompatActivity {
         // change ratio / percentage calculation of payment split
         setupRationRButtons();
 
-        // setup container with group members and payments
-        setupContainerForPayments();
+        // setup whoPaysContainer with group members and payments
+        setupWhoPaysContainer();
 
         // setup date text view & date picker
         setupDatePicker();
@@ -135,14 +138,21 @@ public class AddExpense extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String howMuch = AddExpense.this.howMuch.getText().toString().trim();
-                if (howMuch.length() <= 0 || howMuch.equals("0")) {
+                String howMuchText = howMuch.getText().toString().trim();
+                if (howMuchText.length() <= 0 || howMuchText.equals("0")) {
                     Toast.makeText(context, getString(R.string.howmuch_is_null),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    // TODO save payment
                     Toast.makeText(context, getString(R.string.saved),
                             Toast.LENGTH_SHORT).show();
+
+                    if (forAll.isChecked()) {
+                        // TODO save payment for all
+                        ExpenseRepo expenseRepo = new ExpenseRepo();
+                    } else {
+                        // TODO save payment for selected members
+                        ExpenseRepo expenseRepo = new ExpenseRepo();
+                    }
                 }
             }
         });
@@ -212,9 +222,9 @@ public class AddExpense extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currencySelectedId = currencyIds.get(position);
                 currencySelectedName = currencyNames.get(position);
-                for (int i = 0; i < container.getChildCount(); i++) {
-                    View thisChild = container.getChildAt(i);
-                    TextView currency = thisChild.findViewById(R.id.tv_payment_currency);
+                for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
+                    View thisChild = whoPaysContainer.getChildAt(i);
+                    TextView currency = thisChild.findViewById(R.id.tv_expense_currency);
                     currency.setText(currencyNames.get(position));
                 }
             }
@@ -229,48 +239,163 @@ public class AddExpense extends AppCompatActivity {
     /**
      *  Setup linear layout dynamically based on the numer of members and filled data
      */
-    private void setupContainerForPayments() {
+    private void setupWhoPaysContainer() {
         String percentagePerPerson = String.valueOf(getPercentagePerMember());
         for (int i = 0; i < memberNames.size(); i++) {
             LayoutInflater layoutInflater =
                     (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert layoutInflater != null;
-            final View addView = layoutInflater.inflate(R.layout.item_payment_member, null);
+            final View addView = layoutInflater.inflate(R.layout.item_expense_member, null);
 
-            CheckBox willPay = addView.findViewById(R.id.chbox_payment_member);
+            final TextView memberName = addView.findViewById(R.id.tv_payment_member);
+            memberName.setText(memberNames.get(i));
+
+            final EditText memberRation = addView.findViewById(R.id.et_expense_ratio);
+            memberRation.setText(percentagePerPerson);
+            memberRation.setTag(memberRation.getKeyListener());
+            memberRation.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // TODO change text listener
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            final TextView ratio = addView.findViewById(R.id.tv_expense_ratio);
+            ratio.setText("%");
+
+            final EditText memberAmount = addView.findViewById(R.id.et_expense_amount);
+            memberAmount.setText("");
+            memberAmount.setTag(memberAmount.getKeyListener());
+            memberAmount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // TODO change text listener
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            final TextView currency = addView.findViewById(R.id.tv_expense_currency);
+            currency.setText("");
+
+            CheckBox willPay = addView.findViewById(R.id.chbox_expense_member);
             willPay.setChecked(true);
             willPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (! isChecked) {
+                        int colorIfNotChecked = getResources().getColor(R.color.colorGray);
+                        memberName.setTextColor(colorIfNotChecked);
 
+                        memberRation.setText("");
+                        memberRation.setTextColor(colorIfNotChecked);
+                        memberRation.setVisibility(View.GONE);
+                        memberRation.setKeyListener(null);
+
+                        ratio.setVisibility(View.GONE);
+
+                        memberAmount.setText("0");
+                        memberAmount.setVisibility(View.GONE);
+                        memberAmount.setTextColor(colorIfNotChecked);
+                        memberAmount.setKeyListener(null);
+
+                        currency.setVisibility(View.GONE);
+                    } else {
+                        int colorIfChecked = getResources().getColor(R.color.colorBlack);
+                        memberName.setTextColor(colorIfChecked);
+
+                        String textRatio;
+                        if (rbtnPercent.isChecked()) {
+                            textRatio = String.valueOf(getPercentagePerMember(getCountMembersSelected()));
+                        } else {
+                            textRatio = "1";
+                        }
+                        memberRation.setText(textRatio);
+                        memberRation.setTextColor(colorIfChecked);
+                        memberRation.setVisibility(View.VISIBLE);
+                        memberRation.setKeyListener((KeyListener) memberRation.getTag());
+
+                        ratio.setVisibility(View.VISIBLE);
+
+                        memberAmount.setText("0"); // TODO
+                        memberAmount.setTextColor(colorIfChecked);
+                        memberAmount.setVisibility(View.VISIBLE);
+                        memberAmount.setKeyListener((KeyListener) memberAmount.getTag());
+
+                        currency.setVisibility(View.VISIBLE);
                     }
+
+                    updateWhoPaysContainer();
                 }
             });
 
-            TextView memberName = addView.findViewById(R.id.tv_payment_member);
-            memberName.setText(memberNames.get(i));
-            EditText memberRation = addView.findViewById(R.id.et_payment_ratio);
-            memberRation.setText(percentagePerPerson);
-            TextView ratio = addView.findViewById(R.id.tv_payment_ratio);
-            ratio.setText("%");
-            EditText memberAmount = addView.findViewById(R.id.et_payment_amount);
-            memberAmount.setText("0");
-            TextView currency = addView.findViewById(R.id.tv_payment_currency);
-            currency.setText("Kč");
-
-            container.addView(addView);
+            whoPaysContainer.addView(addView);
         }
     }
 
     /**
-     *  Get all members in liner layout container
+     * Generate / update the LL whoPaysContainer with members who will pay
      */
-    private ArrayList<String> getAllMembers() {
-        ArrayList<String> members =  new ArrayList<>();
-        int childCount = container.getChildCount();
+    private void updateWhoPaysContainer() {
+        String textAmount = String.valueOf(howMuch.getText());
+        float amountPerMember;
+        if (textAmount.length() > 0) {
+            amountPerMember = Float.valueOf(textAmount);
+            amountPerMember = amountPerMember / getCountMembersSelected();
+            amountPerMember = Math.round(amountPerMember * 100f) / 100f;
+        } else {
+            amountPerMember = 0;
+        }
+
+        for (int i = 0; i < memberNames.size(); i++) {
+            View memberLine = whoPaysContainer.getChildAt(i);
+
+            CheckBox childPayerCheckBox = memberLine.findViewById(R.id.chbox_expense_member);
+            if (childPayerCheckBox.isChecked()) {
+                EditText childRatioValue  = memberLine.findViewById(R.id.et_expense_ratio);
+                TextView childRatio = memberLine.findViewById(R.id.tv_expense_ratio);
+                if (rbtnPercent.isChecked()) {
+                    childRatioValue.setText(String.valueOf(getPercentagePerMember(getCountMembersSelected())));
+                    childRatio.setText("%");
+                } else {
+                    childRatioValue.setText("1");
+                    String ratioText = "/";
+                    ratioText += String.valueOf(getCountMembersSelected());
+                    childRatio.setText(ratioText);
+                }
+
+                EditText childAmount = memberLine.findViewById(R.id.et_expense_amount);
+                childAmount.setText(String.valueOf(amountPerMember));
+            }
+        }
+    }
+
+    /**
+     *  Get all members in liner layout whoPaysContainer
+     */
+    private List<String> getAllMembers() {
+        List<String> members =  new ArrayList<>();
+        int childCount = whoPaysContainer.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            View thisChild = container.getChildAt(i);
+            View thisChild = whoPaysContainer.getChildAt(i);
             EditText childEditText = thisChild.findViewById(R.id.tv_payment_member);
             members.add(childEditText.getText().toString());
         }
@@ -278,17 +403,42 @@ public class AddExpense extends AppCompatActivity {
     }
 
     /**
-     *  Calculate percentage for each member
+     * Get count of all members in group
+     * @return
      */
-    private float getPercentagePerMember() {
-        int memberCount = memberNames.size();
-        Log.d(TAG, "getPercentagePerMember: childs " + memberCount);
-        return Math.round((float) 100 / (float) memberCount * 100f) / 100f;
+    private int getCountMembers() {
+        return memberNames.size();
     }
 
     /**
-     *  Setup date picker
-     *  Set today as a default value
+     * Get count of selected member to pay
+     * @return
+     */
+    private int getCountMembersSelected() {
+        int payersSelected = 0;
+        for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
+            View child = whoPaysContainer.getChildAt(i);
+            CheckBox checkBox = child.findViewById(R.id.chbox_expense_member);
+            if (checkBox.isChecked()) {
+                payersSelected++;
+            }
+        }
+        return payersSelected;
+    }
+
+    /**
+     * Calculate percentage for each member
+     */
+    private float getPercentagePerMember() {
+        return Math.round((float) 100 / (float) getCountMembers() * 100f) / 100f;
+    }
+    private float getPercentagePerMember(int membersSelected) {
+        return Math.round((float) 100 / (float) membersSelected * 100f) / 100f;
+    }
+
+    /**
+     * Setup date picker
+     * Set today as a default value
      */
     private void setupDatePicker() {
         // set today as a date
@@ -299,16 +449,14 @@ public class AddExpense extends AppCompatActivity {
         String monthZero = "";
         String dayZero = "";
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (month < 10)
-            monthZero = "0";
-        if (day < 10)
-            dayZero = "0";
+        if (month < 10) { monthZero = "0"; }
+        if (day < 10)   { dayZero   = "0"; }
         String dateDb = year + monthZero + month + "." + dayZero + day + ".";
         String dateShow = dayZero + day + "." + monthZero + month + "." + year;
-        this.date.setText(dateShow);
+        date.setText(dateShow);
 
         // set date from calendar
-        this.date.setOnClickListener(new View.OnClickListener() {
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
@@ -321,7 +469,8 @@ public class AddExpense extends AppCompatActivity {
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener,
                         year, month, day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Objects.requireNonNull(dialog.getWindow())
+                        .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
@@ -343,24 +492,7 @@ public class AddExpense extends AppCompatActivity {
         typeCalculation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton rb = (RadioButton) group.findViewById(checkedId);
-                String ratioText, ratioValueText;
-                if (checkedId == R.id.rbtn_payment_percentage) {
-                    ratioText = "%";
-                    ratioValueText = String.valueOf(getPercentagePerMember());
-                } else {
-                    ratioText = "/";
-                    ratioText += String.valueOf(memberNames.size());
-                    ratioValueText = "1";
-                }
-
-                for (int i = 0; i < memberNames.size(); i++) {
-                    View thisChild = container.getChildAt(i);
-                    TextView ratio = thisChild.findViewById(R.id.tv_payment_ratio);
-                    ratio.setText(ratioText);
-                    EditText ratioValue = thisChild.findViewById(R.id.et_payment_ratio);
-                    ratioValue.setText(ratioValueText);
-                }
+                updateWhoPaysContainer();
             }
         });
     }
@@ -375,18 +507,21 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    String forAllInfo = getString(R.string.payment_for_all);
-                    forAllInfo += " ( " + String.valueOf(memberNames.size()) + " )";
-                    AddExpense.this.forAllInfo.setText(forAllInfo);
-                    AddExpense.this.forAllInfo.setVisibility(View.VISIBLE);
+                    String forAllInfoText = getString(R.string.payment_for_all);
+                    forAllInfoText += " ( " + String.valueOf(memberNames.size()) + " )";
+                    forAllInfo.setText(forAllInfoText);
+                    forAllInfo.setVisibility(View.VISIBLE);
                     rbtnRatio.setVisibility(View.GONE);
                     rbtnPercent.setVisibility(View.GONE);
-                    container.setVisibility(View.GONE);
+
+                    whoPaysContainer.setVisibility(View.GONE);
                 } else {
                     forAllInfo.setVisibility(View.GONE);
                     rbtnRatio.setVisibility(View.VISIBLE);
                     rbtnPercent.setVisibility(View.VISIBLE);
-                    container.setVisibility(View.VISIBLE);
+
+                    whoPaysContainer.setVisibility(View.VISIBLE);
+                    updateWhoPaysContainer();
                 }
             }
         });
