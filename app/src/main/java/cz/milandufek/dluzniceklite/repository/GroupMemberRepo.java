@@ -62,6 +62,11 @@ public class GroupMemberRepo implements BaseColumns {
         return db.insert(TABLE_NAME,null, values);
     }
 
+    /**
+     * Insert multiple group member into database
+     * @param groupMembers
+     * @return number of rows affected
+     */
     public long insertGroupMembers(List<GroupMember> groupMembers) {
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
         int rowsAffected = 0;

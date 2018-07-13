@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
@@ -50,6 +53,41 @@ public class TransactionRepo implements BaseColumns {
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
 
         return db.insert(TABLE_NAME,null, values);
+    }
+
+    /**
+     * Insert multiple transaction into database
+     * @param transactions
+     * @return number of rows affected
+     */
+    public long insertTransactions(List<Transaction> transactions) {
+        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        int rowsAffected = 0;
+        int transactionsCount = transactions.size();
+        try {
+            db.beginTransaction();
+            for (int i = 0; transactionsCount > i; i++) {
+                ContentValues values = new ContentValues();
+                values.put(_DEBTOR_ID, transactions.get(i).getDebtor_id());
+                values.put(_EXPENSE_ID, transactions.get(i).getExpense_id());
+                values.put(_AMOUNT, transactions.get(i).getAmount());
+
+                if(db.insert(TABLE_NAME,null, values) > -1) {
+                    rowsAffected++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+
+        if (transactionsCount == rowsAffected) {
+            return rowsAffected;
+        } else {
+            return -1;
+        }
     }
 
     /**

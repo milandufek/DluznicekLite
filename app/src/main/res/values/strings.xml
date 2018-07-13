@@ -73,13 +73,14 @@
     <string name="reason">Předmět platby</string>
     <string name="text_reason">Večeře…</string>
     <string name="for_all">Za všechny</string>
-    <string name="ratio">Podíly</string>
-    <string name="percentage">Procenty</string>
+    <string name="ratio">Podílově</string>
+    <string name="manually">Ručně</string>
     <string name="payment_for_all">Platba za všechny členy</string>
     <string name="howmuch_is_null">Částka není správně</string>
     <string name="toast_no_expense">Nejsou tu žádné výdaje</string>
 
     <string name="total_spent">Celkem utraceno</string>
     <string name="paid_for">zaplatil(a) za</string>
+
 
 </resources>

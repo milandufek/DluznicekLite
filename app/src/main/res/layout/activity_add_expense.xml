@@ -88,21 +88,22 @@
             android:id="@+id/rbtng_payment_ratio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/padding">
 
             <RadioButton
                 android:id="@+id/rbtn_payment_ratio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/ratio"
-                android:checked="false" />
+                android:checked="true" />
 
             <RadioButton
-                android:id="@+id/rbtn_payment_percentage"
+                android:id="@+id/rbtn_payment_manually"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/percentage"
-                android:checked="true" />
+                android:checked="false"
+                android:text="@string/manually" />
 
         </RadioGroup>
 

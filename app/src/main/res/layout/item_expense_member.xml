@@ -1,55 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
     <CheckBox
         android:id="@+id/chbox_expense_member"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_payment_member"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".30"
+        android:layout_marginTop="10dp"
+        android:text="member"
+        android:textColor="@color/colorBlack"
         android:textSize="18sp"
-        android:textColor="@color/colorBlack" />
+        app:layout_constraintStart_toEndOf="@+id/chbox_expense_member"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_expense_ratio"
-        android:layout_width="0dp"
+    <ImageButton
+        android:id="@+id/ibtn_expense_ratiominus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"
-        android:layout_weight=".20"
-        android:inputType="number" />
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="6dp"
+        android:background="?attr/actionBarItemBackground"
+        android:padding="8dp"
+        android:src="@drawable/round_remove_circle_black_18"
+        app:layout_constraintEnd_toStartOf="@+id/tv_expense_ratio_value"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_expense_ratio"
-        android:layout_width="0dp"
+        android:id="@+id/tv_expense_ratio_value"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        android:layout_weight=".10"
+        android:layout_marginTop="10dp"
+        android:text="value"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/colorBlack"
         android:textSize="18sp"
-        android:textColor="@color/colorBlack" />
+        app:layout_constraintEnd_toStartOf="@+id/tv_expense_ratio_separator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_expense_ratio_separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="/"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/tv_expense_ratio_total"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_expense_ratio_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="10dp"
+        android:text="total"
+        android:textAlignment="viewStart"
+        android:textColor="@color/colorBlack"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/ibtn_expense_ratioplus"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibtn_expense_ratioplus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="6dp"
+        android:background="?attr/actionBarItemBackground"
+        android:padding="8dp"
+        android:src="@drawable/round_add_circle_black_18"
+        app:layout_constraintEnd_toStartOf="@+id/et_expense_amount"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/et_expense_amount"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".20"
         android:inputType="numberDecimal"
-        android:text=""
-        android:textAlignment="viewEnd" />
+        android:text="111"
+        android:textAlignment="viewEnd"
+        app:layout_constraintEnd_toStartOf="@+id/tv_expense_currency"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_expense_currency"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight=".10"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:text="X"
         android:textAlignment="viewStart"
+        android:textColor="@color/colorBlack"
         android:textSize="18sp"
-        android:textColor="@color/colorBlack" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
