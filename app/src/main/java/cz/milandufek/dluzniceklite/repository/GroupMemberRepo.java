@@ -104,16 +104,29 @@ public class GroupMemberRepo implements BaseColumns {
     /**
      * Retrieve all data
      * @param groupId
-     * @return members of group
+     * @return List of group members
      */
-    // TODO predelat aby metoda vracela List<GroupMemebrs>
-    public Cursor selectGroupMembers(int groupId) {
+    public List<GroupMember> selectGroupMembers(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
 
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        Cursor members = db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
                 null, null, _NAME);
+
+        List<GroupMember> members = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            GroupMember member = new GroupMember();
+            member.setId(cursor.getInt(0));
+            member.setGroupId(cursor.getInt(1));
+            member.setName(cursor.getString(2));
+            member.setEmail(cursor.getString(3));
+            member.setContact(cursor.getString(4));
+            member.setDescription(cursor.getString(5));
+            member.setIsMe(cursor.getInt(6));
+            members.add(member);
+        }
+        cursor.close();
 
         return members;
     }

@@ -39,6 +39,7 @@ import java.util.Objects;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Expense;
+import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
@@ -51,7 +52,6 @@ public class AddExpense extends AppCompatActivity {
 
     private Context context = this;
     private int whoPaysIdSelected;
-    private String whoPaysNameSelected;
     private int currencySelectedId;
     private String currencySelectedName;
     private int totalRatiosToPay;
@@ -67,13 +67,11 @@ public class AddExpense extends AppCompatActivity {
     private TextView forAllInfo;
     private RadioGroup typeCalculation;
     private RadioButton rbtnRatio, rbtManually;
-    private ImageButton ibtnRatioPlus, ibtnRatioMinus;
     private LinearLayout whoPaysContainer;
     private EditText reason;
     private TextView date, time;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog.OnTimeSetListener timeSetListener;
-    private Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +85,12 @@ public class AddExpense extends AppCompatActivity {
         forAllInfo = (TextView)    findViewById(R.id.tv_payment_forallinfo);
         typeCalculation = (RadioGroup) findViewById(R.id.rbtng_payment_ratio);
         rbtnRatio = (RadioButton)   findViewById(R.id.rbtn_payment_ratio);
-        ibtnRatioPlus =  (ImageButton) findViewById(R.id.ibtn_expense_ratioplus);
-        ibtnRatioMinus = (ImageButton) findViewById(R.id.ibtn_expense_ratiominus);
         rbtManually = (RadioButton) findViewById(R.id.rbtn_payment_manually);
         whoPaysContainer = (LinearLayout) findViewById(R.id.ll_payment_container);
         reason = (EditText)        findViewById(R.id.et_payment_reason);
         date = (TextView)          findViewById(R.id.et_payment_date);
         time = (TextView)          findViewById(R.id.et_payment_time);
-        btnAdd = (Button)          findViewById(R.id.btn_payment_add);
+        Button btnAdd = findViewById(R.id.btn_payment_add);
 
         totalRatiosToPay = getCountMembers();
 
@@ -146,62 +142,15 @@ public class AddExpense extends AppCompatActivity {
                     Toast.makeText(context, getString(R.string.howmuch_is_null),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Expense expense = new Expense();
-                    expense.setId(0);
-                    expense.setPayerId(whoPaysIdSelected);
-                    expense.setGroupId(new MySharedPreferences(context).getActiveGroupId());
-                    expense.setCurrencyId(currencySelectedId);
-                    String reasonText = reason.getText().toString();
-                    if (reasonText.isEmpty()) {
-                        reasonText = getString(R.string.reason_empty);
-                    }
-                    expense.setReason(reasonText);
-                    expense.setDate(dateDb);
-                    expense.setTime(timeDb);
-
-                    ExpenseRepo expenseRepo = new ExpenseRepo();
-                    long newExpenseId = expenseRepo.insertExpense(expense);
-                    List<Transaction> transactions = new ArrayList<>();
-                    double expensePerMember;
-                    CheckBox willPay;
-
-                    for (int i = 0; i < getCountMembers(); i++) {
-                        if (forAll.isChecked()) {
-                            expensePerMember = getHowMuchTotal() / getCountMembers();
-                            willPay = forAll;
-                        } else {
-                            View memberLine;
-                            EditText amountPerMemberTv;
-                            memberLine = whoPaysContainer.getChildAt(i);
-                            willPay = memberLine.findViewById(R.id.chbox_expense_member);
-                            amountPerMemberTv = memberLine.findViewById(R.id.et_expense_amount);
-                            if (amountPerMemberTv.getText().toString().trim().length() > 0) {
-                                expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString());
-                            } else {
-                                expensePerMember = 0;
-                            }
-                        }
-
-                        if (willPay.isChecked()) {
-                            Transaction transaction = new Transaction();
-                            transaction.setId(0);
-                            transaction.setDebtor_id(memberIds.get(i));
-                            transaction.setAmount(expensePerMember);
-                            transaction.setExpense_id((int) newExpenseId);
-                            transactions.add(transaction);
-                        }
-                    }
-
-                    TransactionRepo transactionRepo = new TransactionRepo();
-                    long resultInsertTransaction = transactionRepo.insertTransactions(transactions);
-
-                    if (resultInsertTransaction > -1) {
+                    if (saveExpense()) {
                         Toast.makeText(context, getString(R.string.saved),
                                 Toast.LENGTH_SHORT).show();
+                        finish();
                         startActivity(getParentActivityIntent());
                     } else {
                         Log.d(TAG, "Cannot insert data...");
-                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.error),
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -213,10 +162,10 @@ public class AddExpense extends AppCompatActivity {
      */
     private void selectAllGroupMembers() {
         int groupId = new MySharedPreferences(context).getActiveGroupId();
-        Cursor allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
-        while (allGroupMembers.moveToNext()) {
-            memberIds.add(allGroupMembers.getInt(0));
-            memberNames.add(allGroupMembers.getString(2));
+        List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
+        for (int i = 0; i < allGroupMembers.size(); i++) {
+            memberIds.add(allGroupMembers.get(i).getId());
+            memberNames.add(allGroupMembers.get(i).getName());
         }
     }
 
@@ -231,7 +180,6 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 whoPaysIdSelected = memberIds.get(position);
-                whoPaysNameSelected = memberNames.get(position);
             }
 
             @Override
@@ -537,7 +485,7 @@ public class AddExpense extends AppCompatActivity {
 
     /**
      * Get count of all members in group
-     * @return
+     * @return int
      */
     private int getCountMembers() {
         return memberNames.size();
@@ -545,7 +493,7 @@ public class AddExpense extends AppCompatActivity {
 
     /**
      * Get count of selected member to pay
-     * @return
+     * @return int
      */
     private int getCountMembersSelected() {
         int payersSelected = 0;
@@ -809,5 +757,63 @@ public class AddExpense extends AppCompatActivity {
             assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    /**
+     * Insert expense and all related transaction into database
+     * @return true if success
+     */
+    private boolean saveExpense() {
+        Expense expense = new Expense();
+        expense.setId(0);
+        expense.setPayerId(whoPaysIdSelected);
+        expense.setGroupId(new MySharedPreferences(context).getActiveGroupId());
+        expense.setCurrencyId(currencySelectedId);
+        String reasonText = reason.getText().toString();
+        if (reasonText.isEmpty()) {
+            reasonText = getString(R.string.reason_empty);
+        }
+        expense.setReason(reasonText);
+        expense.setDate(dateDb);
+        expense.setTime(timeDb);
+
+        ExpenseRepo expenseRepo = new ExpenseRepo();
+        long newExpenseId = expenseRepo.insertExpense(expense);
+        List<Transaction> transactions = new ArrayList<>();
+        double expensePerMember;
+        CheckBox willPay;
+
+        for (int i = 0; i < getCountMembers(); i++) {
+            if (forAll.isChecked()) {
+                expensePerMember = getHowMuchTotal() / getCountMembers();
+                willPay = forAll;
+            } else {
+                View memberLine;
+                EditText amountPerMemberTv;
+                memberLine = whoPaysContainer.getChildAt(i);
+                willPay = memberLine.findViewById(R.id.chbox_expense_member);
+                amountPerMemberTv = memberLine.findViewById(R.id.et_expense_amount);
+                if (amountPerMemberTv.getText().toString().trim().length() > 0) {
+                    expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString());
+                } else {
+                    expensePerMember = 0;
+                }
+            }
+
+            if (willPay.isChecked()) {
+                Transaction transaction = new Transaction();
+                transaction.setId(0);
+                transaction.setDebtor_id(memberIds.get(i));
+                transaction.setAmount(expensePerMember);
+                transaction.setExpense_id((int) newExpenseId);
+                transactions.add(transaction);
+            }
+
+        }
+
+        TransactionRepo transactionRepo = new TransactionRepo();
+        long resultInsertTransaction = transactionRepo.insertTransactions(transactions);
+
+        return resultInsertTransaction > -1;
     }
 }

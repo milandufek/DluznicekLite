@@ -21,6 +21,9 @@ public class GroupMember {
         this.isMe = isMe;
     }
 
+    public GroupMember() {
+    }
+
     public int getId() {
         return id;
     }

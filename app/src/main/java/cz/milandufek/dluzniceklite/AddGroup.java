@@ -209,8 +209,7 @@ public class AddGroup extends AppCompatActivity {
         for (int i = 0; groups.size() > i; i++) {
             groupsInDb.add(groups.get(i).getName());
         }
-        // TODO direct compare?
-        //return groups.contains(groupName);
+
         return groupsInDb.contains(groupName);
     }
 

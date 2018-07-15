@@ -25,7 +25,6 @@ public class ExpenseRepo implements BaseColumns {
     private static final String ALL_COLS[] = { _ID, _PAYER_ID, _GROUP_ID, _CURRENCY_ID,
             _REASON, _DATE, _TIME};
 
-    // TODO date & time format, ORDER BY doesn't work properly
     public static final String CREATE_TABLE_EXPENSE = "CREATE TABLE " + TABLE_NAME + " ( " +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             _PAYER_ID + " TEXT NOT NULL, " +

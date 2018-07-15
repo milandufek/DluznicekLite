@@ -20,6 +20,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Group;
+import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 
@@ -58,10 +59,10 @@ public class GroupRecViewAdapter
 
         //String groupInfo = "[gID " + groupId + "] [cID " + groupCurrencyId + "] ";
         String groupInfo = "";
-        Cursor allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
-        groupInfo += "(" + allGroupMembers.getCount() + ") ";
-        while (allGroupMembers.moveToNext()) {
-            groupInfo += allGroupMembers.getString(2) + ", ";
+        List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
+        groupInfo += "(" + allGroupMembers.size() + ") ";
+        for (int i = 0; i < allGroupMembers.size(); i++) {
+            groupInfo += allGroupMembers.get(i).getName() + ", ";
         }
         groupInfo = groupInfo.substring(0, groupInfo.length() - 2);
 
