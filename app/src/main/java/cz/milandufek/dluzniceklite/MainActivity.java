@@ -4,9 +4,7 @@ import cz.milandufek.dluzniceklite.utils.DbHelper;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -38,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         // init database
         //DbHelper db = new DbHelper(this);
 
-        // init shared preferences
-        initSharePreferences();
+        // set active group name
+        title = getActiveGroupName();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         toolbar.setTitle(title);
@@ -75,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-    private void initSharePreferences() {
+    private String getActiveGroupName() {
         MySharedPreferences sp = new MySharedPreferences(this);
-        title = sp.getActiveGroupName();
+        return sp.getActiveGroupName();
     }
 
     @Override
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initSharePreferences();
+        getActiveGroupName();
     }
 
     @Override

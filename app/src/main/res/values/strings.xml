@@ -67,7 +67,7 @@
     <string name="really_want_to_delete_currency">Smazat měnu?</string>
 
     <!-- ADD/EDIT PAYMENT -->
-    <string name="who_pays">Platil</string>
+    <string name="who_pays">Platil(a)</string>
     <string name="how_much">Částka</string>
     <string name="for_who">Za koho</string>
     <string name="reason">Předmět platby</string>
@@ -78,9 +78,11 @@
     <string name="payment_for_all">Platba za všechny členy</string>
     <string name="howmuch_is_null">Částka není správně</string>
     <string name="toast_no_expense">Nejsou tu žádné výdaje</string>
-
+    <string name="reason_empty">Nějaký výdaj...</string>
     <string name="total_spent">Celkem utraceno</string>
     <string name="paid_for">zaplatil(a) za</string>
+    <string name="today">dnes</string>
+    <string name="now">teď</string>
 
 
 </resources>

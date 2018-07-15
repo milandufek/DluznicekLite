@@ -2,6 +2,7 @@ package cz.milandufek.dluzniceklite;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +29,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -67,8 +70,9 @@ public class AddExpense extends AppCompatActivity {
     private ImageButton ibtnRatioPlus, ibtnRatioMinus;
     private LinearLayout whoPaysContainer;
     private EditText reason;
-    private TextView date;
+    private TextView date, time;
     private DatePickerDialog.OnDateSetListener dateSetListener;
+    private TimePickerDialog.OnTimeSetListener timeSetListener;
     private Button btnAdd;
 
     @Override
@@ -89,6 +93,7 @@ public class AddExpense extends AppCompatActivity {
         whoPaysContainer = (LinearLayout) findViewById(R.id.ll_payment_container);
         reason = (EditText)        findViewById(R.id.et_payment_reason);
         date = (TextView)          findViewById(R.id.et_payment_date);
+        time = (TextView)          findViewById(R.id.et_payment_time);
         btnAdd = (Button)          findViewById(R.id.btn_payment_add);
 
         totalRatiosToPay = getCountMembers();
@@ -129,6 +134,9 @@ public class AddExpense extends AppCompatActivity {
         // setup date text view & date picker
         setupDatePicker();
 
+        // setup time text view & time picker
+        setupTimePicker();
+
         // save button - insert data into database
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,45 +146,43 @@ public class AddExpense extends AppCompatActivity {
                     Toast.makeText(context, getString(R.string.howmuch_is_null),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, getString(R.string.saved),
-                            Toast.LENGTH_SHORT).show();
-
                     Expense expense = new Expense();
                     expense.setId(0);
                     expense.setPayerId(whoPaysIdSelected);
                     expense.setGroupId(new MySharedPreferences(context).getActiveGroupId());
                     expense.setCurrencyId(currencySelectedId);
-                    expense.setReason(reason.getText().toString());
+                    String reasonText = reason.getText().toString();
+                    if (reasonText.isEmpty()) {
+                        reasonText = getString(R.string.reason_empty);
+                    }
+                    expense.setReason(reasonText);
                     expense.setDate(dateDb);
-                    expense.setTime(null); // TODO timeDb
+                    expense.setTime(timeDb);
+
                     ExpenseRepo expenseRepo = new ExpenseRepo();
                     long newExpenseId = expenseRepo.insertExpense(expense);
-
                     List<Transaction> transactions = new ArrayList<>();
-                    if (forAll.isChecked()) {
-                        float expensePerMember = getHowMuchTotal() / getCountMembers();
-                        for (int i = 0; i < getCountMembers(); i++) {
-                            Transaction transaction = new Transaction();
-                            transaction.setId(0);
-                            transaction.setDebtor_id(memberIds.get(i));
-                            transaction.setAmount(expensePerMember);
-                            transaction.setExpense_id((int) newExpenseId);
-                            transactions.add(transaction);
-                        }
-                        TransactionRepo transactionRepo = new TransactionRepo();
-                        transactionRepo.insertTransactions(transactions);
+                    double expensePerMember;
+                    CheckBox willPay;
 
-                    } else {
-                        // TODO save payment for selected members
-                        View memberLine;
-                        EditText amountPerMemberTv;
-                        double expensePerMember;
-
-                        for (int i = 0; i < getCountMembers(); i++) {
+                    for (int i = 0; i < getCountMembers(); i++) {
+                        if (forAll.isChecked()) {
+                            expensePerMember = getHowMuchTotal() / getCountMembers();
+                            willPay = forAll;
+                        } else {
+                            View memberLine;
+                            EditText amountPerMemberTv;
                             memberLine = whoPaysContainer.getChildAt(i);
+                            willPay = memberLine.findViewById(R.id.chbox_expense_member);
                             amountPerMemberTv = memberLine.findViewById(R.id.et_expense_amount);
-                            expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString());
-                            // TODO if selected
+                            if (amountPerMemberTv.getText().toString().trim().length() > 0) {
+                                expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString());
+                            } else {
+                                expensePerMember = 0;
+                            }
+                        }
+
+                        if (willPay.isChecked()) {
                             Transaction transaction = new Transaction();
                             transaction.setId(0);
                             transaction.setDebtor_id(memberIds.get(i));
@@ -184,6 +190,18 @@ public class AddExpense extends AppCompatActivity {
                             transaction.setExpense_id((int) newExpenseId);
                             transactions.add(transaction);
                         }
+                    }
+
+                    TransactionRepo transactionRepo = new TransactionRepo();
+                    long resultInsertTransaction = transactionRepo.insertTransactions(transactions);
+
+                    if (resultInsertTransaction > -1) {
+                        Toast.makeText(context, getString(R.string.saved),
+                                Toast.LENGTH_SHORT).show();
+                        startActivity(getParentActivityIntent());
+                    } else {
+                        Log.d(TAG, "Cannot insert data...");
+                        Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -277,7 +295,7 @@ public class AddExpense extends AppCompatActivity {
             @SuppressLint("InflateParams")
             final View addView = layoutInflater.inflate(R.layout.item_expense_member, null);
 
-            final TextView memberName = addView.findViewById(R.id.tv_payment_member);
+            final TextView memberName = addView.findViewById(R.id.chbox_expense_member);
             memberName.setText(memberNames.get(i));
 
             final TextView ratioValue = addView.findViewById(R.id.tv_expense_ratio_value);
@@ -336,7 +354,10 @@ public class AddExpense extends AppCompatActivity {
                             willPay = memberLine.findViewById(R.id.chbox_expense_member);
                             if (willPay.isChecked()) {
                                 EditText amountPerMember = memberLine.findViewById(R.id.et_expense_amount);
-                                amountTotal += Float.valueOf(amountPerMember.getText().toString());
+                                String amountTmp = amountPerMember.getText().toString();
+                                if (amountTmp.trim().length() > 0) {
+                                    amountTotal += Float.valueOf(amountTmp);
+                                }
                             }
                         }
                         amountTotal = roundIt(amountTotal);
@@ -490,14 +511,6 @@ public class AddExpense extends AppCompatActivity {
         }
     }
 
-    private void addOneRatio() {
-
-    }
-
-    private void removeOneRatio() {
-
-    }
-
     /**
      * Set EditText element as focusable
      * @param et
@@ -616,19 +629,8 @@ public class AddExpense extends AppCompatActivity {
      * Set today as a default value
      */
     private void setupDatePicker() {
-        // set today as a date
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month = month + 1;
-        String monthZero = "";
-        String dayZero = "";
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        if (month < 10) { monthZero = "0"; }
-        if (day < 10)   { dayZero   = "0"; }
-        dateDb = year + monthZero + month + "." + dayZero + day + ".";
-        String dateShow = dayZero + day + "." + monthZero + month + "." + year;
-        date.setText(dateShow);
+        dateDb = getDateToday();
+        date.setText(getString(R.string.today));
 
         // set date from calendar
         date.setOnClickListener(new View.OnClickListener() {
@@ -643,7 +645,9 @@ public class AddExpense extends AppCompatActivity {
                         context,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         dateSetListener,
-                        year, month, day);
+                        year,
+                        month,
+                        day);
                 Objects.requireNonNull(dialog.getWindow())
                         .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
@@ -654,11 +658,102 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                String date = day + "." + month + "." + year;
-                AddExpense.this.date.setText(date);
+                String monthZeroPrefix = "";
+                String dayZeroPrefix = "";
+
+                if (month < 10)
+                    monthZeroPrefix = "0";
+                if (day < 10)
+                    dayZeroPrefix = "0";
+
+                String dateText = day + "." + month + "." + year;
+                dateDb = year + "." + monthZeroPrefix + month + "." + dayZeroPrefix + day + ".";
+                date.setText(dateText);
             }
         };
     }
+
+    /**
+     * Get today's date in YYYY.MM.DD format
+     */
+    private String getDateToday() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        month = month + 1;
+
+        String monthZeroPrefix = "";
+        String dayZeroPrefix = "";
+        if (month < 10)
+            monthZeroPrefix = "0";
+        if (day < 10)
+            dayZeroPrefix = "0";
+
+        return year + "." + monthZeroPrefix + month + "." + dayZeroPrefix + day + ".";
+    }
+
+    /**
+     * Setup time picker
+     * Set now as a default value
+     */
+    private void setupTimePicker() {
+        timeDb = getTimeNow();
+        time.setText(getString(R.string.now));
+
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int hours = cal.get(Calendar.HOUR);
+                int minutes = cal.get(Calendar.MINUTE);
+
+                TimePickerDialog dialog = new TimePickerDialog(
+                        context,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        timeSetListener,
+                        hours,
+                        minutes,
+                        true);
+                Objects.requireNonNull(dialog.getWindow())
+                        .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String hourZeroPrefix = "";
+                String minuteZeroPrefix = "";
+                if (hourOfDay < 10)
+                    hourZeroPrefix = "0";
+                if (minute < 10)
+                    minuteZeroPrefix = "0";
+
+                timeDb = hourZeroPrefix + hourOfDay + ":" + minuteZeroPrefix + minute;
+                time.setText(timeDb);
+            }
+        };
+    }
+
+    /**
+     * Get time now in format HH:mm
+     */
+    private String getTimeNow() {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR);
+        int minute = cal.get(Calendar.MINUTE);
+        String hourZeroPrefix = "";
+        String minuteZeroPrefix = "";
+        if (hour < 10)
+            hourZeroPrefix = "0";
+        if (minute < 10)
+            minuteZeroPrefix = "0";
+
+        return hourZeroPrefix + hour + ":" + minuteZeroPrefix + minute;
+    }
+
 
     /**
      *  Setup radio buttons to change ration calculation
