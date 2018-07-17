@@ -26,13 +26,14 @@ import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.ExpenseRecViewAdapter;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 
-public class ListExpense extends Fragment {
-    private static final String TAG = "ListExpense";
+public class ListExpenseFragment extends Fragment {
+    private static final String TAG = "ListExpenseFragment";
 
     private Context context;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_main_expenses, container, false);
 
@@ -75,18 +76,18 @@ public class ListExpense extends Fragment {
             expenseItem.setTime(cursorExpenseItems.getString(5));
 
             // select all transactions related to the expense
-            String debtors = "";
+            StringBuilder debtors = new StringBuilder();
             double sum = 0;
             Cursor selectTransactions = new TransactionRepo()
                     .selectTransactionForExpense(expenseItem.getId());
             while (selectTransactions.moveToNext()) {
-                debtors += selectTransactions.getString(0) + ", ";
+                debtors.append(selectTransactions.getString(0)).append(", ");
                 sum += selectTransactions.getDouble(1);
             }
             selectTransactions.close();
 
-            debtors = debtors.substring(0, debtors.length() - 2);
-            expenseItem.setDebtors(debtors);
+            debtors = new StringBuilder(debtors.substring(0, debtors.length() - 2));
+            expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
 
             expenseItems.add(expenseItem);

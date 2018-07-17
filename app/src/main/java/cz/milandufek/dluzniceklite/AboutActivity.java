@@ -156,7 +156,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 1,1,3,"Boty", "2018-12-06", "13:37");
+                expense = new Expense(0, 1,1,3,"Boty", "2018-06-12", "13:37");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 2, (int)expensesId, 110));
                 for (int i = 0; transactions.size() > i; i++) {
@@ -164,7 +164,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 3,1,1,"Piva", "2018-16-06", "23:46");
+                expense = new Expense(0, 3,1,1,"Piva", "2018-06-16", "23:46");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 1, (int)expensesId, 200));
                 transactions.add(new Transaction(0, 2, (int)expensesId, 100));
@@ -175,7 +175,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 2,1,1,"Útrata u Dřeváka...", "2018-26-06", "22:12");
+                expense = new Expense(0, 2,1,1,"Útrata u Dřeváka...", "2018-06-26", "22:12");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 1, (int)expensesId, 435));
                 transactions.add(new Transaction(0, 2, (int)expensesId, 435));
@@ -185,7 +185,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 1,1,2,"Závod", "2018-10-06", "23:26");
+                expense = new Expense(0, 1,1,2,"Závod", "2018-06-10", "23:26");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 1, (int)expensesId, 11));
                 transactions.add(new Transaction(0, 2, (int)expensesId, 11));
@@ -206,7 +206,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 2,1,1,"Piva", "2018-16-06", "23:46");
+                expense = new Expense(0, 2,1,1,"Piva", "2018-06-16", "23:46");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 2, (int)expensesId, 100));
                 transactions.add(new Transaction(0, 3, (int)expensesId, 100));
@@ -216,7 +216,7 @@ public class AboutActivity extends AppCompatActivity {
                 }
 
                 transactions.clear();
-                expense = new Expense(0, 4,1,1,"Za cestu", "2018-16-06", "11:11");
+                expense = new Expense(0, 4,1,1,"Za cestu", "2018-06-16", "11:11");
                 expensesId = expenseRepo.insertExpense(expense);
                 transactions.add(new Transaction(0, 1, (int)expensesId, 267));
                 transactions.add(new Transaction(0, 4, (int)expensesId, 267));

@@ -21,8 +21,6 @@ import com.facebook.stetho.Stetho;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    private String title;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,29 +31,25 @@ public class MainActivity extends AppCompatActivity {
         // SQL explorer plugin
         Stetho.initializeWithDefaults(this);
 
-        // init database
-        //DbHelper db = new DbHelper(this);
-
         // set active group name
-        title = getActiveGroupName();
+        String title = getActiveGroupName();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         toolbar.setTitle(title);
-        //toolbar.setBackgroundColor(getColor(R.color.colorPrimaryYelloy));
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the X tabbed activity
         SectionsPageAdapter pageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.ll_group_container);
+        ViewPager mViewPager = findViewById(R.id.ll_group_container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_main_activity);
+        TabLayout tabLayout = findViewById(R.id.tabs_main_activity);
         tabLayout.setupWithViewPager(mViewPager);
 
         // Floating Button (add payment)
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_payment_add);
+        FloatingActionButton fab = findViewById(R.id.fab_payment_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,22 +59,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Setup view pager for tab fragments
+     * @param viewPager
+     */
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ListExpense(), getString(R.string.tab_payments));
-        //adapter.addFragment(new ListGroups(), getString(R.string.tab_groups));
-        adapter.addFragment(new SettleUpActivity(), getString(R.string.tab_settleup));
+
+        ListGroupFragment listGroupFragment = new ListGroupFragment();
+        adapter.addFragment(listGroupFragment, getString(R.string.tab_groups));
+
+        ListExpenseFragment listExpenseFragment = new ListExpenseFragment();
+        adapter.addFragment(listExpenseFragment, getString(R.string.tab_payments));
+
+        SettleUpFragment settleUpFragment = new SettleUpFragment();
+        adapter.addFragment(settleUpFragment, getString(R.string.tab_settleup));
+
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
     }
 
+    /**
+     * Get active from name from SharedPreferences
+     * @return String
+     */
     private String getActiveGroupName() {
         MySharedPreferences sp = new MySharedPreferences(this);
         return sp.getActiveGroupName();
     }
 
+    /**
+     * Inflate the menu
+     * @param menu
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -88,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * hHandle activity item from menu
      * @param item
-     * @return
+     * @return selected item
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -96,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_manage_groups:
-                intent = new Intent(this, ListGroups.class);
-                break;
+//            case R.id.action_manage_groups:
+//                intent = new Intent(this, ListGroups.class);
+//                break;
             case R.id.action_manage_currencies:
                 intent = new Intent(this, ListCurrency.class);
                 break;

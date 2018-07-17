@@ -62,11 +62,6 @@ public class CurrencyRecViewAdapter
                 Toast.makeText(context,currency.get(holder.getAdapterPosition()).getName()
                                 + " ID(" + currency.get(holder.getAdapterPosition()).getId() + ")",
                         Toast.LENGTH_SHORT).show();
-
-                // TODO open to edit
-//                Intent intent = new Intent(context, ListCurrency.class);
-//                intent.putExtra("currency_id", mCurrencyId.get(position));
-//                context.startActivity(intent);
             }
         });
 
@@ -97,7 +92,6 @@ public class CurrencyRecViewAdapter
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // nothing
                             }
                         });
                 builder.show();
@@ -124,53 +118,9 @@ public class CurrencyRecViewAdapter
             super(itemView);
 
             parentLayout = itemView.findViewById(R.id.itemCurrency);
-            //parentLayout.setOnClickListener(this);
-
             currencyName = itemView.findViewById(R.id.tv_currency_name);
-
             currencyValue = itemView.findViewById(R.id.tv_currency_value);
-
             currencyDelete = itemView.findViewById(R.id.ibtn_currency_remove);
-            //currencyDelete.setOnClickListener(this);
         }
-
-        // TODO doesn't work
-//        @Override
-//        public void onClick(View v) {
-//            switch (v.getId()) {
-//                case R.id.ibtn_currency_remove:
-//                    final int currencyId = currency.get(getAdapterPosition()).getId();
-//                    Log.d(TAG, "onClick: delete ID " + currencyId);
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(context)
-//                            .setTitle(R.string.really_want_to_delete_currency)
-//                            .setMessage(currency.get(getAdapterPosition()).getName())
-//                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    CurrencyRepo db = new CurrencyRepo();
-//                                    db.deleteCurrency(currencyId);
-//                                    currency.remove(getAdapterPosition());
-//                                    notifyItemRemoved(getAdapterPosition());
-//                                    notifyItemRangeChanged(0, currency.size());
-//                                }
-//                            })
-//                            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    // nothing
-//                                }
-//                            });
-//                    builder.show();
-//                    break;
-//
-//                case R.id.tv_currency_name:
-//                    Log.d(TAG, "onClick: item ID " + currency.get(this.getAdapterPosition()).getName());
-//
-//                    Toast.makeText(context,currency.get(this.getAdapterPosition()).getName()
-//                                    + " ID(" + currency.get(this.getAdapterPosition()).getId() + ")",
-//                            Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
     }
 }

@@ -145,8 +145,8 @@ public class AddExpense extends AppCompatActivity {
                     if (saveExpense()) {
                         Toast.makeText(context, getString(R.string.saved),
                                 Toast.LENGTH_SHORT).show();
-                        finish();
                         startActivity(getParentActivityIntent());
+                        finish();
                     } else {
                         Log.d(TAG, "Cannot insert data...");
                         Toast.makeText(context, getString(R.string.error),
@@ -184,7 +184,6 @@ public class AddExpense extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // nothing...
             }
         });
     }
@@ -196,14 +195,14 @@ public class AddExpense extends AppCompatActivity {
         final ArrayList<Integer> currencyIds = new ArrayList<>();
         final ArrayList<String> currencyNames = new ArrayList<>();
 
-        // call DB and get all currencies
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
         for (int i = 0; currencies.size() > i; i++) {
             currencyIds.add(currencies.get(i).getId());
             currencyNames.add(currencies.get(i).getName());
         }
 
-        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                context,
                 android.R.layout.simple_spinner_dropdown_item,
                 currencyNames);
         currency.setAdapter(spinnerAdapter);
@@ -212,7 +211,6 @@ public class AddExpense extends AppCompatActivity {
         int selectedItem = new MySharedPreferences(context).getActiveGroupCurrency();
         currencySelectedId = currencyIds.indexOf(selectedItem);
         currency.setSelection(currencySelectedId);
-
         currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -227,7 +225,6 @@ public class AddExpense extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // nothing
             }
         });
     }
@@ -245,30 +242,26 @@ public class AddExpense extends AppCompatActivity {
 
             final TextView memberName = addView.findViewById(R.id.chbox_expense_member);
             memberName.setText(memberNames.get(i));
-
             final TextView ratioValue = addView.findViewById(R.id.tv_expense_ratio_value);
             ratioValue.setText("1");
-
             final TextView ratioSeparator = addView.findViewById(R.id.tv_expense_ratio_separator);
             ratioSeparator.setText("/");
-
             final TextView ratioTotal = addView.findViewById(R.id.tv_expense_ratio_total);
             ratioTotal.setText(String.valueOf(getCountMembers()));
-
-            final ImageButton ratioPlus  = addView.findViewById(R.id.ibtn_expense_ratioplus);
             final ImageButton ratioMinus = addView.findViewById(R.id.ibtn_expense_ratiominus);
             ratioMinus.setVisibility(View.INVISIBLE);
+            final ImageButton ratioPlus  = addView.findViewById(R.id.ibtn_expense_ratioplus);
 
             ratioPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int newValue = Integer.valueOf(ratioValue.getText().toString());
-                    if (newValue <= 2) ratioMinus.setVisibility(View.VISIBLE);
+                    if (newValue <= 2)
+                        ratioMinus.setVisibility(View.VISIBLE);
 
                     newValue++;
                     totalRatiosToPay++;
                     ratioValue.setText(String.valueOf(newValue));
-
                     updateMemberLinesByRation();
                 }
             });
@@ -277,12 +270,12 @@ public class AddExpense extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     int newValue = Integer.valueOf(ratioValue.getText().toString());
-                    if (newValue <= 2) ratioMinus.setVisibility(View.INVISIBLE);
+                    if (newValue <= 2)
+                        ratioMinus.setVisibility(View.INVISIBLE);
 
                     newValue--;
                     totalRatiosToPay--;
                     ratioValue.setText(String.valueOf(newValue));
-
                     updateMemberLinesByRation();
                 }
             });
@@ -296,11 +289,11 @@ public class AddExpense extends AppCompatActivity {
                     if (rbtManually.isChecked()) {
                         float amountTotal = 0;
                         View memberLine;
-                        CheckBox willPay;
+                        CheckBox memberWillPay;
                         for (int i = 0; i < getCountMembers(); i++) {
                             memberLine = whoPaysContainer.getChildAt(i);
-                            willPay = memberLine.findViewById(R.id.chbox_expense_member);
-                            if (willPay.isChecked()) {
+                            memberWillPay = memberLine.findViewById(R.id.chbox_expense_member);
+                            if (memberWillPay.isChecked()) {
                                 EditText amountPerMember = memberLine.findViewById(R.id.et_expense_amount);
                                 String amountTmp = amountPerMember.getText().toString();
                                 if (amountTmp.trim().length() > 0) {
@@ -312,15 +305,14 @@ public class AddExpense extends AppCompatActivity {
                         howMuch.setText(String.valueOf(amountTotal));
                     }
                 }
+
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-
                 @Override
                 public void afterTextChanged(Editable s) {
                 }
             });
-
 
             final TextView currency = addView.findViewById(R.id.tv_expense_currency);
             currency.setText("");
@@ -615,14 +607,14 @@ public class AddExpense extends AppCompatActivity {
                     dayZeroPrefix = "0";
 
                 String dateText = day + "." + month + "." + year;
-                dateDb = year + "." + monthZeroPrefix + month + "." + dayZeroPrefix + day + ".";
+                dateDb = year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
                 date.setText(dateText);
             }
         };
     }
 
     /**
-     * Get today's date in YYYY.MM.DD format
+     * Get today's date in YYYY-MM-DD format
      */
     private String getDateToday() {
         Calendar cal = Calendar.getInstance();
@@ -638,7 +630,7 @@ public class AddExpense extends AppCompatActivity {
         if (day < 10)
             dayZeroPrefix = "0";
 
-        return year + "." + monthZeroPrefix + month + "." + dayZeroPrefix + day + ".";
+        return year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
     }
 
     /**

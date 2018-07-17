@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cz.milandufek.dluzniceklite.MainActivity">
 
-    <item
-        android:id="@+id/action_manage_groups"
-        android:orderInCategory="101"
-        android:title="@string/action_manage_groups"
-        android:icon="@drawable/ic_group_white_24dp"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_manage_groups"-->
+        <!--android:orderInCategory="101"-->
+        <!--android:title="@string/action_manage_groups"-->
+        <!--android:icon="@drawable/ic_group_white_24dp"-->
+        <!--app:showAsAction="ifRoom" />-->
 
     <item
         android:id="@+id/action_export_data"

@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SettleUpActivity extends Fragment {
-    private static final String TAG = "SettleUpActivity";
+public class SettleUpFragment extends Fragment {
+    private static final String TAG = "SettleUpFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

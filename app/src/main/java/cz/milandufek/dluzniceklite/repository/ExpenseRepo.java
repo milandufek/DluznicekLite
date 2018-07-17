@@ -93,7 +93,8 @@ public class ExpenseRepo implements BaseColumns {
     }
 
     /**
-     * Select all expenses in format suitable for ExpenseItem
+     * Select all expenses for group in format suitable for ExpenseItem
+     * @param groupId
      */
     public Cursor selectExpenseItems(int groupId) {
         String query = "SELECT " +
@@ -107,8 +108,8 @@ public class ExpenseRepo implements BaseColumns {
                 " INNER JOIN " + CurrencyRepo.TABLE_NAME +
                 " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
-                " ORDER BY " + _DATE + ", " + _TIME +
-                " DESC;";
+                " ORDER BY " + _DATE + " DESC, " + _TIME + " DESC" +
+                ";";
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
 
         return db.rawQuery(query, null, null);

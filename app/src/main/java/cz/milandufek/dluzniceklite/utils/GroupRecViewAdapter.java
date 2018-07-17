@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
@@ -85,6 +88,11 @@ public class GroupRecViewAdapter
                 sp.setActiveGroupCurrencyId(groupCurrencyId);
 
                 String setAsActive = groupName + " " + context.getString(R.string.group_set_as_active);
+
+                Intent newMainActivity = new Intent(context, MainActivity.class);
+                newMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(newMainActivity);
+
                 Toast.makeText(context, setAsActive, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -121,7 +129,7 @@ public class GroupRecViewAdapter
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // nothing
+                                dialog.dismiss();
                             }
                         });
                 builder.show();
@@ -152,7 +160,7 @@ public class GroupRecViewAdapter
     protected class ViewHolder extends RecyclerView.ViewHolder {
         TextView groupName, groupInfo;
         ImageButton groupDelete;
-        RelativeLayout parentLayout;
+        ConstraintLayout parentLayout;
 
         private ViewHolder(View itemView) {
             super(itemView);
