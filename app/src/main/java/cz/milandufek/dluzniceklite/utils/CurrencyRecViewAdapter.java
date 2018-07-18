@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -112,7 +113,7 @@ public class CurrencyRecViewAdapter
         TextView currencyName;
         TextView currencyValue;
         ImageButton currencyDelete;
-        RelativeLayout parentLayout;
+        ConstraintLayout parentLayout;
 
         private ViewHolder(View itemView) {
             super(itemView);

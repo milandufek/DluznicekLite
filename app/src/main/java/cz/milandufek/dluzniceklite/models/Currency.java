@@ -89,7 +89,7 @@ public class Currency {
         if (! this.country.equals("")) {
             String country = " (" + this.country + " )";
         }
-        return quantity + " : " + exchangeRate + " " + country;
+        return quantity + " : " + exchangeRate + " \u2022 " + country;
     }
 
     public String getCountry() {

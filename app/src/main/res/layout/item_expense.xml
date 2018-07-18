@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fadingEdge="horizontal"
-    android:paddingTop="@dimen/padding"
+
     app:layout_insetEdge="none">
 
     <TextView
@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="Reason"
         android:textColor="@color/colorBlack"
         android:textSize="20sp"
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="Amount"
         android:textColor="@color/colorBlack"
         android:textSize="20sp"

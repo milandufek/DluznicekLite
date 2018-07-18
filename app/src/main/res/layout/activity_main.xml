@@ -66,4 +66,12 @@
         app:elevation="0dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progressBar"-->
+        <!--android:theme="@style/Widget.AppCompat.ProgressBar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:indeterminate="true" />-->
+
 </android.support.design.widget.CoordinatorLayout>
