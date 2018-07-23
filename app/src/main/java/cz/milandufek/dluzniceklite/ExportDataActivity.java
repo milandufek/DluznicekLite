@@ -10,6 +10,6 @@ public class ExportDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export_data);
 
-        // TODO export data actions do jinych appek (ShareActionProvider)
+        // TODO export to another apps... (ShareActionProvider)
     }
 }

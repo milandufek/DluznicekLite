@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import cz.milandufek.dluzniceklite.utils.GroupRecViewAdapter;
 
 public class ListGroups extends AppCompatActivity {
     private static final String TAG = "ListGroups";
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class ListGroups extends AppCompatActivity {
         setContentView(R.layout.activity_list_groups);
         Log.d(TAG, "onCreate: started.");
 
-        initRecyclerView();
+        setupRecyclerView();
 
         // Floating Button
         FloatingActionButton fab = findViewById(R.id.fab_group_add);
@@ -41,16 +43,16 @@ public class ListGroups extends AppCompatActivity {
     /**
      * Setup RecyclerView
      */
-    public void initRecyclerView() {
-        Log.d(TAG, "initRecyclerView: settings up adapter...");
+    public void setupRecyclerView() {
+        Log.d(TAG, "setupRecyclerView: settings up adapter...");
 
         List<Group> groups = new GroupRepo().getAllGroups();
 
-        GroupRecViewAdapter adapter = new GroupRecViewAdapter(this, groups);
+        GroupRecViewAdapter adapter = new GroupRecViewAdapter(context, groups);
 
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 }

@@ -45,7 +45,10 @@ public class ListExpenseFragment extends Fragment {
         summaryTitle.setText(titleText);
 
         TextView summarySum = view.findViewById(R.id.tv_expense_summary_amount);
-        String sumSpent = String.valueOf(summaryValues.getSumSpent()) + " " + summaryValues.getCurrencyName();
+        StringBuilder sumSpent = new StringBuilder();
+            sumSpent.append(summaryValues.getSumSpent());
+            sumSpent.append(" ");
+            sumSpent.append(summaryValues.getCurrencyName());
         summarySum.setText(sumSpent);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
@@ -76,17 +79,19 @@ public class ListExpenseFragment extends Fragment {
             expenseItem.setTime(cursorExpenseItems.getString(5));
 
             // select all transactions related to the expense
-            StringBuilder debtors = new StringBuilder();
             double sum = 0;
             Cursor selectTransactions = new TransactionRepo()
                     .selectTransactionForExpense(expenseItem.getId());
+            StringBuilder debtors = new StringBuilder();
+            String separator = "";
             while (selectTransactions.moveToNext()) {
-                debtors.append(selectTransactions.getString(0)).append(", ");
+                debtors.append(separator);
+                separator = ", ";
+                debtors.append(selectTransactions.getString(0));
                 sum += selectTransactions.getDouble(1);
             }
             selectTransactions.close();
 
-            debtors = new StringBuilder(debtors.substring(0, debtors.length() - 2));
             expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
 
@@ -120,17 +125,18 @@ public class ListExpenseFragment extends Fragment {
             } else {
                 sumAmountInBaseCurrency += cursorSummary.getDouble(4);
             }
+            //sumAmountInBaseCurrency *= -1;
             Log.d(TAG, "initDataSummary: sum = " + sumAmountInBaseCurrency);
         }
 
         sumAmountInBaseCurrency = new BigDecimal(sumAmountInBaseCurrency)
-                .setScale(2, RoundingMode.HALF_UP).doubleValue();
+                .setScale(2, RoundingMode.HALF_UP)
+                .doubleValue();
+
         ExpenseSummary expenseSummary = new ExpenseSummary();
         expenseSummary.setCurrencyName(currencyName);
         expenseSummary.setSumSpent(sumAmountInBaseCurrency);
 
         return expenseSummary;
     }
-
-
 }

@@ -86,10 +86,16 @@ public class Currency {
     }
 
     public String getCurrencyInfo() {
+        StringBuilder info = new StringBuilder(quantity);
+        info.append(" : ");
+        info.append(exchangeRate);
+        info.append(" \u2022 ");
         if (! this.country.equals("")) {
-            String country = " (" + this.country + " )";
+            info.append(" (");
+            info.append(this.country);
+            info.append(" )");
         }
-        return quantity + " : " + exchangeRate + " \u2022 " + country;
+        return info.toString();
     }
 
     public String getCountry() {

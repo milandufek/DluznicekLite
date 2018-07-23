@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +31,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -163,9 +164,9 @@ public class AddExpense extends AppCompatActivity {
     private void selectAllGroupMembers() {
         int groupId = new MySharedPreferences(context).getActiveGroupId();
         List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
-        for (int i = 0; i < allGroupMembers.size(); i++) {
-            memberIds.add(allGroupMembers.get(i).getId());
-            memberNames.add(allGroupMembers.get(i).getName());
+        for (GroupMember groupMember : allGroupMembers) {
+            memberIds.add(groupMember.getId());
+            memberNames.add(groupMember.getName());
         }
     }
 
@@ -196,9 +197,9 @@ public class AddExpense extends AppCompatActivity {
         final ArrayList<String> currencyNames = new ArrayList<>();
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
-        for (int i = 0; currencies.size() > i; i++) {
-            currencyIds.add(currencies.get(i).getId());
-            currencyNames.add(currencies.get(i).getName());
+        for (Currency currency : currencies) {
+            currencyIds.add(currency.getId());
+            currencyNames.add(currency.getName());
         }
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
@@ -287,7 +288,7 @@ public class AddExpense extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (rbtManually.isChecked()) {
-                        float amountTotal = 0;
+                        double amountTotal = 0;
                         View memberLine;
                         CheckBox memberWillPay;
                         for (int i = 0; i < getCountMembers(); i++) {
@@ -301,7 +302,7 @@ public class AddExpense extends AppCompatActivity {
                                 }
                             }
                         }
-                        amountTotal = roundIt(amountTotal);
+                        amountTotal = roundIt(amountTotal, 2);
                         howMuch.setText(String.valueOf(amountTotal));
                     }
                 }
@@ -333,7 +334,6 @@ public class AddExpense extends AppCompatActivity {
 
                         ratioSeparator.setVisibility(View.VISIBLE);
                         ratioTotal.setVisibility(View.VISIBLE);
-                        //ratioMinus.setVisibility(View.VISIBLE);
                         ratioPlus.setVisibility(View.VISIBLE);
 
                         memberAmount.setText("0");
@@ -342,7 +342,7 @@ public class AddExpense extends AppCompatActivity {
                         if (rbtManually.isChecked()) {
                             setEditTextFocusable(memberAmount);
                         } else {
-                            setEditTextUnfocusable(memberAmount);
+                            unsetEditTextFocusable(memberAmount);
                         }
 
                         currency.setVisibility(View.VISIBLE);
@@ -384,7 +384,7 @@ public class AddExpense extends AppCompatActivity {
         CheckBox willPay;
         TextView ratioTotal, ratioPerMemberLine;
         EditText amountPerMemberLine;
-        float oneRatioValue, ratioLineCount, amountPerMemberText;
+        Double oneRatioValue, ratioLineCount, amountPerMemberText;
 
         for (int i = 0; i < getCountMembers(); i++) {
             memberLine = whoPaysContainer.getChildAt(i);
@@ -396,9 +396,9 @@ public class AddExpense extends AppCompatActivity {
             oneRatioValue = getHowMuchTotal() / totalRatiosToPay;
 
             if (willPay.isChecked()) {
-                ratioLineCount = Float.valueOf(String.valueOf(ratioPerMemberLine.getText()));
+                ratioLineCount = Double.valueOf(String.valueOf(ratioPerMemberLine.getText()));
                 amountPerMemberText = oneRatioValue * ratioLineCount;
-                amountPerMemberText = roundIt(amountPerMemberText);
+                amountPerMemberText = roundIt(amountPerMemberText, 2);
 
                 amountPerMemberLine.setText(String.valueOf(amountPerMemberText));
                 ratioTotal.setText(String.valueOf(totalRatiosToPay));
@@ -410,7 +410,7 @@ public class AddExpense extends AppCompatActivity {
      * Generate / update the LL whoPaysContainer with members who will pay
      */
     private void updateWhoPaysContainer() {
-        float amountPerMember = getHowMuchPerMember();
+        double amountPerMember = getHowMuchPerMember();
 
         for (int i = 0; i < getCountMembers(); i++) {
             View memberLine = whoPaysContainer.getChildAt(i);
@@ -437,7 +437,7 @@ public class AddExpense extends AppCompatActivity {
                     childRatio.setText(ratioText);
                     totalRatiosToPay = getCountMembersSelected();
 
-                    setEditTextUnfocusable(childAmount);
+                    unsetEditTextFocusable(childAmount);
                 } else {
                     childRatioValue.setVisibility(View.GONE);
                     childRatio.setVisibility(View.GONE);
@@ -468,7 +468,7 @@ public class AddExpense extends AppCompatActivity {
      * @param et
      *      EditText element
      */
-    private void setEditTextUnfocusable(EditText et) {
+    private void unsetEditTextFocusable(EditText et) {
         et.setKeyListener(null);
         et.setFocusable(false);
         et.setFocusableInTouchMode(false);
@@ -503,12 +503,12 @@ public class AddExpense extends AppCompatActivity {
      * Get amount how much to pay in total
      * Round the number to 2 decimals
      */
-    private float getHowMuchTotal() {
+    private double getHowMuchTotal() {
         String textAmount = String.valueOf(howMuch.getText());
-        float amountTotal;
+        double amountTotal;
         if (textAmount.length() > 0) {
-            amountTotal = Float.valueOf(textAmount);
-            amountTotal = Math.round(amountTotal * 100f) / 100f;
+            amountTotal = Double.valueOf(textAmount);
+            amountTotal = roundIt(amountTotal, 2);
         } else {
             amountTotal = 0;
         }
@@ -519,12 +519,12 @@ public class AddExpense extends AppCompatActivity {
      * Get amount how much to pay per member
      * Round the number to 2 decimals
      */
-    private float getHowMuchPerMember() {
-        float amountTotal = getHowMuchTotal();
-        float amountPerMember;
+    private double getHowMuchPerMember() {
+        double amountTotal = getHowMuchTotal();
+        double amountPerMember;
         if (amountTotal > 0) {
             amountPerMember = amountTotal / getCountMembersSelected();
-            amountPerMember = Math.round(amountPerMember * 100f) / 100f;
+            amountPerMember = roundIt(amountPerMember, 2);
         } else {
             amountPerMember = 0;
         }
@@ -537,18 +537,21 @@ public class AddExpense extends AppCompatActivity {
      */
     private void howMuchOnTextChangeListener(CharSequence s) {
         if (!rbtManually.isChecked()) {
-            String forAllInfoText = getString(R.string.payment_for_all);
-            forAllInfoText += " ( " + String.valueOf(getCountMembers());
+            StringBuilder forAllInfoText = new StringBuilder(getString(R.string.payment_for_all));
+            forAllInfoText.append(" ( ");
+            forAllInfoText.append(getCountMembers());
             if (s.toString().trim().length() > 0) {
-                float amount = Float.valueOf(s.toString()) / getCountMembers();
-                amount = Math.round(amount * 100f) / 100f;
+                double amount = Double.valueOf(s.toString()) / getCountMembers();
+                amount = roundIt(amount, 2);
+                // update summary in TextView
+                forAllInfoText.append(" x ");
+                forAllInfoText.append(amount);
+                forAllInfoText.append(" ");
+                forAllInfoText.append(currencySelectedName);
                 // rewrite items in LL whoPaysContainer
                 updateWhoPaysContainer();
-                // update summary in TextView
-                forAllInfoText += " x ";
-                forAllInfoText += String.valueOf(amount) + " " + currencySelectedName;
             }
-            forAllInfoText += " )";
+            forAllInfoText.append(" )");
             forAllInfo.setText(forAllInfoText);
 
             if (!forAll.isChecked()) {
@@ -558,10 +561,17 @@ public class AddExpense extends AppCompatActivity {
     }
 
     /**
-     * Round number
+     * Round number to specified decimals
+     * @param value
+     * @param places
+     * @return rounded number
      */
-    private float roundIt(float number) {
-        return Math.round(number * 100f) / 100f;
+    private double roundIt(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
     /**
@@ -719,8 +729,19 @@ public class AddExpense extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 hideSoftKeyboard();
                 if (isChecked) {
-                    String forAllInfoText = getString(R.string.payment_for_all);
-                    forAllInfoText += " ( " + String.valueOf(memberNames.size()) + " )";
+                    StringBuilder forAllInfoText = new StringBuilder(getString(R.string.payment_for_all));
+                    forAllInfoText.append(" ( ");
+                    forAllInfoText.append(memberNames.size());
+                    String howMuchText = howMuch.getText().toString().trim();
+                    if (! howMuchText.equals("")) {
+                        if (Double.valueOf(howMuchText) > 0) {
+                            forAllInfoText.append(" x ");
+                            forAllInfoText.append(howMuchText);
+                            forAllInfoText.append(" ");
+                            forAllInfoText.append(currencySelectedName);
+                        }
+                    }
+                    forAllInfoText.append(" )");
                     forAllInfo.setText(forAllInfoText);
                     forAllInfo.setVisibility(View.VISIBLE);
                     rbtnRatio.setVisibility(View.GONE);
@@ -790,6 +811,12 @@ public class AddExpense extends AppCompatActivity {
                 } else {
                     expensePerMember = 0;
                 }
+            }
+            expensePerMember *= -1;
+
+            // plus total amount if the debtor is also creditor
+            if (whoPaysIdSelected == memberIds.get(i)) {
+                expensePerMember += getHowMuchTotal();
             }
 
             if (willPay.isChecked()) {

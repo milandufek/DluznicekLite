@@ -40,8 +40,6 @@ public class AddGroup extends AppCompatActivity {
     private EditText groupName;
     private Spinner selectCurrency;
     private int currencySelectedId;
-    //private AutoCompleteTextView memberNameIn;
-    //private ArrayAdapter<String> mAdapter;
     private EditText memberNameIn;
     private LinearLayout container;
 
@@ -161,9 +159,9 @@ public class AddGroup extends AppCompatActivity {
         final ArrayList<String> currencyNames = new ArrayList<>();
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
-        for (int i = 0; currencies.size() > i; i++) {
-            currencyIds.add(currencies.get(i).getId());
-            currencyNames.add(currencies.get(i).getName());
+        for (Currency currency : currencies) {
+            currencyIds.add(currency.getId());
+            currencyNames.add(currency.getName());
         }
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
@@ -189,8 +187,7 @@ public class AddGroup extends AppCompatActivity {
      */
     private ArrayList<String> getAllMembers() {
         ArrayList<String> groupMembers =  new ArrayList<>();
-        int childCount = container.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        for (int i = 0; i < container.getChildCount(); i++) {
             View thisChild = container.getChildAt(i);
             EditText childEditText = thisChild.findViewById(R.id.et_groupmember_add);
             groupMembers.add(childEditText.getText().toString());
@@ -206,8 +203,8 @@ public class AddGroup extends AppCompatActivity {
     private boolean checkIfGroupExists(String groupName) {
         ArrayList<String> groupsInDb = new ArrayList<>();
         List<Group> groups = new GroupRepo().getAllGroups();
-        for (int i = 0; groups.size() > i; i++) {
-            groupsInDb.add(groups.get(i).getName());
+        for (Group group : groups) {
+            groupsInDb.add(group.getName());
         }
 
         return groupsInDb.contains(groupName);

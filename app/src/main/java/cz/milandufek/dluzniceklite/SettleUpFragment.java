@@ -14,6 +14,8 @@ public class SettleUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_main_settleup, container, false);
 
+        // TODO settle up list info
+
         return view;
     }
 }

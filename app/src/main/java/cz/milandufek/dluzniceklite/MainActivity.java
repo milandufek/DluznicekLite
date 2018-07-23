@@ -4,7 +4,6 @@ import cz.milandufek.dluzniceklite.utils.DbHelper;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -16,11 +15,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.facebook.stetho.Stetho;
-
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -58,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddExpense.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });

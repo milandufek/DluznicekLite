@@ -45,8 +45,10 @@ public class ExpenseRecViewAdapter
 
         holder.expenseReason.setText(expensesItems.get(position).getReason());
 
-        String amountFormatted = String.valueOf(expensesItems.get(position).getAmount()) + " " +
-                expensesItems.get(position).getCurrency();
+        StringBuilder amountFormatted = new StringBuilder();
+            amountFormatted.append(expensesItems.get(position).getAmount());
+            amountFormatted.append(" ");
+            amountFormatted.append(expensesItems.get(position).getCurrency());
         holder.expenseAmount.setText(amountFormatted);
 
         String payer = expensesItems.get(position).getPayer();
@@ -54,7 +56,15 @@ public class ExpenseRecViewAdapter
         String date = expensesItems.get(position).getDate();
         String time = expensesItems.get(position).getTime();
 
-        String info = date + " " + time + " \u2022 " + payer + " zaplatil(a) za " + debtors + " ";
+        StringBuilder info = new StringBuilder();
+            info.append(date);
+            info.append(" ");
+            info.append(time);
+            info.append(" \u2022 ");
+            info.append(payer);
+            info.append(" zaplatil(a) za ");
+            info.append(debtors);
+            info.append(" ");
         holder.expenseInfo.setText(info);
     }
 

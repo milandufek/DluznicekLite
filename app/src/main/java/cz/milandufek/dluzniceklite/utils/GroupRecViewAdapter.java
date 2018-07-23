@@ -60,23 +60,25 @@ public class GroupRecViewAdapter
         final int groupId = groups.get(position).getId();
         final int groupCurrencyId = groups.get(position).getCurrency();
 
-        //String groupInfo = "[gID " + groupId + "] [cID " + groupCurrencyId + "] ";
-        String groupInfo = "";
         List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
-        groupInfo += "(" + allGroupMembers.size() + ") ";
-        for (int i = 0; i < allGroupMembers.size(); i++) {
-            groupInfo += allGroupMembers.get(i).getName() + ", ";
+        StringBuilder groupInfo = new StringBuilder();
+        groupInfo.append("(");
+        groupInfo.append(allGroupMembers.size());
+        groupInfo.append(") ");
+        String separator = "";
+        for (GroupMember member : allGroupMembers) {
+            groupInfo.append(separator);
+            separator = ", ";
+            groupInfo.append(member.getName());
         }
-        groupInfo = groupInfo.substring(0, groupInfo.length() - 2);
 
         // TODO dependency on the screen resolution
         int maxInfoLength = 55;
         if (groupInfo.length() > maxInfoLength) {
-            groupInfo = groupInfo.substring(0, maxInfoLength - 3);
-            holder.groupInfo.setText(groupInfo + "...");
-        } else {
-            holder.groupInfo.setText(groupInfo);
+            groupInfo.setLength(maxInfoLength - 3);
+            groupInfo.append("…");
         }
+        holder.groupInfo.setText(groupInfo);
 
         // set group as active
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {

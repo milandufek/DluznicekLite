@@ -45,7 +45,7 @@ public class ListCurrency extends AppCompatActivity {
      * Setup RecyclerView
      */
     public void initRecyclerView() {
-        Log.d(TAG, "initRecyclerView: ");
+        Log.d(TAG, "setupRecyclerView: ");
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
 

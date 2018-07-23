@@ -115,7 +115,7 @@ public class TransactionRepo implements BaseColumns {
         String[] selectionArgs = { String.valueOf(id) };
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
 
-        return  db.delete(TABLE_NAME, selection, selectionArgs);
+        return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 
     /**
@@ -131,6 +131,11 @@ public class TransactionRepo implements BaseColumns {
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 
+    /**
+     * Select transaction for expenses ID with positive amount
+     * @param expenseId
+     * @return transaction
+     */
     public Cursor selectTransactionForExpense(int expenseId) {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT "
@@ -139,8 +144,21 @@ public class TransactionRepo implements BaseColumns {
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
                 " ON " + _DEBTOR_ID + " = " + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
                 " WHERE " + _EXPENSE_ID + " = " + expenseId +
+                " AND " + _AMOUNT + " >= " + 0 +
                 ";";
 
+        return db.rawQuery(query, null, null);
+    }
+
+    /**
+     * Select all transaction for SettleUp activity
+     * @param groupId
+     * @return cursor with transactions
+     */
+    public Cursor selectBalance(int groupId) {
+        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME;
+        
         return db.rawQuery(query, null, null);
     }
 }

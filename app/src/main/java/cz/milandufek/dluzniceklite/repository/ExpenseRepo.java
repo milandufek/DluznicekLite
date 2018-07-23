@@ -123,7 +123,7 @@ public class ExpenseRepo implements BaseColumns {
 //        FROM expenses
 //        INNER JOIN currencies ON expenses.currency_id = currencies._id
 //        INNER JOIN transactions ON expenses._id = transactions.expense_id
-//        WHERE expenses.group_id = 1
+//        WHERE expenses.group_id = 1 AND transactions.amount >= 0
 //        GROUP BY currencies.name;
         String query = "SELECT " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID + ", " +
@@ -133,10 +133,14 @@ public class ExpenseRepo implements BaseColumns {
                 "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ") " +
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + CurrencyRepo.TABLE_NAME +
-                " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
+                " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " +
+                    CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
                 " INNER JOIN " + TransactionRepo.TABLE_NAME +
-                " ON " + TABLE_NAME + "." + _ID + " = " + TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
+                " ON " + TABLE_NAME + "." + _ID + " = " +
+                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
+                    " AND " +
+                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + " >= " + 0 +
                 " GROUP BY " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME +
                 ";";
 
