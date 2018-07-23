@@ -57,6 +57,8 @@
     <string name="group_set_as_active">je aktivní skupina</string>
     <string name="really_want_to_delete_group">Smazat skupinu?</string>
     <string name="group_saved">Skupina uložena</string>
+    <string name="group_name_is_empty">Název skupiny je prázdný…</string>
+    <string name="group_already_exists">již existuje…"</string>
 
     <!-- CURRENCY -->
     <string name="currency">Měna</string>

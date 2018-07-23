@@ -221,6 +221,7 @@ public class AddExpense extends AppCompatActivity {
                     View thisChild = whoPaysContainer.getChildAt(i);
                     TextView currency = thisChild.findViewById(R.id.tv_expense_currency);
                     currency.setText(currencyNames.get(position));
+                    refreshSummaryLine();
                 }
             }
 
@@ -729,20 +730,7 @@ public class AddExpense extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 hideSoftKeyboard();
                 if (isChecked) {
-                    StringBuilder forAllInfoText = new StringBuilder(getString(R.string.payment_for_all));
-                    forAllInfoText.append(" ( ");
-                    forAllInfoText.append(memberNames.size());
-                    String howMuchText = howMuch.getText().toString().trim();
-                    if (! howMuchText.equals("")) {
-                        if (Double.valueOf(howMuchText) > 0) {
-                            forAllInfoText.append(" x ");
-                            forAllInfoText.append(howMuchText);
-                            forAllInfoText.append(" ");
-                            forAllInfoText.append(currencySelectedName);
-                        }
-                    }
-                    forAllInfoText.append(" )");
-                    forAllInfo.setText(forAllInfoText);
+                    refreshSummaryLine();
                     forAllInfo.setVisibility(View.VISIBLE);
                     rbtnRatio.setVisibility(View.GONE);
                     rbtManually.setVisibility(View.GONE);
@@ -758,6 +746,26 @@ public class AddExpense extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Refresh summary line
+     */
+    private void refreshSummaryLine() {
+        StringBuilder forAllInfoText = new StringBuilder(getString(R.string.payment_for_all));
+        forAllInfoText.append(" ( ");
+        forAllInfoText.append(memberNames.size());
+        String howMuchText = howMuch.getText().toString().trim();
+        if (! howMuchText.equals("")) {
+            if (Double.valueOf(howMuchText) > 0) {
+                forAllInfoText.append(" x ");
+                forAllInfoText.append(howMuchText);
+                forAllInfoText.append(" ");
+                forAllInfoText.append(currencySelectedName);
+            }
+        }
+        forAllInfoText.append(" )");
+        forAllInfo.setText(forAllInfoText);
     }
 
     /**

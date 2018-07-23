@@ -110,19 +110,19 @@ public class AddGroup extends AppCompatActivity {
         Log.d(TAG, "onClick: save button");
         String groupName = AddGroup.this.groupName.getText().toString();
         if (groupName.equals("")) {
-            Log.d(TAG, "onClick: item_group name empty " + groupName);
-            Toast.makeText(context, "Název skupiny je prázdný...",
+            Toast.makeText(context, getString(R.string.group_name_is_empty),
                     Toast.LENGTH_SHORT).show();
         } else if (checkIfGroupExists(groupName)) {
-            Log.d(TAG, "onClick: item_group " + groupName + " already exists");
-            Toast.makeText(context, "Skupina " + groupName + " již existuje...",
+            Toast.makeText(context,
+                    "Skupina " + groupName + " " + getString(R.string.group_already_exists),
                     Toast.LENGTH_SHORT).show();
         } else {
             // save group
             GroupRepo repo = new GroupRepo();
-            Group group = new Group(0, groupName, currencySelectedId,"description");
+            Group group = new Group(0, groupName, currencySelectedId,null);
             long newGroupId = repo.insertGroup(group);
             if (newGroupId != -1) {
+                group.setId((int) newGroupId);
                 Toast.makeText(context,getString(R.string.group_saved), Toast.LENGTH_SHORT).show();
             } else {
                 Log.d(TAG, "Cannot insert data...");
@@ -136,10 +136,12 @@ public class AddGroup extends AppCompatActivity {
             GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
             List<String> groupMemberNames = getAllMembers();
             List<GroupMember> groupMembersToInsert = new ArrayList<>();
-            for (int i = 0; i < groupMemberNames.size(); i++) {
-                GroupMember groupMembers = new GroupMember(0, (int)newGroupId,
-                        groupMemberNames.get(i),"","","",0);
-                groupMembersToInsert.add(groupMembers);
+            for (String member : groupMemberNames) {
+                GroupMember groupMember = new GroupMember();
+                    groupMember.setName(member);
+                    groupMember.setGroupId((int)newGroupId);
+                    groupMember.setIsMe(0);
+                groupMembersToInsert.add(groupMember);
             }
             groupMemberRepo.insertGroupMembers(groupMembersToInsert);
 
@@ -147,7 +149,8 @@ public class AddGroup extends AppCompatActivity {
             setGroupAsActive(group);
 
             // go back to parent activity
-            startActivity(getParentActivityIntent());
+            Intent intent = new Intent(context, MainActivity.class);
+            startActivity(intent);
         }
     }
 
