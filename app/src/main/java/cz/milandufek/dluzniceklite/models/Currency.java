@@ -4,7 +4,6 @@ package cz.milandufek.dluzniceklite.models;
  *  Class for object - currency
  */
 public class Currency {
-    private static final String TAG = "Currency";
 
     private int id, quantity, baseCurrency, isBaseCurrency, isDeletable;
     private String name, country;

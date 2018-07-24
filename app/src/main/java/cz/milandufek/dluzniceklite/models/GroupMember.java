@@ -1,14 +1,10 @@
 package cz.milandufek.dluzniceklite.models;
 
 public class GroupMember {
-    private static final String TAG = "GroupMember";
 
     private int id;
     private int groupId;
-    private String name;
-    private String email;
-    private String contact;
-    private String description;
+    private String name, email, contact, description;
     private int isMe;
 
     public GroupMember(int id, int groupId, String name, String email, String contact, String description, int isMe) {
@@ -23,6 +19,7 @@ public class GroupMember {
 
     public GroupMember() {
     }
+
 
     public int getId() {
         return id;

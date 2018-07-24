@@ -4,7 +4,6 @@ package cz.milandufek.dluzniceklite.models;
  *  Class for object - GROUP
  */
 public class Group {
-    private static final String TAG = "Group";
 
     private int id;
     private String name, description;
@@ -20,9 +19,7 @@ public class Group {
         this.description = description;
     }
 
-    /**
-     * Getters & Setters
-     */
+
     public int getId() {
         return id;
     }

@@ -1,7 +1,6 @@
 package cz.milandufek.dluzniceklite.models;
 
 public class Expense {
-    private static final String TAG = "Expense";
 
     private int id, payerId, groupId, currencyId;
     private String reason, date, time;

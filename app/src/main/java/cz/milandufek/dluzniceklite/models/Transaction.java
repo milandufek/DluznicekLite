@@ -1,7 +1,6 @@
 package cz.milandufek.dluzniceklite.models;
 
 public class Transaction {
-    private static final String TAG = "Transaction";
 
     private double amount;
     private int id, debtor_id, expense_id;
@@ -15,6 +14,7 @@ public class Transaction {
         this.debtor_id = debtor_id;
         this.expense_id = expense_id;
     }
+
 
     public double getAmount() {
         return amount;

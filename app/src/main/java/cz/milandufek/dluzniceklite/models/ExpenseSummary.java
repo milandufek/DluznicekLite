@@ -1,7 +1,6 @@
 package cz.milandufek.dluzniceklite.models;
 
 public class ExpenseSummary {
-    private static final String TAG = "ExpenseSummary";
 
     private String currencyName;
     private double sumSpent;
