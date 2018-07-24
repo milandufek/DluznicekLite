@@ -3,7 +3,6 @@ package cz.milandufek.dluzniceklite.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,22 +15,22 @@ import java.util.List;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 
-public class ExpenseRecViewAdapter
-        extends RecyclerView.Adapter<ExpenseRecViewAdapter.ViewHolder> {
+public class ExpenseRVAdapter
+        extends RecyclerView.Adapter<ExpenseRVAdapter.ViewHolder> {
 
     private static final String TAG = "ExpenseRecyclerViewAdap";
 
     private Context context;
     private List<ExpenseItem> expensesItems;
 
-    public ExpenseRecViewAdapter(Context context, List<ExpenseItem> expensesItems) {
+    public ExpenseRVAdapter(Context context, List<ExpenseItem> expensesItems) {
         this.context = context;
         this.expensesItems = expensesItems;
     }
 
     @NonNull
     @Override
-    public ExpenseRecViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ExpenseRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder: ");
 
         View view = LayoutInflater.from(parent.getContext())
@@ -40,7 +39,7 @@ public class ExpenseRecViewAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExpenseRecViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ExpenseRVAdapter.ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
 
         holder.expenseReason.setText(expensesItems.get(position).getReason());

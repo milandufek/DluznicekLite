@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,14 +21,14 @@ import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Currency;
 
-public class CurrencyRecViewAdapter
-        extends RecyclerView.Adapter<CurrencyRecViewAdapter.ViewHolder> {
-    private static final String TAG = "CurrencyRecViewAdapter";
+public class CurrencyRVAdapter
+        extends RecyclerView.Adapter<CurrencyRVAdapter.ViewHolder> {
+    private static final String TAG = "CurrencyRVAdapter";
 
     private Context context;
     private List<Currency> currency;
 
-    public CurrencyRecViewAdapter(Context context, List<Currency> currency) {
+    public CurrencyRVAdapter(Context context, List<Currency> currency) {
         this.context = context;
         this.currency = currency;
     }

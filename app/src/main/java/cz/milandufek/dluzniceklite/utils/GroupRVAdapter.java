@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,15 +25,15 @@ import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 
-public class GroupRecViewAdapter
-        extends RecyclerView.Adapter<GroupRecViewAdapter.ViewHolder> {
+public class GroupRVAdapter
+        extends RecyclerView.Adapter<GroupRVAdapter.ViewHolder> {
 
-    private static final String TAG = "GroupRecViewAdapter";
+    private static final String TAG = "GroupRVAdapter";
 
     private Context context;
     private List<Group> groups;
 
-    public GroupRecViewAdapter(Context context, List<Group> groups) {
+    public GroupRVAdapter(Context context, List<Group> groups) {
         this.context = context;
         this.groups = groups;
     }
@@ -44,7 +42,6 @@ public class GroupRecViewAdapter
     @SuppressLint("LongLogTag")
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: ");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_group, parent, false);
         return new ViewHolder(view);
@@ -53,7 +50,6 @@ public class GroupRecViewAdapter
     @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: ");
         final String groupName = groups.get(position).getName();
         holder.groupName.setText(groupName);
 
