@@ -14,7 +14,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.GroupRecViewAdapter;
+import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 
 public class ListGroups extends AppCompatActivity {
     private static final String TAG = "ListGroups";
@@ -48,7 +48,7 @@ public class ListGroups extends AppCompatActivity {
 
         List<Group> groups = new GroupRepo().getAllGroups();
 
-        GroupRecViewAdapter adapter = new GroupRecViewAdapter(context, groups);
+        GroupRVAdapter adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);
         recyclerView.setHasFixedSize(true);

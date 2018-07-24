@@ -13,7 +13,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.utils.CurrencyRecViewAdapter;
+import cz.milandufek.dluzniceklite.utils.CurrencyRVAdapter;
 
 public class ListCurrency extends AppCompatActivity {
     private static final String TAG = "ListCurrency";
@@ -49,7 +49,7 @@ public class ListCurrency extends AppCompatActivity {
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
 
-        CurrencyRecViewAdapter adapter = new CurrencyRecViewAdapter(this, currencies);
+        CurrencyRVAdapter adapter = new CurrencyRVAdapter(this, currencies);
 
         RecyclerView recyclerView = findViewById(R.id.rv_currency_list);
         recyclerView.setHasFixedSize(true);

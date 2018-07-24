@@ -17,13 +17,13 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.GroupRecViewAdapter;
+import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 
 public class ListGroupFragment extends Fragment {
     private static final String TAG = "ListGroupsFragment";
 
     private Context context;
-    private GroupRecViewAdapter adapter;
+    private GroupRVAdapter adapter;
 
     @Nullable
     @Override
@@ -44,7 +44,7 @@ public class ListGroupFragment extends Fragment {
         });
 
         List<Group> groups = new GroupRepo().getAllGroups();
-        adapter = new GroupRecViewAdapter(context, groups);
+        adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_main_group_list);
         recyclerView.setHasFixedSize(true);
