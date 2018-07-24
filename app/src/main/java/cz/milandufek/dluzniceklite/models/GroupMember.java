@@ -79,17 +79,4 @@ public class GroupMember {
     public void setIsMe(int isMe) {
         this.isMe = isMe;
     }
-
-    @Override
-    public String toString() {
-        return "GroupMember{" +
-                " id='" + id + '\'' +
-                ", groupId='" + groupId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", contact='" + contact + '\'' +
-                ", description='" + description + '\'' +
-                ", isMe='" + isMe + "\'" +
-                '}';
-    }
 }

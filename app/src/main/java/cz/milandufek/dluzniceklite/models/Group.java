@@ -54,13 +54,4 @@ public class Group {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Override
-    public String toString() {
-        return "Group {" +
-                "id=" + id + "\'" +
-                ", name='" + name + "\'" +
-                ", currency'" + currency + "\'" +
-                '}';
-    }
 }
