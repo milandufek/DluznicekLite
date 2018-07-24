@@ -108,6 +108,4 @@ public class GroupRepo implements BaseColumns {
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
-
-
 }

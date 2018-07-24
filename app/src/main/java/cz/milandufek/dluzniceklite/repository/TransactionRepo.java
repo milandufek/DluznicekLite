@@ -18,9 +18,9 @@ public class TransactionRepo implements BaseColumns {
     private Context context;
 
     public static final String TABLE_NAME = "transactions";
-    static final String _DEBTOR_ID = "debtor_id";
-    static final String _EXPENSE_ID = "expense_id";
-    static final String _AMOUNT = "amount";
+    public static final String _DEBTOR_ID = "debtor_id";
+    public static final String _EXPENSE_ID = "expense_id";
+    public static final String _AMOUNT = "amount";
 
     private static final String ALL_COLS[] = { _ID, _DEBTOR_ID, _EXPENSE_ID, _AMOUNT};
 
@@ -151,7 +151,7 @@ public class TransactionRepo implements BaseColumns {
     }
 
     /**
-     * Select all transaction for SettleUp activity
+     * Select all transaction for DebtCalculator activity
      * @param groupId
      * @return cursor with transactions
      */

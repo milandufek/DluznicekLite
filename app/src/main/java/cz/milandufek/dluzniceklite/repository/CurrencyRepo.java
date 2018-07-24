@@ -13,7 +13,6 @@ import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 
 public class CurrencyRepo implements BaseColumns {
-    private static final String TAG = "CurrencyRepo";
 
     private Context context;
 
