@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +52,8 @@ public class GroupRVAdapter
     @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final String groupName = groups.get(position).getName();
-        holder.groupName.setText(groupName);
+        final String groupNameText = groups.get(position).getName();
+        holder.groupName.setText(groupNameText);
 
         final int groupId = groups.get(position).getId();
         final int groupCurrencyId = groups.get(position).getCurrency();
@@ -77,62 +79,83 @@ public class GroupRVAdapter
         holder.groupInfo.setText(groupInfo);
 
         // set group as active
-        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 MySharedPreferences sp = new MySharedPreferences(context);
                 sp.setActiveGroupId(groupId);
-                sp.setActiveGroupName(groupName);
+                sp.setActiveGroupName(groupNameText);
                 sp.setActiveGroupCurrencyId(groupCurrencyId);
 
-                String setAsActive = groupName + " " + context.getString(R.string.group_set_as_active);
+                String setAsActive = groupNameText + " " + context.getString(R.string.group_set_as_active);
 
                 Intent newMainActivity = new Intent(context, MainActivity.class);
                 newMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 context.startActivity(newMainActivity);
 
                 Toast.makeText(context, setAsActive, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // popup menu edit/delete
+        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+                popupMenu.inflate(R.menu.menu_item_onclick);
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_edit_item:
+                                onClickEdit(holder, groupId);
+                                Toast.makeText(context,"TODO: Edit item " + groupNameText,
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            case R.id.action_delete_item:
+                                onClickDelete(holder, groupNameText);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+
                 return true;
             }
         });
+    }
 
-        // TODO open to edit
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: " + groups.get(holder.getAdapterPosition()).getName());
-                Toast.makeText(context, groups.get(holder.getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void onClickEdit(ViewHolder h, int id) {
+        // TODO onClickEdit
+    }
 
-        // delete button
-        holder.groupDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: delete ID " + groups.get(holder.getAdapterPosition()).getId());
-                AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setTitle(R.string.really_want_to_delete_group)
-                        .setMessage(groupName)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                GroupRepo repo = new GroupRepo();
-                                repo.deleteGroup(groups.get(holder.getAdapterPosition()).getId());
-                                groups.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                notifyItemRangeChanged(holder.getAdapterPosition(), groups.size());
-                                changeActiveGroupToFirstAvailable();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.show();
-            }
-        });
+    private void onClickDelete(final ViewHolder h, String groupNameText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle(R.string.really_want_to_delete_group)
+                .setMessage(groupNameText)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        GroupRepo repo = new GroupRepo();
+                        repo.deleteGroup(groups.get(h.getAdapterPosition()).getId());
+                        groups.remove(h.getAdapterPosition());
+                        notifyItemRemoved(h.getAdapterPosition());
+                        notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
+                        changeActiveGroupToFirstAvailable();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
     }
 
     /**
@@ -157,7 +180,6 @@ public class GroupRVAdapter
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
         TextView groupName, groupInfo;
-        ImageButton groupDelete;
         ConstraintLayout parentLayout;
 
         private ViewHolder(View itemView) {
@@ -167,7 +189,6 @@ public class GroupRVAdapter
 
             groupName = itemView.findViewById(R.id.tv_group_name);
             groupInfo = itemView.findViewById(R.id.tv_group_info);
-            groupDelete = itemView.findViewById(R.id.ibtn_group_remove);
         }
     }
 }

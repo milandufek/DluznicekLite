@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +53,6 @@ public class CurrencyRVAdapter
         holder.parentLayout.setId(currency.get(position).getId());
         holder.currencyName.setText(currency.get(position).getName());
         holder.currencyValue.setText(currency.get(position).getCurrencyInfo());
-        holder.currencyDelete.setId(currency.get(position).getId());
 
         // item click Toast notification
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -65,38 +66,62 @@ public class CurrencyRVAdapter
             }
         });
 
-        // hide delete button if there is only last item_currency
-        if (getItemCount() <= 1) {
-            holder.currencyDelete.setVisibility(View.GONE);
-        }
-
         // delete button
-        holder.currencyDelete.setOnClickListener(new View.OnClickListener() {
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int currencyId = currency.get(holder.getAdapterPosition()).getId();
-                Log.d(TAG, "onClick: delete ID " + currencyId);
-                AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setTitle(R.string.really_want_to_delete_currency)
-                        .setMessage(currency.get(holder.getAdapterPosition()).getName())
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                CurrencyRepo db = new CurrencyRepo();
-                                db.deleteCurrency(currencyId);
-                                currency.remove(holder.getAdapterPosition());
-                                notifyItemRemoved(holder.getAdapterPosition());
-                                notifyItemRangeChanged(0, currency.size());
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
-                builder.show();
+
+                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+                popupMenu.inflate(R.menu.menu_item_onclick);
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_edit_item:
+                                onClickEdit(holder, currencyId);
+                                return true;
+
+                            case R.id.action_delete_item:
+                                onClickDelete(holder, currencyId);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popupMenu.show();
             }
         });
+    }
+
+    private void onClickEdit(ViewHolder h, int id) {
+        // TODO onClickEdit
+    }
+
+    private void onClickDelete(final ViewHolder h, final int currencyId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle(R.string.really_want_to_delete_currency)
+                .setMessage(currency.get(h.getAdapterPosition()).getName())
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CurrencyRepo db = new CurrencyRepo();
+                        db.deleteCurrency(currencyId);
+                        currency.remove(h.getAdapterPosition());
+                        notifyItemRemoved(h.getAdapterPosition());
+                        notifyItemRangeChanged(0, currency.size());
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+        builder.show();
     }
 
     @Override
@@ -111,7 +136,6 @@ public class CurrencyRVAdapter
     //protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView currencyName;
         TextView currencyValue;
-        ImageButton currencyDelete;
         ConstraintLayout parentLayout;
 
         private ViewHolder(View itemView) {
@@ -120,7 +144,6 @@ public class CurrencyRVAdapter
             parentLayout = itemView.findViewById(R.id.itemCurrency);
             currencyName = itemView.findViewById(R.id.tv_currency_name);
             currencyValue = itemView.findViewById(R.id.tv_currency_value);
-            currencyDelete = itemView.findViewById(R.id.ibtn_currency_remove);
         }
     }
 }

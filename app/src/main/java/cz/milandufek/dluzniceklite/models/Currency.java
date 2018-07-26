@@ -85,7 +85,8 @@ public class Currency {
     }
 
     public String getCurrencyInfo() {
-        StringBuilder info = new StringBuilder(quantity);
+        StringBuilder info = new StringBuilder();
+        info.append(quantity);
         info.append(" : ");
         info.append(exchangeRate);
         info.append(" \u2022 ");

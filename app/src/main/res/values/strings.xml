@@ -18,6 +18,10 @@
     <string name="saved">Uloženo</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Smazat</string>
+    <string name="edit">Upravit</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 
     <!-- WARRNINGS / ERRORS -->
     <string name="error">Oooops něco se pokazilo…</string>
