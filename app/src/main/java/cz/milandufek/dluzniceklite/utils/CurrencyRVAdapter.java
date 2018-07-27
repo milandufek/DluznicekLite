@@ -118,7 +118,6 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
      *  Recycler View Holder
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
-    //protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView currencyName;
         TextView currencyValue;
         ConstraintLayout parentLayout;

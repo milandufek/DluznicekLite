@@ -17,14 +17,13 @@ import cz.milandufek.dluzniceklite.repository.GroupRepo;
 import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 
 public class ListGroups extends AppCompatActivity {
-    private static final String TAG = "ListGroups";
+
     private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_groups);
-        Log.d(TAG, "onCreate: started.");
 
         setupRecyclerView();
 
@@ -44,8 +43,6 @@ public class ListGroups extends AppCompatActivity {
      * Setup RecyclerView
      */
     public void setupRecyclerView() {
-        Log.d(TAG, "setupRecyclerView: settings up adapter...");
-
         List<Group> groups = new GroupRepo().getAllGroups();
 
         GroupRVAdapter adapter = new GroupRVAdapter(context, groups);

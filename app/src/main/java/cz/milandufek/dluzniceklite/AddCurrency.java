@@ -41,22 +41,17 @@ public class AddCurrency extends AppCompatActivity {
                 int quantity;
 
                 if (checkIfStringIsEmpty(currencyName)) {
-                    Log.d(TAG, "onClick: item_currency name is empty " + currencyName);
                     Toast.makeText(context,getString(R.string.warrning_currency_empty),
                             Toast.LENGTH_SHORT).show();
                 }
                 else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
-                    Log.d(TAG, "onClick: item_currency already exists " + currencyName);
                     Toast.makeText(context, getString(R.string.warrning_currency_exists),
                             Toast.LENGTH_SHORT).show();
                 }
                 else if (checkIfStringIsEmpty(currencyExchangeRate)) {
-                    Log.d(TAG, "onClick: exchange rate is empty " + currencyName);
                     Toast.makeText(context,getString(R.string.warrning_exrate_empty),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d(TAG, "onClick: saving new row - currency " + currencyName);
-                    // set quantity
                     quantity = checkIfStringIsEmpty(currencyExchangeRate)
                             ? 1
                             : Integer.parseInt(AddCurrency.this.quantity.getText().toString());
@@ -66,15 +61,12 @@ public class AddCurrency extends AppCompatActivity {
                             0,0, 1);
 
                     if (sql.insertCurrency(currency) > 0) {
-                        Log.d(TAG, "onClick: " + currencyName + " saved");
                         Toast.makeText(context, getString(R.string.saved),
                                 Toast.LENGTH_SHORT).show();
-
                         // go back to parent activity
                         startActivity(getParentActivityIntent());
                     }
                     else {
-                        Log.d(TAG, "DB: Cannot insert data...");
                         Toast.makeText(context, getString(R.string.error),
                                 Toast.LENGTH_SHORT).show();
                     }

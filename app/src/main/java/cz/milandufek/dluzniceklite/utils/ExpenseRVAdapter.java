@@ -59,12 +59,17 @@ public class ExpenseRVAdapter
             info.append(date);
             info.append(" ");
             info.append(time);
-            info.append(" \u2022 ");
+            info.append(" ");
+            info.append(context.getString(R.string.big_dot));
+            info.append(" ");
             info.append(payer);
-            info.append(" zaplatil(a) za ");
+            info.append(" ");
+            info.append(context.getString(R.string.paid_for));
+            info.append(" ");
             info.append(debtors);
             info.append(" ");
         holder.expenseInfo.setText(info);
+        ;
     }
 
     @Override

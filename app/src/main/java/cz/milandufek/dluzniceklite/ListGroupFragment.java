@@ -20,6 +20,7 @@ import cz.milandufek.dluzniceklite.repository.GroupRepo;
 import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 
 public class ListGroupFragment extends Fragment {
+
     private static final String TAG = "ListGroupsFragment";
 
     private Context context;

@@ -22,6 +22,7 @@
     <string name="edit">Upravit</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="big_dot">•</string>
 
     <!-- WARRNINGS / ERRORS -->
     <string name="error">Oooops něco se pokazilo…</string>
@@ -49,6 +50,7 @@
     <string name="version">Verze: 0.1</string>
 
     <!-- GROUPS -->
+    <string name="group">Skupina</string>
     <string name="toast_no_groups_found">Zatím tu žádné skupiny…</string>
     <string name="group_name">Název skupiny</string>
     <string name="group_name_hint">Váš název…</string>

@@ -16,6 +16,7 @@ import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.CurrencyRVAdapter;
 
 public class ListCurrency extends AppCompatActivity {
+
     private static final String TAG = "ListCurrency";
 
     // TODO load data from CNB page
@@ -25,7 +26,6 @@ public class ListCurrency extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_currency);
-        Log.d(TAG, "onCreate: started.");
 
         initRecyclerView();
 
@@ -45,8 +45,6 @@ public class ListCurrency extends AppCompatActivity {
      * Setup RecyclerView
      */
     public void initRecyclerView() {
-        Log.d(TAG, "setupRecyclerView: ");
-
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
 
         CurrencyRVAdapter adapter = new CurrencyRVAdapter(this, currencies);

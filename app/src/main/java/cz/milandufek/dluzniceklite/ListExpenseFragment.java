@@ -58,8 +58,6 @@ public class ListExpenseFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        //registerForContextMenu(recyclerView);
-
         return view;
     }
 

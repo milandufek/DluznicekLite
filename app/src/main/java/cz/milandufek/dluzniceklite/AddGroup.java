@@ -114,7 +114,11 @@ public class AddGroup extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else if (checkIfGroupExists(groupName)) {
             Toast.makeText(context,
-                    "Skupina " + groupName + " " + getString(R.string.group_already_exists),
+                    context.getString(R.string.group) +
+                            " " +
+                            groupName +
+                            " " +
+                            getString(R.string.group_already_exists),
                     Toast.LENGTH_SHORT).show();
         } else {
             // save group
@@ -127,7 +131,6 @@ public class AddGroup extends AppCompatActivity {
             } else {
                 Log.d(TAG, "Cannot insert data...");
                 Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
-
                 // go back to parent activity
                 startActivity(getParentActivityIntent());
             }
