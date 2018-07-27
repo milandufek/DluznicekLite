@@ -23,9 +23,7 @@ import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Currency;
 
-public class CurrencyRVAdapter
-        extends RecyclerView.Adapter<CurrencyRVAdapter.ViewHolder> {
-    private static final String TAG = "CurrencyRVAdapter";
+public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.ViewHolder> {
 
     private Context context;
     private List<Currency> currency;
@@ -39,7 +37,6 @@ public class CurrencyRVAdapter
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: Creating...");
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_currency, parent, false);
         return new ViewHolder(view);
@@ -48,23 +45,10 @@ public class CurrencyRVAdapter
     @SuppressLint("LongLogTag")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: called...");
 
         holder.parentLayout.setId(currency.get(position).getId());
         holder.currencyName.setText(currency.get(position).getName());
         holder.currencyValue.setText(currency.get(position).getCurrencyInfo());
-
-        // item click Toast notification
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: item ID " + currency.get(holder.getAdapterPosition()).getName());
-
-                Toast.makeText(context,currency.get(holder.getAdapterPosition()).getName()
-                                + " ID(" + currency.get(holder.getAdapterPosition()).getId() + ")",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // delete button
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +83,7 @@ public class CurrencyRVAdapter
 
     private void onClickEdit(ViewHolder h, int id) {
         // TODO onClickEdit
+        Toast.makeText(context,"TODO: Edit item " + id, Toast.LENGTH_SHORT).show();
     }
 
     private void onClickDelete(final ViewHolder h, final int currencyId) {
