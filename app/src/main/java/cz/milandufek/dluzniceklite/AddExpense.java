@@ -656,7 +656,7 @@ public class AddExpense extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                int hours = cal.get(Calendar.HOUR);
+                int hours = cal.get(Calendar.HOUR_OF_DAY);
                 int minutes = cal.get(Calendar.MINUTE);
 
                 TimePickerDialog dialog = new TimePickerDialog(
@@ -693,7 +693,7 @@ public class AddExpense extends AppCompatActivity {
      */
     private String getTimeNow() {
         Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
         String hourZeroPrefix = "";
         String minuteZeroPrefix = "";
