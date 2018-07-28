@@ -25,6 +25,7 @@ import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.ExpenseRVAdapter;
+import cz.milandufek.dluzniceklite.utils.MyNumbers;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 
 public class ListExpenseFragment extends Fragment {
@@ -93,6 +94,7 @@ public class ListExpenseFragment extends Fragment {
             }
             selectTransactions.close();
 
+            sum = new MyNumbers().roundIt(sum, 2);
             expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
 

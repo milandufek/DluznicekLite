@@ -46,6 +46,8 @@ import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.utils.MyDateTime;
+import cz.milandufek.dluzniceklite.utils.MyNumbers;
 import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
 
 public class AddExpense extends AppCompatActivity {
@@ -303,7 +305,7 @@ public class AddExpense extends AppCompatActivity {
                                 }
                             }
                         }
-                        amountTotal = roundIt(amountTotal, 2);
+                        amountTotal = new MyNumbers().roundIt(amountTotal, 2);
                         howMuch.setText(String.valueOf(amountTotal));
                     }
                 }
@@ -399,7 +401,7 @@ public class AddExpense extends AppCompatActivity {
             if (willPay.isChecked()) {
                 ratioLineCount = Double.valueOf(String.valueOf(ratioPerMemberLine.getText()));
                 amountPerMemberText = oneRatioValue * ratioLineCount;
-                amountPerMemberText = roundIt(amountPerMemberText, 2);
+                amountPerMemberText = new MyNumbers().roundIt(amountPerMemberText, 2);
 
                 amountPerMemberLine.setText(String.valueOf(amountPerMemberText));
                 ratioTotal.setText(String.valueOf(totalRatiosToPay));
@@ -509,7 +511,7 @@ public class AddExpense extends AppCompatActivity {
         double amountTotal;
         if (textAmount.length() > 0) {
             amountTotal = Double.valueOf(textAmount);
-            amountTotal = roundIt(amountTotal, 2);
+            amountTotal = new MyNumbers().roundIt(amountTotal, 2);
         } else {
             amountTotal = 0;
         }
@@ -525,7 +527,7 @@ public class AddExpense extends AppCompatActivity {
         double amountPerMember;
         if (amountTotal > 0) {
             amountPerMember = amountTotal / getCountMembersSelected();
-            amountPerMember = roundIt(amountPerMember, 2);
+            amountPerMember = new MyNumbers().roundIt(amountPerMember, 2);
         } else {
             amountPerMember = 0;
         }
@@ -534,7 +536,7 @@ public class AddExpense extends AppCompatActivity {
 
     /**
      * Updating a view with summary how much will be paid
-     * @param s
+     * @param s text
      */
     private void howMuchOnTextChangeListener(CharSequence s) {
         if (!rbtManually.isChecked()) {
@@ -543,7 +545,7 @@ public class AddExpense extends AppCompatActivity {
             forAllInfoText.append(getCountMembers());
             if (s.toString().trim().length() > 0) {
                 double amount = Double.valueOf(s.toString()) / getCountMembers();
-                amount = roundIt(amount, 2);
+                amount = new MyNumbers().roundIt(amount, 2);
                 // update summary in TextView
                 forAllInfoText.append(" x ");
                 forAllInfoText.append(amount);
@@ -562,25 +564,11 @@ public class AddExpense extends AppCompatActivity {
     }
 
     /**
-     * Round number to specified decimals
-     * @param value
-     * @param places
-     * @return rounded number
-     */
-    private double roundIt(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
-    /**
      * Setup date picker
      * Set today as a default value
      */
     private void setupDatePicker() {
-        dateDb = getDateToday();
+        dateDb = new MyDateTime().getDateToday();
         date.setText(getString(R.string.today));
 
         // set date from calendar
@@ -625,31 +613,11 @@ public class AddExpense extends AppCompatActivity {
     }
 
     /**
-     * Get today's date in YYYY-MM-DD format
-     */
-    private String getDateToday() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        month = month + 1;
-
-        String monthZeroPrefix = "";
-        String dayZeroPrefix = "";
-        if (month < 10)
-            monthZeroPrefix = "0";
-        if (day < 10)
-            dayZeroPrefix = "0";
-
-        return year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
-    }
-
-    /**
      * Setup time picker
      * Set now as a default value
      */
     private void setupTimePicker() {
-        timeDb = getTimeNow();
+        timeDb = new MyDateTime().getTimeNow();
         time.setText(getString(R.string.now));
 
         time.setOnClickListener(new View.OnClickListener() {
@@ -687,24 +655,6 @@ public class AddExpense extends AppCompatActivity {
             }
         };
     }
-
-    /**
-     * Get time now in format HH:mm
-     */
-    private String getTimeNow() {
-        Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int minute = cal.get(Calendar.MINUTE);
-        String hourZeroPrefix = "";
-        String minuteZeroPrefix = "";
-        if (hour < 10)
-            hourZeroPrefix = "0";
-        if (minute < 10)
-            minuteZeroPrefix = "0";
-
-        return hourZeroPrefix + hour + ":" + minuteZeroPrefix + minute;
-    }
-
 
     /**
      *  Setup radio buttons to change ration calculation
