@@ -20,6 +20,7 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Smazat</string>
     <string name="edit">Upravit</string>
+    <string name="settleup">Vyrovnat dluh</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="big_dot">•</string>
@@ -92,6 +93,7 @@
     <string name="paid_for">zaplatil(a) za</string>
     <string name="today">dnes</string>
     <string name="now">teď</string>
+    <string name="really_want_to_delete_expense">Smazat výdaj?</string>
 
 
 </resources>

@@ -40,9 +40,13 @@ public class SettleUpFragment extends Fragment {
     private List<SettleUpTransaction> recViewDataSet() {
         List<SettleUpTransaction> transactions = new ArrayList<>();
 
-        SettleUpTransaction transaction = new SettleUpTransaction();
-
-        transactions.add(transaction);
+        for (int i = 0; i < 4; i++) {
+            SettleUpTransaction transaction = new SettleUpTransaction();
+            transaction.setFrom("From user " + i);
+            transaction.setTo("To user " + i);
+            transaction.setAmount(i * 100);
+            transactions.add(transaction);
+        }
 
         return transactions;
     }

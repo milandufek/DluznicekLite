@@ -3,12 +3,16 @@ package cz.milandufek.dluzniceklite.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -38,12 +42,27 @@ public class SettleUpRVAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+
+        holder.debtor.setText(transactions.get(position).getFrom());
+        holder.creditor.setText(transactions.get(position).getTo());
+        holder.amount.setText(String.valueOf(transactions.get(position).getAmount()));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO OnClick to settle-up the debt
+                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+                popupMenu.inflate(R.menu.menu_item_settleup_onclick);
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // TODO OnClick to settle-up the debt
+                        Toast.makeText(context, "TODO: vyrovnej dluh", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+                popupMenu.show();
             }
         });
     }

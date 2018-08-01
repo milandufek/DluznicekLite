@@ -89,11 +89,12 @@ public class ListExpenseFragment extends Fragment {
             while (selectTransactions.moveToNext()) {
                 debtors.append(separator);
                 separator = ", ";
-                debtors.append(selectTransactions.getString(0));
-                sum += selectTransactions.getDouble(1);
+                debtors.append(selectTransactions.getString(0)); // member name
+                sum += selectTransactions.getDouble(1); // amount
             }
             selectTransactions.close();
 
+            sum *= -1;
             sum = new MyNumbers().roundIt(sum, 2);
             expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
@@ -128,13 +129,12 @@ public class ListExpenseFragment extends Fragment {
             } else {
                 sumAmountInBaseCurrency += cursorSummary.getDouble(4);
             }
-            //sumAmountInBaseCurrency *= -1;
+
             Log.d(TAG, "initDataSummary: sum = " + sumAmountInBaseCurrency);
         }
 
-        sumAmountInBaseCurrency = new BigDecimal(sumAmountInBaseCurrency)
-                .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue();
+        sumAmountInBaseCurrency *= -1;
+        sumAmountInBaseCurrency = new MyNumbers().roundIt(sumAmountInBaseCurrency, 2);
 
         ExpenseSummary expenseSummary = new ExpenseSummary();
         expenseSummary.setCurrencyName(currencyName);

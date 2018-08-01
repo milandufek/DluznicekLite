@@ -139,7 +139,7 @@ public class ExpenseRepo implements BaseColumns {
                     TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                     " AND " +
-                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + " >= " + 0 +
+                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + " <= " + 0 +
                 " GROUP BY " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME +
                 ";";
 

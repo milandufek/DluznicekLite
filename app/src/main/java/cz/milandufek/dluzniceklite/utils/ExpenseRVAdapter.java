@@ -1,19 +1,26 @@
 package cz.milandufek.dluzniceklite.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
+import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 
 public class ExpenseRVAdapter
         extends RecyclerView.Adapter<ExpenseRVAdapter.ViewHolder> {
@@ -39,8 +46,10 @@ public class ExpenseRVAdapter
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ExpenseRVAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: ");
+
+        final int expenseId = expensesItems.get(position).getId();
 
         holder.expenseReason.setText(expensesItems.get(position).getReason());
 
@@ -69,7 +78,62 @@ public class ExpenseRVAdapter
             info.append(debtors);
             info.append(" ");
         holder.expenseInfo.setText(info);
-        ;
+
+        holder.itemExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, holder.itemExpense);
+                popupMenu.inflate(R.menu.menu_item_onclick);
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_edit_item:
+                                onClickEdit(holder, expenseId);
+                                Toast.makeText(context,"TODO: Edit item ",
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            case R.id.action_delete_item:
+                                onClickDelete(holder, expenseId);
+                                return true;
+
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    private void onClickEdit(ViewHolder h, int id) {
+
+    }
+
+    private void onClickDelete(final ViewHolder h, final int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle(R.string.really_want_to_delete_expense)
+                .setMessage(expensesItems.get(h.getAdapterPosition()).getReason())
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ExpenseRepo repo = new ExpenseRepo();
+                        repo.deleteExpense(id);
+                        expensesItems.remove(h.getAdapterPosition());
+                        notifyItemRemoved(h.getAdapterPosition());
+                        notifyItemRangeChanged(h.getAdapterPosition(), expensesItems.size());
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        builder.show();
     }
 
     @Override

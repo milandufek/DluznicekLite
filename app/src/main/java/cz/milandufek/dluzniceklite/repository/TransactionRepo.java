@@ -144,7 +144,7 @@ public class TransactionRepo implements BaseColumns {
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
                 " ON " + _DEBTOR_ID + " = " + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
                 " WHERE " + _EXPENSE_ID + " = " + expenseId +
-                " AND " + _AMOUNT + " >= " + 0 +
+                " AND " + _AMOUNT + " <= " + 0 +
                 ";";
 
         return db.rawQuery(query, null, null);

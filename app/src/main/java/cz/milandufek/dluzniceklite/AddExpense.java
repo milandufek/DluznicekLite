@@ -765,17 +765,17 @@ public class AddExpense extends AppCompatActivity {
                 willPay = memberLine.findViewById(R.id.chbox_expense_member);
                 amountPerMemberTv = memberLine.findViewById(R.id.et_expense_amount);
                 if (amountPerMemberTv.getText().toString().trim().length() > 0) {
-                    expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString());
+                    expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString().trim());
                 } else {
                     expensePerMember = 0;
                 }
             }
-            expensePerMember *= -1;
+//            expensePerMember *= -1;
 
             // plus total amount if the debtor is also creditor
-            if (whoPaysIdSelected == memberIds.get(i)) {
-                expensePerMember += getHowMuchTotal();
-            }
+//            if (whoPaysIdSelected == memberIds.get(i)) {
+//                expensePerMember += getHowMuchTotal();
+//            }
 
             if (willPay.isChecked()) {
                 Transaction transaction = new Transaction();
@@ -785,8 +785,15 @@ public class AddExpense extends AppCompatActivity {
                 transaction.setExpense_id((int) newExpenseId);
                 transactions.add(transaction);
             }
-
         }
+
+        // add also positive expense for payer
+        Transaction transaction = new Transaction();
+        transaction.setId(0);
+        transaction.setDebtor_id(whoPaysIdSelected);
+        transaction.setAmount(getHowMuchTotal() * -1);
+        transaction.setExpense_id((int) newExpenseId);
+        transactions.add(transaction);
 
         TransactionRepo transactionRepo = new TransactionRepo();
         long resultInsertTransaction = transactionRepo.insertTransactions(transactions);
