@@ -770,12 +770,6 @@ public class AddExpense extends AppCompatActivity {
                     expensePerMember = 0;
                 }
             }
-//            expensePerMember *= -1;
-
-            // plus total amount if the debtor is also creditor
-//            if (whoPaysIdSelected == memberIds.get(i)) {
-//                expensePerMember += getHowMuchTotal();
-//            }
 
             if (willPay.isChecked()) {
                 Transaction transaction = new Transaction();

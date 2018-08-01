@@ -125,6 +125,7 @@ public class ExpenseRVAdapter
                         expensesItems.remove(h.getAdapterPosition());
                         notifyItemRemoved(h.getAdapterPosition());
                         notifyItemRangeChanged(h.getAdapterPosition(), expensesItems.size());
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
