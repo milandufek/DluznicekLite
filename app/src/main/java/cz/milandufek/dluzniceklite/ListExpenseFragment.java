@@ -94,7 +94,6 @@ public class ListExpenseFragment extends Fragment {
             }
             selectTransactions.close();
 
-            sum *= -1;
             sum = new MyNumbers().roundIt(sum, 2);
             expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
