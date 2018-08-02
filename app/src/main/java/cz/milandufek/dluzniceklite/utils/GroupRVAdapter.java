@@ -141,12 +141,17 @@ public class GroupRVAdapter
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        int groupId = groups.get(h.getAdapterPosition()).getId();
                         GroupRepo repo = new GroupRepo();
-                        repo.deleteGroup(groups.get(h.getAdapterPosition()).getId());
+                        repo.deleteGroup(groupId);
                         groups.remove(h.getAdapterPosition());
                         notifyItemRemoved(h.getAdapterPosition());
                         notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
+
+                        int activeGroupId = new MySharedPreferences(context).getActiveGroupId();
                         changeActiveGroupToFirstAvailable();
+                        if (groupId == activeGroupId)
+                            context.startActivity(new Intent(context, MainActivity.class));
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

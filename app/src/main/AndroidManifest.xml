@@ -32,16 +32,6 @@
             android:label="@string/title_activity_about"
             android:parentActivityName=".MainActivity" />
 
-        <!-- Groups -->
-        <activity
-            android:name=".ListGroups"
-            android:label="@string/action_manage_groups"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".AddGroup"
-            android:label="@string/title_add_group"
-            android:parentActivityName=".ListGroups" />
-
         <!-- Currency -->
         <activity
             android:name=".ListCurrency"

@@ -157,6 +157,7 @@ public class TransactionRepo implements BaseColumns {
      */
     public Cursor selectBalance(int groupId) {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        // TODO select balance
         String query = "SELECT * FROM " + TABLE_NAME;
         
         return db.rawQuery(query, null, null);

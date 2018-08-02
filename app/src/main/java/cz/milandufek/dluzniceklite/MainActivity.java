@@ -111,9 +111,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-//            case R.id.action_manage_groups:
-//                intent = new Intent(this, ListGroups.class);
-//                break;
             case R.id.action_manage_currencies:
                 intent = new Intent(this, ListCurrency.class);
                 break;
