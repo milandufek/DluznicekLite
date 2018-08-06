@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Balance;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 
 /**
@@ -23,7 +22,12 @@ public class DebtCalculator {
     private static final String TAG = "DebtCalculator";
     private Context context;
 
-    public List<HashMap<String, Object>> calculateDebts(List<Balance> balances) {
+    public DebtCalculator() {
+    }
+
+    public List<HashMap<String, Object>> calculateDebts(int groupId, int currencyId) {
+        List<Balance> balances = new LinkedList<>(getBalances(groupId, currencyId));
+
         List<HashMap<String, Object>> debts = new LinkedList<>();
         double tolerance = 0.001;
 
@@ -37,7 +41,6 @@ public class DebtCalculator {
             double debtorShouldSend = debtor.getBalance();
             double creditorShouldReceive = creditor.getBalance();
             double amount;
-            // TODO
             if (debtorShouldSend > creditorShouldReceive) {
                 amount = debtorShouldSend;
             } else {
@@ -80,43 +83,25 @@ public class DebtCalculator {
     /**
      * Select balances for all members in group in base currency
      * @param groupId
-     * @return
+     * @param currencyId
+     * @return Cursor
      */
-    private List<Balance> getBalances(int groupId) {
-        //SELECT debtor_id,SUM(amount) AS balance
-        // FROM transactions
-        // INNER JOIN expenses
-        // ON expenses._id = transactions.expense_id
-        // WHERE expenses.group_id = 1
-        // GROUP BY debtor_id
-        // ORDER BY balance;
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        String query = "SELECT " +
-                    TransactionRepo._DEBTOR_ID + ", " +
-                    "SUM(" + TransactionRepo._AMOUNT + ")" + " AS balance " +
-                " FROM " + TransactionRepo.TABLE_NAME +
-                " INNER JOIN " + ExpenseRepo.TABLE_NAME +
-                " ON " +
-                    ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
-                    " = " +
-                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
-                " WHERE " +
-                    ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
-                    " = " +
-                    groupId +
-                " GROUP BY balance" +
-                " ORDER BY " + TransactionRepo._DEBTOR_ID +
-                ";";
-
-        Cursor cursor = db.rawQuery(query, null, null);
+    private List<Balance> getBalances(int groupId, int currencyId) {
         List<Balance> balances = new ArrayList<>();
 
-        // TODO reflect baseCurrency
+        Cursor cursor = new TransactionRepo().selectBalance(groupId);
         while (cursor.moveToNext()) {
             Balance balance = new Balance();
                 balance.setGroupId(groupId);
                 balance.setMemberId(cursor.getInt(0));
-                balance.setBalance(cursor.getDouble(1));
+                balance.setMemberName(cursor.getString(1));
+                int expenseCurrencyId = cursor.getInt(3);
+                if (expenseCurrencyId != currencyId) {
+                    int quantity = cursor.getInt(4);
+                    int exchangeRate = cursor.getInt(5);
+                    double amount = cursor.getDouble(2);
+                    balance.setBalance( amount / quantity * exchangeRate );
+                }
             balances.add(balance);
         }
 

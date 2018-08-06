@@ -4,7 +4,8 @@ import android.support.annotation.NonNull;
 
 public class Balance implements Comparable<Balance> {
 
-    private int groupId, memberId;
+    private int groupId, memberId, currencyId;
+    private String memberName;
     private double balance;
 
     public Balance() {
@@ -32,6 +33,22 @@ public class Balance implements Comparable<Balance> {
 
     public void setMemberId(int memberId) {
         this.memberId = memberId;
+    }
+
+    public int getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(int currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
     }
 
     public double getBalance() {

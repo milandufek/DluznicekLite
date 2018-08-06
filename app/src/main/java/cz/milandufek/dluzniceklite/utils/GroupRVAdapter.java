@@ -89,9 +89,7 @@ public class GroupRVAdapter
 
                 String setAsActive = groupNameText + " " + context.getString(R.string.group_set_as_active);
 
-                Intent newMainActivity = new Intent(context, MainActivity.class);
-                newMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(newMainActivity);
+                refreshActivity();
 
                 Toast.makeText(context, setAsActive, Toast.LENGTH_SHORT).show();
             }
@@ -145,13 +143,14 @@ public class GroupRVAdapter
                         GroupRepo repo = new GroupRepo();
                         repo.deleteGroup(groupId);
                         groups.remove(h.getAdapterPosition());
+
                         notifyItemRemoved(h.getAdapterPosition());
                         notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
 
                         int activeGroupId = new MySharedPreferences(context).getActiveGroupId();
                         changeActiveGroupToFirstAvailable();
                         if (groupId == activeGroupId)
-                            context.startActivity(new Intent(context, MainActivity.class));
+                            refreshActivity();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -173,6 +172,12 @@ public class GroupRVAdapter
         sp.setActiveGroupId(groups.get(0).getId());
         sp.setActiveGroupName(groups.get(0).getName());
         sp.setActiveGroupCurrencyId(groups.get(0).getCurrency());
+    }
+
+    private void refreshActivity() {
+        Intent newActivity = new Intent(context, MainActivity.class);
+        newActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(newActivity);
     }
 
     @Override

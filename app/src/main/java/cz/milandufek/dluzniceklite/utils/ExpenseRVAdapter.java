@@ -2,8 +2,11 @@ package cz.milandufek.dluzniceklite.utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
@@ -125,7 +129,7 @@ public class ExpenseRVAdapter
                         expensesItems.remove(h.getAdapterPosition());
                         notifyItemRemoved(h.getAdapterPosition());
                         notifyItemRangeChanged(h.getAdapterPosition(), expensesItems.size());
-
+                        refreshActivity();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -135,6 +139,12 @@ public class ExpenseRVAdapter
                     }
                 });
         builder.show();
+    }
+
+    private void refreshActivity() {
+        Intent newActivity = new Intent(context, MainActivity.class);
+        newActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(newActivity);
     }
 
     @Override

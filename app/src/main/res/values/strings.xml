@@ -25,7 +25,7 @@
     <string name="off">Off</string>
     <string name="big_dot">•</string>
 
-    <!-- WARRNINGS / ERRORS -->
+    <!-- WARNINGS / ERRORS -->
     <string name="error">Oooops něco se pokazilo…</string>
     <string name="warrning_member_empty">Člen není vyplněn</string>
     <string name="warrning_currency_empty">Název měny je prázdný</string>

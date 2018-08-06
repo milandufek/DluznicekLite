@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,17 +42,7 @@ public class ListExpenseFragment extends Fragment {
 
         context = getActivity();
 
-        TextView summaryTitle = view.findViewById(R.id.tv_expense_summary_title);
-        ExpenseSummary summaryValues = initDataSummary();
-        String titleText = getString(R.string.total_spent);
-        summaryTitle.setText(titleText);
-
-        TextView summarySum = view.findViewById(R.id.tv_expense_summary_amount);
-        StringBuilder sumSpent = new StringBuilder();
-            sumSpent.append(summaryValues.getSumSpent());
-            sumSpent.append(" ");
-            sumSpent.append(summaryValues.getCurrencyName());
-        summarySum.setText(sumSpent);
+        setupSummaryView(view);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
         ExpenseRVAdapter adapter = new ExpenseRVAdapter(context, recViewDataSet());
@@ -103,6 +94,20 @@ public class ListExpenseFragment extends Fragment {
         cursorExpenseItems.close();
 
         return expenseItems;
+    }
+
+    private void setupSummaryView(View view) {
+        TextView summaryTitle = view.findViewById(R.id.tv_expense_summary_title);
+        ExpenseSummary summaryValues = initDataSummary();
+        String titleText = getString(R.string.total_spent);
+        summaryTitle.setText(titleText);
+
+        TextView summarySum = view.findViewById(R.id.tv_expense_summary_amount);
+        StringBuilder sumSpent = new StringBuilder();
+        sumSpent.append(summaryValues.getSumSpent());
+        sumSpent.append(" ");
+        sumSpent.append(summaryValues.getCurrencyName());
+        summarySum.setText(sumSpent);
     }
 
     /**

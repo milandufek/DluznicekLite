@@ -34,6 +34,7 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         // reset button
+        /*
         Button mBtnReset = findViewById(R.id.btn_settings_resetdata);
         mBtnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,7 +272,6 @@ public class AboutActivity extends AppCompatActivity {
 
             }
         });
+        */
     }
-
-
 }

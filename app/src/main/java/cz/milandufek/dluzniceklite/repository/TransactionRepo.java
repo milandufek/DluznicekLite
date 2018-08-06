@@ -18,9 +18,9 @@ public class TransactionRepo implements BaseColumns {
     private Context context;
 
     public static final String TABLE_NAME = "transactions";
-    public static final String _DEBTOR_ID = "debtor_id";
-    public static final String _EXPENSE_ID = "expense_id";
-    public static final String _AMOUNT = "amount";
+    static final String _DEBTOR_ID = "debtor_id";
+    static final String _EXPENSE_ID = "expense_id";
+    static final String _AMOUNT = "amount";
 
     private static final String ALL_COLS[] = { _ID, _DEBTOR_ID, _EXPENSE_ID, _AMOUNT};
 
@@ -156,10 +156,49 @@ public class TransactionRepo implements BaseColumns {
      * @return cursor with transactions
      */
     public Cursor selectBalance(int groupId) {
+//        SELECT debtor_id, group_members.name , SUM(amount) AS balance, currencies._id, currencies.quantity, currencies.exchange_rate
+//        FROM transactions
+//        INNER JOIN group_members
+//        ON transactions.debtor_id = group_members._id
+//        INNER JOIN expenses
+//        ON expenses._id = transactions.expense_id
+//        INNER JOIN currencies
+//        ON currencies._id = expenses.currency_id
+//        WHERE expenses.group_id = 1
+//        GROUP BY debtor_id, currencies._id
+//        ORDER BY debtor_id
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        // TODO select balance
-        String query = "SELECT * FROM " + TABLE_NAME;
-        
+        String query = "SELECT " +
+                TransactionRepo._DEBTOR_ID + ", " +
+                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " +
+                "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ")" + " AS balance " + ", " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID + " AS currency_id " + ", " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._QUANTITY + ", " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._EXCHANGE_RATE +
+                " FROM " + TransactionRepo.TABLE_NAME +
+                " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
+                " ON " +
+                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
+                " = " +
+                TransactionRepo.TABLE_NAME + "." + TransactionRepo._DEBTOR_ID +
+                " INNER JOIN " + ExpenseRepo.TABLE_NAME +
+                " ON " +
+                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
+                " = " +
+                TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
+                " INNER JOIN " + CurrencyRepo.TABLE_NAME +
+                " ON " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
+                " = " +
+                TransactionRepo.TABLE_NAME + "." + TransactionRepo._ID +
+        " WHERE " +
+                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
+                " = " +
+                groupId +
+                " GROUP BY " + TransactionRepo._DEBTOR_ID + ", currency_id" +
+                " ORDER BY " + TransactionRepo._DEBTOR_ID +
+                ";";
+
         return db.rawQuery(query, null, null);
     }
 }
