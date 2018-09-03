@@ -48,19 +48,22 @@ public class SettleUpFragment extends Fragment {
         MySharedPreferences sp = new MySharedPreferences(context);
         int activeCurrencyId = sp.getActiveGroupCurrency();
         int activeGroupId = sp.getActiveGroupId();
-//        List<HashMap<String, Object>> debts = new DebtCalculator()
-//                .calculateDebts(activeGroupId, activeCurrencyId);
-//        for (HashMap debt : debts) {
-//            String from = debt.get("from").toString();
-//            String amount = debt.get("amount").toString();
-//            String to = debt.get("to").toString();
-//
-//            Log.d(TAG, "Debt: " + from + "(" + amount + ") -> " + to);
-//        }
+
+        List<HashMap<String, Object>> debts = new DebtCalculator()
+                .calculateDebts(activeGroupId, activeCurrencyId);
+
+        Log.d(TAG, "Debts var: " + debts.toString());
+
+        for (HashMap debt : debts) {
+            String from = debt.get("from").toString();
+            String amount = debt.get("amount").toString();
+            String to = debt.get("to").toString();
+
+            Log.d(TAG, "Debt: " + from + "(" + amount + ") -> " + to);
+        }
 
 
-
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 2; i++) {
             SettleUpTransaction transaction = new SettleUpTransaction();
             transaction.setFrom("From user " + i);
             transaction.setTo("To user " + i);

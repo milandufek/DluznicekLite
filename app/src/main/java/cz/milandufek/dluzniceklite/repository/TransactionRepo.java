@@ -167,14 +167,32 @@ public class TransactionRepo implements BaseColumns {
 //        WHERE expenses.group_id = 1
 //        GROUP BY debtor_id, currencies._id
 //        ORDER BY debtor_id
+
+        // balance already grouped by sql
+
+//        SELECT debtor_id, group_members.name , SUM(amount * quantity / exchange_rate) AS balance
+//        FROM transactions
+//        INNER JOIN group_members
+//        ON transactions.debtor_id = group_members._id
+//        INNER JOIN expenses
+//        ON expenses._id = transactions.expense_id
+//        INNER JOIN currencies
+//        ON currencies._id = expenses.currency_id
+//        WHERE expenses.group_id = 1
+//        GROUP BY debtor_id
+//        ORDER BY debtor_id
+
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT " +
                 TransactionRepo._DEBTOR_ID + ", " +
                 GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " +
-                "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ")" + " AS balance " + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID + " AS currency_id " + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._QUANTITY + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._EXCHANGE_RATE +
+                "SUM(" +
+                    TransactionRepo._AMOUNT +
+                    " * " +
+                    CurrencyRepo._QUANTITY +
+                    " / " +
+                    CurrencyRepo._EXCHANGE_RATE +
+                ")" + " AS balance " +
                 " FROM " + TransactionRepo.TABLE_NAME +
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
                 " ON " +
@@ -195,7 +213,7 @@ public class TransactionRepo implements BaseColumns {
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
                 " = " +
                 groupId +
-                " GROUP BY " + TransactionRepo._DEBTOR_ID + ", currency_id" +
+                " GROUP BY " + TransactionRepo._DEBTOR_ID +
                 " ORDER BY " + TransactionRepo._DEBTOR_ID +
                 ";";
 

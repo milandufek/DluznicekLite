@@ -47,6 +47,11 @@
             android:name=".AddExpense"
             android:label="@string/title_add_payment"
             android:parentActivityName=".MainActivity" />
+        <!-- groups -->
+        <activity
+            android:name=".AddGroup"
+            android:label="@string/title_add_group"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

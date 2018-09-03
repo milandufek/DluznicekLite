@@ -1,8 +1,8 @@
 package cz.milandufek.dluzniceklite.models;
 
-import android.support.annotation.NonNull;
+import java.util.Comparator;
 
-public class Balance implements Comparable<Balance> {
+public class Balance {
 
     private int groupId, memberId, currencyId;
     private String memberName;
@@ -11,13 +11,12 @@ public class Balance implements Comparable<Balance> {
     public Balance() {
     }
 
-    @Override
-    public int compareTo(@NonNull Balance o) {
-        int balance = (int) this.balance * 100;
-        int balanceToCompare = (int) o.balance * 100;
-
-        return (balance - balanceToCompare);
-    }
+    public static Comparator<Balance> SortByBalance = new Comparator<Balance>() {
+        @Override
+        public int compare(Balance o1, Balance o2) {
+            return Double.compare(o1.getBalance(), o2.getBalance());
+        }
+    };
 
     public int getGroupId() {
         return groupId;
@@ -57,5 +56,14 @@ public class Balance implements Comparable<Balance> {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "[ gID = " + groupId + " ] " +
+                "[ mID = " + memberId + " ] " +
+                "[ cId = " + currencyId + " ] " +
+                "[ name = " + memberName + " ] " +
+                "[ balance = " + balance + " ] ";
     }
 }

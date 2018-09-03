@@ -3,6 +3,7 @@ package cz.milandufek.dluzniceklite.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,8 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Balance;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+
+import static java.util.Collections.sort;
 
 /**
  * Class to settle up the debts
@@ -26,6 +29,7 @@ public class DebtCalculator {
     }
 
     public List<HashMap<String, Object>> calculateDebts(int groupId, int currencyId) {
+        Log.d(TAG, "calculateDebts method started");
         List<Balance> balances = new LinkedList<>(getBalances(groupId, currencyId));
 
         List<HashMap<String, Object>> debts = new LinkedList<>();
@@ -33,48 +37,11 @@ public class DebtCalculator {
 
         int resolvedMembers = 0;
         int totalMembers = balances.size();
-        while (resolvedMembers != totalMembers) {
-            Collections.sort(balances);
-            Balance debtor   = balances.get(0);
-            Balance creditor = balances.get(balances.size() - 1);
+        //sort(balances, Balance.SortByBalance);
 
-            double debtorShouldSend = debtor.getBalance();
-            double creditorShouldReceive = creditor.getBalance();
-            double amount;
-            if (debtorShouldSend > creditorShouldReceive) {
-                amount = debtorShouldSend;
-            } else {
-                amount = creditorShouldReceive;
-            }
-            debtor.setBalance(debtor.getBalance() + amount);
-            creditor.setBalance(creditor.getBalance() - amount);
-
-            // set transaction for settle-up
-            HashMap<String, Object> transaction = new HashMap<>();
-            transaction.put("from", debtor);
-            transaction.put("to", creditor);
-            transaction.put("amount", amount);
-            debts.add(transaction);
-
-            // delete members with balance lower than tolerance
-            debtorShouldSend = debtor.getBalance();
-            creditorShouldReceive = creditor.getBalance();
-            if (debtorShouldSend <= tolerance) {
-                balances.remove(0);
-                resolvedMembers++;
-            }
-            if (creditorShouldReceive <= tolerance) {
-                balances.remove(balances.size() - 1);
-                resolvedMembers++;
-            }
-
-            // remove transaction with less than tolerance
-            Iterator<HashMap<String, Object>> iterator = debts.iterator();
-            while (iterator.hasNext()) {
-                HashMap<String, Object> debt = iterator.next();
-                if ((double) debt.get("amount") <= tolerance)
-                    iterator.remove();
-            }
+        for (Balance balance : balances) {
+            Log.d(TAG, "Member: " +  balance.getMemberName());
+            Log.d(TAG, "Balance: " + String.valueOf(balance.getBalance()));
         }
 
         return debts;
@@ -95,13 +62,7 @@ public class DebtCalculator {
                 balance.setGroupId(groupId);
                 balance.setMemberId(cursor.getInt(0));
                 balance.setMemberName(cursor.getString(1));
-                int expenseCurrencyId = cursor.getInt(3);
-                if (expenseCurrencyId != currencyId) {
-                    int quantity = cursor.getInt(4);
-                    int exchangeRate = cursor.getInt(5);
-                    double amount = cursor.getDouble(2);
-                    balance.setBalance( amount / quantity * exchangeRate );
-                }
+                balance.setBalance(cursor.getDouble(2));
             balances.add(balance);
         }
 
