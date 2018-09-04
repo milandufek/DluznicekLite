@@ -37,8 +37,15 @@ public class DebtCalculator {
 
         int resolvedMembers = 0;
         int totalMembers = balances.size();
-        //sort(balances, Balance.SortByBalance);
 
+        Log.d(TAG, "Unsorted: ");
+        for (Balance balance : balances) {
+            Log.d(TAG, "Member: " +  balance.getMemberName());
+            Log.d(TAG, "Balance: " + String.valueOf(balance.getBalance()));
+        }
+
+        sort(balances, Balance.SortByBalance);
+        Log.d(TAG, "Sorted: ");
         for (Balance balance : balances) {
             Log.d(TAG, "Member: " +  balance.getMemberName());
             Log.d(TAG, "Balance: " + String.valueOf(balance.getBalance()));

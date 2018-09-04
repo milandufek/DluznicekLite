@@ -15,8 +15,8 @@ public class ExpenseRepo implements BaseColumns {
 
     public static final String TABLE_NAME = "expenses";
     private static final String _PAYER_ID = "payer_id";
-    public static final String _GROUP_ID = "group_id";
-    private static final String _CURRENCY_ID = "currency_id";
+    static final String _GROUP_ID = "group_id";
+    static final String _CURRENCY_ID = "currency_id";
     private static final String _REASON = "reason";
     private static final String _DATE = "date";
     private static final String _TIME = "time";

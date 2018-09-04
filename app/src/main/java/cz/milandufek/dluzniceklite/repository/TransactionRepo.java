@@ -208,7 +208,7 @@ public class TransactionRepo implements BaseColumns {
                 " ON " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
                 " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._ID +
+                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._CURRENCY_ID +
         " WHERE " +
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
                 " = " +
@@ -216,6 +216,7 @@ public class TransactionRepo implements BaseColumns {
                 " GROUP BY " + TransactionRepo._DEBTOR_ID +
                 " ORDER BY " + TransactionRepo._DEBTOR_ID +
                 ";";
+        //Log.d(TAG, "query: " + query);
 
         return db.rawQuery(query, null, null);
     }
