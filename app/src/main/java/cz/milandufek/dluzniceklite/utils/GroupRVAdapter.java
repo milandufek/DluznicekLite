@@ -82,7 +82,7 @@ public class GroupRVAdapter
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MySharedPreferences sp = new MySharedPreferences(context);
+                MySharedPreferences sp = new MySharedPreferences(context.getApplicationContext());
                 sp.setActiveGroupId(groupId);
                 sp.setActiveGroupName(groupNameText);
                 sp.setActiveGroupCurrencyId(groupCurrencyId);

@@ -67,9 +67,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
 
-        ListGroupFragment listGroupFragment = new ListGroupFragment();
-        adapter.addFragment(listGroupFragment, getString(R.string.tab_groups));
-
         ListExpenseFragment listExpenseFragment = new ListExpenseFragment();
         adapter.addFragment(listExpenseFragment, getString(R.string.tab_payments));
 
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(settleUpFragment, getString(R.string.tab_settleup));
 
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
     }
 
     /**
@@ -111,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.action_manage_groups:
+                intent = new Intent(this, ManageGroups.class);
+                break;
             case R.id.action_manage_currencies:
                 intent = new Intent(this, ListCurrency.class);
                 break;

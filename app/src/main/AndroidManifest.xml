@@ -52,6 +52,10 @@
             android:name=".AddGroup"
             android:label="@string/title_add_group"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ManageGroups"
+            android:label="@string/action_manage_groups"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

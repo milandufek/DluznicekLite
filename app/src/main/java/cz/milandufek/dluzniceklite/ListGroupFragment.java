@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 
+@Deprecated
 public class ListGroupFragment extends Fragment {
 
     private static final String TAG = "ListGroupsFragment";
@@ -35,7 +35,7 @@ public class ListGroupFragment extends Fragment {
 
         context = getActivity();
 
-        View view = inflater.inflate(R.layout.tab_main_groups, container, false);
+        View view = inflater.inflate(R.layout.deprecated_tab_main_groups, container, false);
 
         Button addGroupBtn = view.findViewById(R.id.btn_group_list_add);
         addGroupBtn.setOnClickListener(new View.OnClickListener() {
