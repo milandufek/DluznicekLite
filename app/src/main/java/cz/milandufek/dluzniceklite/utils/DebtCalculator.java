@@ -2,11 +2,9 @@ package cz.milandufek.dluzniceklite.utils;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,19 +36,43 @@ public class DebtCalculator {
         int resolvedMembers = 0;
         int totalMembers = balances.size();
 
-        Log.d(TAG, "Unsorted: ");
-        for (Balance balance : balances) {
-            Log.d(TAG, "Member: " +  balance.getMemberName());
-            Log.d(TAG, "Balance: " + String.valueOf(balance.getBalance()));
-        }
+        while (resolvedMembers != totalMembers) {
+            sort(balances, Balance.SortByBalance);
+            Balance creditor = balances.get(0);
+            Balance debtor = balances.get(balances.size() - 1);
 
-        sort(balances, Balance.SortByBalance);
-        Log.d(TAG, "Sorted: ");
-        for (Balance balance : balances) {
-            Log.d(TAG, "Member: " +  balance.getMemberName());
-            Log.d(TAG, "Balance: " + String.valueOf(balance.getBalance()));
-        }
+            double amount;
+            double creditorShouldReceive = Math.abs(creditor.getBalance());
+            double debtorShouldSend = Math.abs(debtor.getBalance());
+            if (debtorShouldSend > creditorShouldReceive) {
+                amount = creditorShouldReceive;
+            } else {
+                amount = debtorShouldSend;
+            }
 
+            creditor.setBalance(creditor.getBalance() + amount);
+            debtor.setBalance(debtor.getBalance() - amount);
+
+            HashMap<String, Object> values = new HashMap<>();
+            values.put("from", debtor);
+            values.put("amount", amount);
+            values.put("to", creditor);
+            debts.add(values);
+
+            creditorShouldReceive = Math.abs(creditor.getBalance());
+            debtorShouldSend = Math.abs(debtor.getBalance());
+            if (creditorShouldReceive <= tolerance)
+                resolvedMembers++;
+            if (debtorShouldSend <= tolerance)
+                resolvedMembers++;
+
+            Iterator <HashMap<String,Object>> iterator = debts.iterator ();
+            while (iterator.hasNext()) {
+                HashMap <String,Object> debt = iterator.next();
+                if ((Double) debt.get("amount") <= tolerance)
+                    iterator.remove();
+            }
+        }
         return debts;
     }
 
