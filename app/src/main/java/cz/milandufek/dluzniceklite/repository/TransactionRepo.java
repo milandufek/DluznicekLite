@@ -216,7 +216,7 @@ public class TransactionRepo implements BaseColumns {
                 " GROUP BY " + TransactionRepo._DEBTOR_ID +
                 " ORDER BY " + TransactionRepo._DEBTOR_ID +
                 ";";
-        //Log.d(TAG, "query: " + query);
+        Log.d(TAG, "query: " + query);
 
         return db.rawQuery(query, null, null);
     }

@@ -60,10 +60,11 @@ public class Balance {
 
     @Override
     public String toString() {
-        return "[ gID = " + groupId + " ] " +
-                "[ mID = " + memberId + " ] " +
-                "[ cId = " + currencyId + " ] " +
-                "[ name = " + memberName + " ] " +
-                "[ balance = " + balance + " ] ";
+        return memberName;
+//        return "[ gID = " + groupId + " ] " +
+//                "[ mID = " + memberId + " ] " +
+//                "[ cId = " + currencyId + " ] " +
+//                "[ name = " + memberName + " ] " +
+//                "[ balance = " + balance + " ] ";
     }
 }

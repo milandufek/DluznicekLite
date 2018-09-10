@@ -30,8 +30,8 @@ public class DebtCalculator {
         Log.d(TAG, "calculateDebts method started");
         List<Balance> balances = new LinkedList<>(getBalances(groupId, currencyId));
 
-        List<HashMap<String, Object>> debts = new LinkedList<>();
-        double tolerance = 0.001;
+        List<HashMap<String,Object>> debts = new LinkedList<>();
+        double tolerance = 0.01;
 
         int resolvedMembers = 0;
         int totalMembers = balances.size();
@@ -53,7 +53,7 @@ public class DebtCalculator {
             creditor.setBalance(creditor.getBalance() + amount);
             debtor.setBalance(debtor.getBalance() - amount);
 
-            HashMap<String, Object> values = new HashMap<>();
+            HashMap<String,Object> values = new HashMap<>();
             values.put("from", debtor);
             values.put("amount", amount);
             values.put("to", creditor);
@@ -66,7 +66,7 @@ public class DebtCalculator {
             if (debtorShouldSend <= tolerance)
                 resolvedMembers++;
 
-            Iterator <HashMap<String,Object>> iterator = debts.iterator ();
+            Iterator <HashMap<String,Object>> iterator = debts.iterator();
             while (iterator.hasNext()) {
                 HashMap <String,Object> debt = iterator.next();
                 if ((Double) debt.get("amount") <= tolerance)

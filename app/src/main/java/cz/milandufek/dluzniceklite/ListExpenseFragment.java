@@ -114,6 +114,7 @@ public class ListExpenseFragment extends Fragment {
      * Select currency name and total amount spent, converted to active group base currency
      * @return ExpenseSummary [ currencyName, totalSpent ]
      */
+    // TODO spatne pocita, predelat na jeden select
     private ExpenseSummary initDataSummary() {
         MySharedPreferences sp = new MySharedPreferences(context);
         int groupId = sp.getActiveGroupId();
