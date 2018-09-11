@@ -1,9 +1,13 @@
 package cz.milandufek.dluzniceklite.models;
 
-public class ExpenseSummary {
+import android.arch.lifecycle.ViewModel;
+
+public class ExpenseSummary extends ViewModel {
 
     private String currencyName;
     private double sumSpent;
+//    private MutableLiveData<String> currencyName;
+//    private MutableLiveData<Double> sumSpent;
 
     public ExpenseSummary() {
     }
