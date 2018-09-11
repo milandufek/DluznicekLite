@@ -100,7 +100,7 @@ public class GroupRepo implements BaseColumns {
      * @param id
      * @return number of row affected
      */
-    public Integer deleteGroup(int id) {
+    public int deleteGroup(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 

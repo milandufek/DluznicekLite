@@ -162,7 +162,7 @@ public class GroupMemberRepo implements BaseColumns {
      * @param id
      * @return
      */
-    public Integer deleteGroupMember(int id) {
+    public int deleteGroupMember(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 

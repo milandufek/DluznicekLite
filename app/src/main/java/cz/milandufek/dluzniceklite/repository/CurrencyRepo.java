@@ -25,8 +25,8 @@ public class CurrencyRepo implements BaseColumns {
     private static final String _IS_BASE_CURRENCY = "is_base_currency";
     private static final String _IS_DELETABLE = "is_deletable";
 
-    private static final String[] ALL_COLS = { _ID, _NAME, _COUNTRY, _QUANTITY,
-            _EXCHANGE_RATE, _BASE_CURRENCY, _IS_BASE_CURRENCY, _IS_DELETABLE };
+    private static final String[] ALL_COLS = {_ID, _NAME, _COUNTRY, _QUANTITY,
+            _EXCHANGE_RATE, _BASE_CURRENCY, _IS_BASE_CURRENCY, _IS_DELETABLE};
 
     public static final String CREATE_TABLE_CURRENCY = "CREATE TABLE " + TABLE_NAME + " ( " +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -41,6 +41,7 @@ public class CurrencyRepo implements BaseColumns {
 
     /**
      * Insert a new row_currency into the database
+     *
      * @param currency
      * @return row id or -1 if error
      */
@@ -56,16 +57,17 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_DELETABLE, currency.getIsDeletable());
 
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
-        return db.insert(TABLE_NAME,null, values);
+        return db.insert(TABLE_NAME, null, values);
     }
 
     /**
      * Retrieve all data from row_currency table
+     *
      * @return List<Currency>
      */
     public List<Currency> getAllCurrency() {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS,null, null,null, null, _ID);
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
 
         List<Currency> currency = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -86,18 +88,24 @@ public class CurrencyRepo implements BaseColumns {
 
     /**
      * Select currency name based on its id
+     *
      * @param id
      * @return
      */
     public String getCurrencyName(int id) {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        String[] cols = { _NAME };
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] cols = {_NAME};
+        String[] selectionArgs = {String.valueOf(id)};
 
         Cursor cursor = db.query(TABLE_NAME, cols, _ID + " = ?", selectionArgs,
                 null, null, null, null);
-        cursor.moveToFirst();
-        String name = cursor.getString(0);
+
+        String name;
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        } else {
+            name = "---";
+        }
         cursor.close();
 
         return name;
@@ -109,7 +117,7 @@ public class CurrencyRepo implements BaseColumns {
      * @param id
      * @return
      */
-    public Integer deleteCurrency(int id) {
+    public int deleteCurrency(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 

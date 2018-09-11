@@ -110,7 +110,7 @@ public class TransactionRepo implements BaseColumns {
      * @param id
      * @return rows affected
      */
-    public Integer deleteTransaction(int id) {
+    public int deleteTransaction(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
@@ -123,7 +123,7 @@ public class TransactionRepo implements BaseColumns {
      * @param expenseId
      * @return rows affected
      */
-    public Integer deleteTransactions(int expenseId) {
+    public int deleteTransactions(int expenseId) {
         String selection = _EXPENSE_ID + " = ?";
         String[] selectionArgs = { String.valueOf(expenseId) };
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();

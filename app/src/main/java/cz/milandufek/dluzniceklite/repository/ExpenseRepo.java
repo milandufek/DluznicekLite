@@ -82,7 +82,7 @@ public class ExpenseRepo implements BaseColumns {
      * @param id
      * @return
      */
-    public Integer deleteExpense(int id) {
+    public int deleteExpense(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
