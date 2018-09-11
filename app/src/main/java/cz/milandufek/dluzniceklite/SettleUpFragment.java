@@ -65,8 +65,8 @@ public class SettleUpFragment extends Fragment {
 
         for (HashMap debt : debts) {
             SettleUpTransaction transaction = new SettleUpTransaction();
-            transaction.setFrom("From user " + debt.get("from").toString());
-            transaction.setTo("To user " + debt.get("to").toString());
+            transaction.setFrom(debt.get("from").toString());
+            transaction.setTo(debt.get("to").toString());
             transaction.setAmount(Double.valueOf(debt.get("amount").toString()));
             transactions.add(transaction);
         }

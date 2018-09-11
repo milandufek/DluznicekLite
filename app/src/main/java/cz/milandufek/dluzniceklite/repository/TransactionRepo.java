@@ -156,18 +156,6 @@ public class TransactionRepo implements BaseColumns {
      * @return cursor with transactions
      */
     public Cursor selectBalance(int groupId) {
-//        SELECT debtor_id, group_members.name , SUM(amount) AS balance, currencies._id, currencies.quantity, currencies.exchange_rate
-//        FROM transactions
-//        INNER JOIN group_members
-//        ON transactions.debtor_id = group_members._id
-//        INNER JOIN expenses
-//        ON expenses._id = transactions.expense_id
-//        INNER JOIN currencies
-//        ON currencies._id = expenses.currency_id
-//        WHERE expenses.group_id = 1
-//        GROUP BY debtor_id, currencies._id
-//        ORDER BY debtor_id
-
         // balance already grouped by sql
 
 //        SELECT debtor_id, group_members.name , SUM(amount * quantity / exchange_rate) AS balance
@@ -189,9 +177,9 @@ public class TransactionRepo implements BaseColumns {
                 "SUM(" +
                     TransactionRepo._AMOUNT +
                     " * " +
-                    CurrencyRepo._QUANTITY +
-                    " / " +
                     CurrencyRepo._EXCHANGE_RATE +
+                    " / " +
+                    CurrencyRepo._QUANTITY +
                 ")" + " AS balance " +
                 " FROM " + TransactionRepo.TABLE_NAME +
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +

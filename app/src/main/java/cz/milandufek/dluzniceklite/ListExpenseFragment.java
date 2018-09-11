@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 import cz.milandufek.dluzniceklite.models.ExpenseSummary;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
@@ -33,6 +34,7 @@ public class ListExpenseFragment extends Fragment {
     private static final String TAG = "ListExpenseFragment";
 
     private Context context;
+    private Currency baseCurrency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -120,13 +122,13 @@ public class ListExpenseFragment extends Fragment {
         int groupId = sp.getActiveGroupId();
         int currencyId = sp.getActiveGroupCurrency();
 
-        String currencyName = new CurrencyRepo().getCurrencyName(currencyId);
+        String baseCurrencyName = new CurrencyRepo().getCurrency(1).getName();
         Cursor cursorSummary = new ExpenseRepo().selectTotalSpent(groupId);
 
         double sumAmountInBaseCurrency = 0;
         while (cursorSummary.moveToNext()) {
             int cId = cursorSummary.getInt(0);
-            if (cId != currencyId) {
+            if (cId == currencyId) {
                 int quantity = cursorSummary.getInt(2);
                 int exchangeRate = cursorSummary.getInt(3);
                 double amount = cursorSummary.getDouble(4);
@@ -142,7 +144,7 @@ public class ListExpenseFragment extends Fragment {
         sumAmountInBaseCurrency = new MyNumbers().roundIt(sumAmountInBaseCurrency, 2);
 
         ExpenseSummary expenseSummary = new ExpenseSummary();
-        expenseSummary.setCurrencyName(currencyName);
+        expenseSummary.setCurrencyName(baseCurrencyName);
         expenseSummary.setSumSpent(sumAmountInBaseCurrency);
 
         return expenseSummary;

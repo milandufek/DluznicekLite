@@ -87,28 +87,29 @@ public class CurrencyRepo implements BaseColumns {
     }
 
     /**
-     * Select currency name based on its id
-     *
+     * Select currency based on its id
      * @param id
      * @return
      */
-    public String getCurrencyName(int id) {
+    public Currency getCurrency(int id) {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        String[] cols = {_NAME};
         String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query(TABLE_NAME, cols, _ID + " = ?", selectionArgs,
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
                 null, null, null, null);
 
-        String name;
-        if (cursor.moveToFirst()) {
-            name = cursor.getString(0);
-        } else {
-            name = "---";
-        }
-        cursor.close();
+        cursor.moveToFirst();
+        Currency currency = new Currency();
+        currency.setId(cursor.getInt(0));
+        currency.setName(cursor.getString(1));
+        currency.setCountry(cursor.getString(2));
+        currency.setQuantity(cursor.getInt(3));
+        currency.setExchangeRate(cursor.getDouble(4));
+        currency.setBaseCurrency(cursor.getInt(5));
+        currency.setIsBaseCurrency(cursor.getInt(6));
+        currency.setIsDeletable(cursor.getInt(7));
 
-        return name;
+        return currency;
     }
 
     /**

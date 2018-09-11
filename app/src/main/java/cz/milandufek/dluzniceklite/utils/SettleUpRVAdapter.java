@@ -46,7 +46,7 @@ public class SettleUpRVAdapter
 
         holder.debtor.setText(transactions.get(position).getFrom());
         holder.creditor.setText(transactions.get(position).getTo());
-        holder.amount.setText(String.valueOf(transactions.get(position).getAmount()));
+        holder.amount.setText(String.valueOf(transactions.get(position).getAmount()) + " CZK");
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
