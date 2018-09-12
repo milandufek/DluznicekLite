@@ -141,6 +141,7 @@ public class ListExpenseFragment extends Fragment {
 
         sumAmountInBaseCurrency *= -1;
         sumAmountInBaseCurrency = new MyNumbers().roundIt(sumAmountInBaseCurrency, 2);
+        // TODO recalculate to selected currency
 
         ExpenseSummary expenseSummary = new ExpenseSummary();
         expenseSummary.setCurrencyName(baseCurrencyName);
