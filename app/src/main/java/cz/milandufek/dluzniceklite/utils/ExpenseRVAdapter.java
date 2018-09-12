@@ -141,7 +141,7 @@ public class ExpenseRVAdapter
         builder.show();
     }
 
-    // TODO better to use MutuableLiveData instead of
+    // TODO better to use MutableLiveData instead of
     private void refreshActivity() {
         Intent newActivity = new Intent(context, MainActivity.class);
         newActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

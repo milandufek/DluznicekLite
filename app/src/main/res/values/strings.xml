@@ -27,10 +27,10 @@
 
     <!-- WARNINGS / ERRORS -->
     <string name="error">Oooops něco se pokazilo…</string>
-    <string name="warrning_member_empty">Člen není vyplněn</string>
-    <string name="warrning_currency_empty">Název měny je prázdný</string>
-    <string name="warrning_currency_exists">Tato měna již existuje</string>
-    <string name="warrning_exrate_empty">Kurz měny je prázdný</string>
+    <string name="warning_member_empty">Člen není vyplněn</string>
+    <string name="warning_currency_empty">Název měny je prázdný</string>
+    <string name="warning_currency_exists">Tato měna již existuje</string>
+    <string name="warning_exrate_empty">Kurz měny je prázdný</string>
 
     <!-- MENU -->
     <string name="save">Uložit</string>

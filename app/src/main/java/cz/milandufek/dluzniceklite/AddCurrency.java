@@ -41,15 +41,15 @@ public class AddCurrency extends AppCompatActivity {
                 int quantity;
 
                 if (checkIfStringIsEmpty(currencyName)) {
-                    Toast.makeText(context,getString(R.string.warrning_currency_empty),
+                    Toast.makeText(context,getString(R.string.warning_currency_empty),
                             Toast.LENGTH_SHORT).show();
                 }
                 else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
-                    Toast.makeText(context, getString(R.string.warrning_currency_exists),
+                    Toast.makeText(context, getString(R.string.warning_currency_exists),
                             Toast.LENGTH_SHORT).show();
                 }
                 else if (checkIfStringIsEmpty(currencyExchangeRate)) {
-                    Toast.makeText(context,getString(R.string.warrning_exrate_empty),
+                    Toast.makeText(context,getString(R.string.warning_exrate_empty),
                             Toast.LENGTH_SHORT).show();
                 } else {
                     quantity = checkIfStringIsEmpty(currencyExchangeRate)
