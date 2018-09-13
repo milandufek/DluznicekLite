@@ -9,16 +9,12 @@ public class Group {
     private String name, description;
     private int currency;
 
-    public Group() {
-    }
-
     public Group(int id, String name, int currency, String description) {
         this.id = id;
         this.name = name;
         this.currency = currency;
         this.description = description;
     }
-
 
     public int getId() {
         return id;
@@ -32,23 +28,11 @@ public class Group {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getCurrency() {
         return currency;
     }
 
-    public void setCurrency(int currency) {
-        this.currency = currency;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

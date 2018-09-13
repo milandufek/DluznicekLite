@@ -2,15 +2,11 @@ package cz.milandufek.dluzniceklite;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,7 +25,7 @@ import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class AddGroup extends AppCompatActivity {
     private static final String TAG = "AddGroup";
@@ -48,10 +43,10 @@ public class AddGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group);
 
-        groupName = (EditText) findViewById(R.id.et_group_name2add);
-        selectCurrency = (Spinner) findViewById(R.id.spinner_group_currency);
-        memberNameIn = (EditText) findViewById(R.id.et_group_member2add);
-        container = (LinearLayout) findViewById(R.id.ll_group_container);
+        groupName = findViewById(R.id.et_group_name2add);
+        selectCurrency = findViewById(R.id.spinner_group_currency);
+        memberNameIn = findViewById(R.id.et_group_member2add);
+        container = findViewById(R.id.ll_group_container);
 
         Button mBtnAdd = findViewById(R.id.btn_group_add);
 
@@ -65,7 +60,7 @@ public class AddGroup extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: add member");
                 if (memberNameIn.getText().toString().isEmpty()) {
-                    Toast.makeText(context,getString(R.string.warrning_member_empty), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,getString(R.string.warning_member_empty), Toast.LENGTH_SHORT).show();
                 } else {
                     LayoutInflater layoutInflater =
                             (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -140,10 +135,10 @@ public class AddGroup extends AppCompatActivity {
             List<String> groupMemberNames = getAllMembers();
             List<GroupMember> groupMembersToInsert = new ArrayList<>();
             for (String member : groupMemberNames) {
-                GroupMember groupMember = new GroupMember();
-                    groupMember.setName(member);
-                    groupMember.setGroupId((int)newGroupId);
-                    groupMember.setIsMe(0);
+                GroupMember groupMember = new GroupMember(0,
+                        (int) newGroupId, member,
+                    "", "", "",false
+                );
                 groupMembersToInsert.add(groupMember);
             }
             groupMemberRepo.insertGroupMembers(groupMembersToInsert);
@@ -221,7 +216,7 @@ public class AddGroup extends AppCompatActivity {
      * @param group
      */
     private void setGroupAsActive(Group group) {
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         sp.setActiveGroupId(group.getId());
         sp.setActiveGroupCurrencyId(group.getCurrency());
         sp.setActiveGroupName(group.getName());

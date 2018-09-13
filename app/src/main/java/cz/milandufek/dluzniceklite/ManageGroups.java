@@ -39,7 +39,7 @@ public class ManageGroups extends AppCompatActivity {
         });
     }
 
-    public void initRecyclerView() {
+    private void initRecyclerView() {
         List<Group> groups = new GroupRepo().getAllGroups();
         adapter = new GroupRVAdapter(context, groups);
 

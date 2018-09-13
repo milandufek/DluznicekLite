@@ -2,6 +2,7 @@ package cz.milandufek.dluzniceklite;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.models.Balance;
-import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 
 public class SettleUpFragment extends Fragment {
@@ -26,7 +25,7 @@ public class SettleUpFragment extends Fragment {
     private Context context;
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
+    public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_main_settleup, container, false);
@@ -48,7 +47,7 @@ public class SettleUpFragment extends Fragment {
     private List<SettleUpTransaction> recViewDataSet() {
         List<SettleUpTransaction> transactions = new ArrayList<>();
 
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         int activeCurrencyId = sp.getActiveGroupCurrency();
         int activeGroupId = sp.getActiveGroupId();
 

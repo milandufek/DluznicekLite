@@ -1,11 +1,15 @@
 package cz.milandufek.dluzniceklite.utils;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 
 public class MyDateTime {
 
     public MyDateTime() {
     }
+
+    // TODO rewrite using DataTimeFormater, return date instead of String
+    // maybe possible only in Android 5/6
 
     /**
      * Get time now

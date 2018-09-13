@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +32,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +50,7 @@ import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class AddExpense extends AppCompatActivity {
     private static final String TAG = "AddExpense";
@@ -58,8 +62,8 @@ public class AddExpense extends AppCompatActivity {
     private int totalRatiosToPay;
     private String dateDb, timeDb;
 
-    private ArrayList<Integer> memberIds = new ArrayList<>();
-    private ArrayList<String> memberNames = new ArrayList<>();
+    private List<Integer> memberIds = new ArrayList<>();
+    private List<String> memberNames = new ArrayList<>();
 
     private Spinner whoPays;
     private EditText howMuch;
@@ -79,18 +83,18 @@ public class AddExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
 
-        whoPays = (Spinner)        findViewById(R.id.spinner_payment_whopays);
-        howMuch = (EditText)       findViewById(R.id.et_payment_howmuch);
-        currency = (Spinner)       findViewById(R.id.spinner_payment_currency);
-        forAll = (CheckBox)        findViewById(R.id.chbox_payment_forall);
-        forAllInfo = (TextView)    findViewById(R.id.tv_payment_forallinfo);
-        typeCalculation = (RadioGroup) findViewById(R.id.rbtng_payment_ratio);
-        rbtnRatio = (RadioButton)   findViewById(R.id.rbtn_payment_ratio);
-        rbtManually = (RadioButton) findViewById(R.id.rbtn_payment_manually);
-        whoPaysContainer = (LinearLayout) findViewById(R.id.ll_payment_container);
-        reason = (EditText)        findViewById(R.id.et_payment_reason);
-        date = (TextView)          findViewById(R.id.et_payment_date);
-        time = (TextView)          findViewById(R.id.et_payment_time);
+        whoPays = findViewById(R.id.spinner_payment_whopays);
+        howMuch = findViewById(R.id.et_payment_howmuch);
+        currency = findViewById(R.id.spinner_payment_currency);
+        forAll = findViewById(R.id.chbox_payment_forall);
+        forAllInfo = findViewById(R.id.tv_payment_forallinfo);
+        typeCalculation = findViewById(R.id.rbtng_payment_ratio);
+        rbtnRatio = findViewById(R.id.rbtn_payment_ratio);
+        rbtManually = findViewById(R.id.rbtn_payment_manually);
+        whoPaysContainer = findViewById(R.id.ll_payment_container);
+        reason = findViewById(R.id.et_payment_reason);
+        date = findViewById(R.id.et_payment_date);
+        time = findViewById(R.id.et_payment_time);
         Button btnAdd = findViewById(R.id.btn_payment_add);
 
         totalRatiosToPay = getCountMembers();
@@ -162,7 +166,7 @@ public class AddExpense extends AppCompatActivity {
      *  Select all members from active group and save them into array
      */
     private void selectAllGroupMembers() {
-        int groupId = new MySharedPreferences(context).getActiveGroupId();
+        int groupId = new MyPreferences(context).getActiveGroupId();
         List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
         for (GroupMember groupMember : allGroupMembers) {
             memberIds.add(groupMember.getId());
@@ -193,8 +197,8 @@ public class AddExpense extends AppCompatActivity {
      *  Setup spinner with currencies from database
      */
     private void setupSpinnerWithCurrencies() {
-        final ArrayList<Integer> currencyIds = new ArrayList<>();
-        final ArrayList<String> currencyNames = new ArrayList<>();
+        final List<Integer> currencyIds = new ArrayList<>();
+        final List<String> currencyNames = new ArrayList<>();
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
         for (Currency currency : currencies) {
@@ -209,7 +213,7 @@ public class AddExpense extends AppCompatActivity {
         currency.setAdapter(spinnerAdapter);
 
         // select active currency for group
-        int selectedItem = new MySharedPreferences(context).getActiveGroupCurrency();
+        int selectedItem = new MyPreferences(context).getActiveGroupCurrency();
         currencySelectedId = currencyIds.indexOf(selectedItem);
         currency.setSelection(currencySelectedId);
         currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -303,7 +307,7 @@ public class AddExpense extends AppCompatActivity {
                                 }
                             }
                         }
-                        amountTotal = new MyNumbers().roundIt(amountTotal, 2);
+                        amountTotal = MyNumbers.roundIt(amountTotal, 2);
                         howMuch.setText(String.valueOf(amountTotal));
                     }
                 }
@@ -399,7 +403,7 @@ public class AddExpense extends AppCompatActivity {
             if (willPay.isChecked()) {
                 ratioLineCount = Double.valueOf(String.valueOf(ratioPerMemberLine.getText()));
                 amountPerMemberText = oneRatioValue * ratioLineCount;
-                amountPerMemberText = new MyNumbers().roundIt(amountPerMemberText, 2);
+                amountPerMemberText = MyNumbers.roundIt(amountPerMemberText, 2);
 
                 amountPerMemberLine.setText(String.valueOf(amountPerMemberText));
                 ratioTotal.setText(String.valueOf(totalRatiosToPay));
@@ -509,7 +513,7 @@ public class AddExpense extends AppCompatActivity {
         double amountTotal;
         if (textAmount.length() > 0) {
             amountTotal = Double.valueOf(textAmount);
-            amountTotal = new MyNumbers().roundIt(amountTotal, 2);
+            amountTotal = MyNumbers.roundIt(amountTotal, 2);
         } else {
             amountTotal = 0;
         }
@@ -525,7 +529,7 @@ public class AddExpense extends AppCompatActivity {
         double amountPerMember;
         if (amountTotal > 0) {
             amountPerMember = amountTotal / getCountMembersSelected();
-            amountPerMember = new MyNumbers().roundIt(amountPerMember, 2);
+            amountPerMember = MyNumbers.roundIt(amountPerMember, 2);
         } else {
             amountPerMember = 0;
         }
@@ -543,7 +547,7 @@ public class AddExpense extends AppCompatActivity {
             forAllInfoText.append(getCountMembers());
             if (s.toString().trim().length() > 0) {
                 double amount = Double.valueOf(s.toString()) / getCountMembers();
-                amount = new MyNumbers().roundIt(amount, 2);
+                amount = MyNumbers.roundIt(amount, 2);
                 // update summary in TextView
                 forAllInfoText.append(" x ");
                 forAllInfoText.append(amount);
@@ -736,7 +740,7 @@ public class AddExpense extends AppCompatActivity {
         Expense expense = new Expense();
         expense.setId(0);
         expense.setPayerId(whoPaysIdSelected);
-        expense.setGroupId(new MySharedPreferences(context).getActiveGroupId());
+        expense.setGroupId(new MyPreferences(context).getActiveGroupId());
         expense.setCurrencyId(currencySelectedId);
         String reasonText = reason.getText().toString();
         if (reasonText.isEmpty()) {

@@ -11,6 +11,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class CurrencyRepo implements BaseColumns {
 
@@ -78,8 +79,8 @@ public class CurrencyRepo implements BaseColumns {
                     cursor.getInt(3),
                     cursor.getDouble(4),
                     cursor.getInt(5),
-                    cursor.getInt(6),
-                    cursor.getInt(7)));
+                    MyNumbers.numberToBoolean(cursor.getInt(6)),
+                    MyNumbers.numberToBoolean(cursor.getInt(7))));
         }
         cursor.close();
 
@@ -99,15 +100,16 @@ public class CurrencyRepo implements BaseColumns {
                 null, null, null, null);
 
         cursor.moveToFirst();
-        Currency currency = new Currency();
-        currency.setId(cursor.getInt(0));
-        currency.setName(cursor.getString(1));
-        currency.setCountry(cursor.getString(2));
-        currency.setQuantity(cursor.getInt(3));
-        currency.setExchangeRate(cursor.getDouble(4));
-        currency.setBaseCurrency(cursor.getInt(5));
-        currency.setIsBaseCurrency(cursor.getInt(6));
-        currency.setIsDeletable(cursor.getInt(7));
+        Currency currency = new Currency(
+            cursor.getInt(0),
+            cursor.getString(1),
+            cursor.getString(2),
+            cursor.getInt(3),
+            cursor.getDouble(4),
+            cursor.getInt(5),
+            MyNumbers.numberToBoolean(cursor.getInt(6)),
+            MyNumbers.numberToBoolean(cursor.getInt(7))
+        );
 
         return currency;
     }

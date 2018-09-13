@@ -83,11 +83,12 @@ public class GroupRepo implements BaseColumns {
 
         Group group;
         while (cursor.moveToNext()) {
-            group = new Group();
-            group.setId(cursor.getInt(0));
-            group.setName(cursor.getString(1));
-            group.setCurrency(cursor.getInt(2));
-            group.setDescription(cursor.getString(3));
+            group = new Group(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getInt(2),
+                cursor.getString(3)
+            );
             groups.add(group);
         }
         cursor.close();

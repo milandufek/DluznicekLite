@@ -5,18 +5,14 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +24,7 @@ import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.ExpenseRVAdapter;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class ListExpenseFragment extends Fragment {
     private static final String TAG = "ListExpenseFragment";
@@ -62,7 +58,7 @@ public class ListExpenseFragment extends Fragment {
         Log.d(TAG, "recViewDataSet: for Rec View");
 
         List<ExpenseItem> expenseItems = new ArrayList<>();
-        int groupId = new MySharedPreferences(context).getActiveGroupId();
+        int groupId = new MyPreferences(context).getActiveGroupId();
         Cursor cursorExpenseItems = new ExpenseRepo().selectExpenseItems(groupId);
         while (cursorExpenseItems.moveToNext()) {
             ExpenseItem expenseItem = new ExpenseItem();
@@ -87,7 +83,7 @@ public class ListExpenseFragment extends Fragment {
             }
             selectTransactions.close();
 
-            sum = new MyNumbers().roundIt(sum, 2);
+            sum = MyNumbers.roundIt(sum, 2);
             expenseItem.setDebtors(debtors.toString());
             expenseItem.setAmount(sum);
 
@@ -117,7 +113,7 @@ public class ListExpenseFragment extends Fragment {
      * @return ExpenseSummary [ currencyName, totalSpent ]
      */
     private ExpenseSummary initDataSummary() {
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
         int currencyId = sp.getActiveGroupCurrency();
 
@@ -140,7 +136,8 @@ public class ListExpenseFragment extends Fragment {
         }
 
         sumAmountInBaseCurrency *= -1;
-        sumAmountInBaseCurrency = new MyNumbers().roundIt(sumAmountInBaseCurrency, 2);
+        sumAmountInBaseCurrency = MyNumbers.roundIt(sumAmountInBaseCurrency, 2);
+        // TODO recalculate to selected currency
 
         ExpenseSummary expenseSummary = new ExpenseSummary();
         expenseSummary.setCurrencyName(baseCurrencyName);
