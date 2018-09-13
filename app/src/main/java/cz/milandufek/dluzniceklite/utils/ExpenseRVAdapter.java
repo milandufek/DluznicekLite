@@ -113,8 +113,8 @@ public class ExpenseRVAdapter
         });
     }
 
-    private void onClickEdit(ViewHolder h, int id) {
-
+    private void onClickEdit(final ViewHolder h, final int id) {
+        // TODO edit
     }
 
     private void onClickDelete(final ViewHolder h, final int id) {

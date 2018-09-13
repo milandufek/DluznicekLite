@@ -135,10 +135,10 @@ public class AddGroup extends AppCompatActivity {
             List<String> groupMemberNames = getAllMembers();
             List<GroupMember> groupMembersToInsert = new ArrayList<>();
             for (String member : groupMemberNames) {
-                GroupMember groupMember = new GroupMember();
-                    groupMember.setName(member);
-                    groupMember.setGroupId((int)newGroupId);
-                    groupMember.setIsMe(0);
+                GroupMember groupMember = new GroupMember(0,
+                        (int) newGroupId, member,
+                    "", "", "",false
+                );
                 groupMembersToInsert.add(groupMember);
             }
             groupMemberRepo.insertGroupMembers(groupMembersToInsert);

@@ -26,7 +26,6 @@ public final class MyNumbers {
     public static boolean numberToBoolean(int number) {
         return number == 1;
     }
-
     public static boolean numberToBoolean(double number) {
         return number == 1;
     }

@@ -58,8 +58,8 @@ public class AddExpense extends AppCompatActivity {
     private int totalRatiosToPay;
     private String dateDb, timeDb;
 
-    private ArrayList<Integer> memberIds = new ArrayList<>();
-    private ArrayList<String> memberNames = new ArrayList<>();
+    private List<Integer> memberIds = new ArrayList<>();
+    private List<String> memberNames = new ArrayList<>();
 
     private Spinner whoPays;
     private EditText howMuch;
@@ -193,8 +193,8 @@ public class AddExpense extends AppCompatActivity {
      *  Setup spinner with currencies from database
      */
     private void setupSpinnerWithCurrencies() {
-        final ArrayList<Integer> currencyIds = new ArrayList<>();
-        final ArrayList<String> currencyNames = new ArrayList<>();
+        final List<Integer> currencyIds = new ArrayList<>();
+        final List<String> currencyNames = new ArrayList<>();
 
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
         for (Currency currency : currencies) {

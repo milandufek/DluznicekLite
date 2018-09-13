@@ -12,6 +12,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class GroupMemberRepo implements BaseColumns {
     private static final String TAG = "GroupMemberRepo";
@@ -116,14 +117,15 @@ public class GroupMemberRepo implements BaseColumns {
 
         List<GroupMember> members = new ArrayList<>();
         while (cursor.moveToNext()) {
-            GroupMember member = new GroupMember();
-            member.setId(cursor.getInt(0));
-            member.setGroupId(cursor.getInt(1));
-            member.setName(cursor.getString(2));
-            member.setEmail(cursor.getString(3));
-            member.setContact(cursor.getString(4));
-            member.setDescription(cursor.getString(5));
-            member.setIsMe(cursor.getInt(6));
+            GroupMember member = new GroupMember(
+                cursor.getInt(0),
+                cursor.getInt(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getString(4),
+                cursor.getString(5),
+                MyNumbers.numberToBoolean(cursor.getInt(6))
+            );
             members.add(member);
         }
         cursor.close();
