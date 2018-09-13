@@ -43,10 +43,10 @@ public class AddGroup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group);
 
-        groupName = (EditText) findViewById(R.id.et_group_name2add);
-        selectCurrency = (Spinner) findViewById(R.id.spinner_group_currency);
-        memberNameIn = (EditText) findViewById(R.id.et_group_member2add);
-        container = (LinearLayout) findViewById(R.id.ll_group_container);
+        groupName = findViewById(R.id.et_group_name2add);
+        selectCurrency = findViewById(R.id.spinner_group_currency);
+        memberNameIn = findViewById(R.id.et_group_member2add);
+        container = findViewById(R.id.ll_group_container);
 
         Button mBtnAdd = findViewById(R.id.btn_group_add);
 

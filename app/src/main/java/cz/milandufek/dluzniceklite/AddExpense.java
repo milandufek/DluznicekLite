@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +32,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -79,18 +83,18 @@ public class AddExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
 
-        whoPays = (Spinner)        findViewById(R.id.spinner_payment_whopays);
-        howMuch = (EditText)       findViewById(R.id.et_payment_howmuch);
-        currency = (Spinner)       findViewById(R.id.spinner_payment_currency);
-        forAll = (CheckBox)        findViewById(R.id.chbox_payment_forall);
-        forAllInfo = (TextView)    findViewById(R.id.tv_payment_forallinfo);
-        typeCalculation = (RadioGroup) findViewById(R.id.rbtng_payment_ratio);
-        rbtnRatio = (RadioButton)   findViewById(R.id.rbtn_payment_ratio);
-        rbtManually = (RadioButton) findViewById(R.id.rbtn_payment_manually);
-        whoPaysContainer = (LinearLayout) findViewById(R.id.ll_payment_container);
-        reason = (EditText)        findViewById(R.id.et_payment_reason);
-        date = (TextView)          findViewById(R.id.et_payment_date);
-        time = (TextView)          findViewById(R.id.et_payment_time);
+        whoPays = findViewById(R.id.spinner_payment_whopays);
+        howMuch = findViewById(R.id.et_payment_howmuch);
+        currency = findViewById(R.id.spinner_payment_currency);
+        forAll = findViewById(R.id.chbox_payment_forall);
+        forAllInfo = findViewById(R.id.tv_payment_forallinfo);
+        typeCalculation = findViewById(R.id.rbtng_payment_ratio);
+        rbtnRatio = findViewById(R.id.rbtn_payment_ratio);
+        rbtManually = findViewById(R.id.rbtn_payment_manually);
+        whoPaysContainer = findViewById(R.id.ll_payment_container);
+        reason = findViewById(R.id.et_payment_reason);
+        date = findViewById(R.id.et_payment_date);
+        time = findViewById(R.id.et_payment_time);
         Button btnAdd = findViewById(R.id.btn_payment_add);
 
         totalRatiosToPay = getCountMembers();

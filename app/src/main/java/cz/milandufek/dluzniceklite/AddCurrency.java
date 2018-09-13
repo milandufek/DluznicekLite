@@ -24,10 +24,10 @@ public class AddCurrency extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_currency);
 
-        name = (EditText) findViewById(R.id.et_currency_name);
-        country = (EditText) findViewById(R.id.et_currency_country);
-        quantity = (EditText) findViewById(R.id.et_currency_quantity);
-        exchangeRate = (EditText) findViewById(R.id.et_currency_exchrate);
+        name = findViewById(R.id.et_currency_name);
+        country = findViewById(R.id.et_currency_country);
+        quantity = findViewById(R.id.et_currency_quantity);
+        exchangeRate = findViewById(R.id.et_currency_exchrate);
         Button btnAdd = findViewById(R.id.btn_currency_add);
 
         // save button

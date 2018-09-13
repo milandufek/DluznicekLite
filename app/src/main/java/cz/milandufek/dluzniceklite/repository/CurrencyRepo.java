@@ -46,7 +46,6 @@ public class CurrencyRepo implements BaseColumns {
      * @param currency
      * @return row id or -1 if error
      */
-    // TODO think about static methods
     public long insertCurrency(Currency currency) {
         ContentValues values = new ContentValues();
         // _ID
