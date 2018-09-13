@@ -58,7 +58,7 @@ public class AddCurrency extends AppCompatActivity {
                     CurrencyRepo sql = new CurrencyRepo();
                     Currency currency = new Currency(0, currencyName, currencyCountry, quantity,
                             Double.parseDouble(currencyExchangeRate),
-                            0,0, 1);
+                            0,false, true);
 
                     if (sql.insertCurrency(currency) > 0) {
                         Toast.makeText(context, getString(R.string.saved),

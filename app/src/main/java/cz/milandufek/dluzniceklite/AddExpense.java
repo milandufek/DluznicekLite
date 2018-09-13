@@ -46,7 +46,7 @@ import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class AddExpense extends AppCompatActivity {
     private static final String TAG = "AddExpense";
@@ -162,7 +162,7 @@ public class AddExpense extends AppCompatActivity {
      *  Select all members from active group and save them into array
      */
     private void selectAllGroupMembers() {
-        int groupId = new MySharedPreferences(context).getActiveGroupId();
+        int groupId = new MyPreferences(context).getActiveGroupId();
         List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
         for (GroupMember groupMember : allGroupMembers) {
             memberIds.add(groupMember.getId());
@@ -209,7 +209,7 @@ public class AddExpense extends AppCompatActivity {
         currency.setAdapter(spinnerAdapter);
 
         // select active currency for group
-        int selectedItem = new MySharedPreferences(context).getActiveGroupCurrency();
+        int selectedItem = new MyPreferences(context).getActiveGroupCurrency();
         currencySelectedId = currencyIds.indexOf(selectedItem);
         currency.setSelection(currencySelectedId);
         currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -303,7 +303,7 @@ public class AddExpense extends AppCompatActivity {
                                 }
                             }
                         }
-                        amountTotal = new MyNumbers().roundIt(amountTotal, 2);
+                        amountTotal = MyNumbers.roundIt(amountTotal, 2);
                         howMuch.setText(String.valueOf(amountTotal));
                     }
                 }
@@ -399,7 +399,7 @@ public class AddExpense extends AppCompatActivity {
             if (willPay.isChecked()) {
                 ratioLineCount = Double.valueOf(String.valueOf(ratioPerMemberLine.getText()));
                 amountPerMemberText = oneRatioValue * ratioLineCount;
-                amountPerMemberText = new MyNumbers().roundIt(amountPerMemberText, 2);
+                amountPerMemberText = MyNumbers.roundIt(amountPerMemberText, 2);
 
                 amountPerMemberLine.setText(String.valueOf(amountPerMemberText));
                 ratioTotal.setText(String.valueOf(totalRatiosToPay));
@@ -509,7 +509,7 @@ public class AddExpense extends AppCompatActivity {
         double amountTotal;
         if (textAmount.length() > 0) {
             amountTotal = Double.valueOf(textAmount);
-            amountTotal = new MyNumbers().roundIt(amountTotal, 2);
+            amountTotal = MyNumbers.roundIt(amountTotal, 2);
         } else {
             amountTotal = 0;
         }
@@ -525,7 +525,7 @@ public class AddExpense extends AppCompatActivity {
         double amountPerMember;
         if (amountTotal > 0) {
             amountPerMember = amountTotal / getCountMembersSelected();
-            amountPerMember = new MyNumbers().roundIt(amountPerMember, 2);
+            amountPerMember = MyNumbers.roundIt(amountPerMember, 2);
         } else {
             amountPerMember = 0;
         }
@@ -543,7 +543,7 @@ public class AddExpense extends AppCompatActivity {
             forAllInfoText.append(getCountMembers());
             if (s.toString().trim().length() > 0) {
                 double amount = Double.valueOf(s.toString()) / getCountMembers();
-                amount = new MyNumbers().roundIt(amount, 2);
+                amount = MyNumbers.roundIt(amount, 2);
                 // update summary in TextView
                 forAllInfoText.append(" x ");
                 forAllInfoText.append(amount);
@@ -736,7 +736,7 @@ public class AddExpense extends AppCompatActivity {
         Expense expense = new Expense();
         expense.setId(0);
         expense.setPayerId(whoPaysIdSelected);
-        expense.setGroupId(new MySharedPreferences(context).getActiveGroupId());
+        expense.setGroupId(new MyPreferences(context).getActiveGroupId());
         expense.setCurrencyId(currencySelectedId);
         String reasonText = reason.getText().toString();
         if (reasonText.isEmpty()) {

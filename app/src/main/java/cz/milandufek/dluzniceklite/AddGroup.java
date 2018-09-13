@@ -25,7 +25,7 @@ import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class AddGroup extends AppCompatActivity {
     private static final String TAG = "AddGroup";
@@ -216,7 +216,7 @@ public class AddGroup extends AppCompatActivity {
      * @param group
      */
     private void setGroupAsActive(Group group) {
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         sp.setActiveGroupId(group.getId());
         sp.setActiveGroupCurrencyId(group.getCurrency());
         sp.setActiveGroupName(group.getName());

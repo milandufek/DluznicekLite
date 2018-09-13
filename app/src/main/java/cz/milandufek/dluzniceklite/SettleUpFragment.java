@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.models.Balance;
-import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 
 public class SettleUpFragment extends Fragment {
@@ -48,7 +46,7 @@ public class SettleUpFragment extends Fragment {
     private List<SettleUpTransaction> recViewDataSet() {
         List<SettleUpTransaction> transactions = new ArrayList<>();
 
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         int activeCurrencyId = sp.getActiveGroupCurrency();
         int activeGroupId = sp.getActiveGroupId();
 

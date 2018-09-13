@@ -1,9 +1,7 @@
 package cz.milandufek.dluzniceklite;
 
-import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
-import cz.milandufek.dluzniceklite.utils.MySharedPreferences;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
 import android.content.Intent;
@@ -19,9 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.stetho.Stetho;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -87,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
      * @return String
      */
     private String getActiveGroupName() {
-        MySharedPreferences sp = new MySharedPreferences(this);
+        MyPreferences sp = new MyPreferences(this);
         return sp.getActiveGroupName();
     }
 

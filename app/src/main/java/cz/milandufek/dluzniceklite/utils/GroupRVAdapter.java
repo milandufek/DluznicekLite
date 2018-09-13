@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -82,7 +81,7 @@ public class GroupRVAdapter
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MySharedPreferences sp = new MySharedPreferences(context.getApplicationContext());
+                MyPreferences sp = new MyPreferences(context.getApplicationContext());
                 sp.setActiveGroupId(groupId);
                 sp.setActiveGroupName(groupNameText);
                 sp.setActiveGroupCurrencyId(groupCurrencyId);
@@ -147,7 +146,7 @@ public class GroupRVAdapter
                         notifyItemRemoved(h.getAdapterPosition());
                         notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
 
-                        int activeGroupId = new MySharedPreferences(context).getActiveGroupId();
+                        int activeGroupId = new MyPreferences(context).getActiveGroupId();
                         changeActiveGroupToFirstAvailable();
                         if (groupId == activeGroupId)
                             refreshActivity();
@@ -168,7 +167,7 @@ public class GroupRVAdapter
     private void changeActiveGroupToFirstAvailable() {
         List<Group> groups = new GroupRepo().getAllGroups();
 
-        MySharedPreferences sp = new MySharedPreferences(context);
+        MyPreferences sp = new MyPreferences(context);
         sp.setActiveGroupId(groups.get(0).getId());
         sp.setActiveGroupName(groups.get(0).getName());
         sp.setActiveGroupCurrencyId(groups.get(0).getCurrency());

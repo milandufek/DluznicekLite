@@ -3,17 +3,19 @@ package cz.milandufek.dluzniceklite.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class MySharedPreferences {
+public class MyPreferences {
 
     private static final String SHARED_PREFERENCES = "dluznicek";
     private static final String SP_ACTIVE_GID = "active_group_id";
     private static final String SP_ACTIVE_GROUP_NAME = "active_group_name";
     private static final String SP_ACTIVE_CID = "active_group_currency";
 
-    private SharedPreferences sharedPreferences;
+
+    // TODO rename to just MyPreferences
+    private final SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
 
-    public MySharedPreferences(Context context) {
+    public MyPreferences(Context context) {
         this.sharedPreferences = context.getApplicationContext()
                 .getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
