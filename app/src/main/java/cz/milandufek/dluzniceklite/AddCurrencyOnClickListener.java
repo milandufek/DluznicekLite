@@ -41,11 +41,12 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
 
 
         if (currencyName.isEmpty()) {
-            showText(R.string.warrning_currency_empty);
+            showText(R.string.warning_currency_empty);
         } else if (sql.checkIfCurrencyExists(currencyName)) {
-            showText(R.string.warrning_currency_exists);
+            showText(R.string.warning_currency_exists);
         } else if (currencyExchangeRate.isEmpty()) { // is this even possible?
-            showText(R.string.warrning_exrate_empty);
+            // TODO this must be resolved before loading the value into String
+            showText(R.string.warning_exrate_empty);
         } else {
             if (sql.insertCurrency(currency) > 0) {
                 showText(R.string.saved);
@@ -55,5 +56,26 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
                 showText(R.string.error);
             }
         }
+
+
+        //                if (checkIfStringIsEmpty(currencyName)) {
+//                    Toast.makeText(context,getString(R.string.warning_currency_empty),
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//                else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
+//                    Toast.makeText(context, getString(R.string.warning_currency_exists),
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//                else if (checkIfStringIsEmpty(currencyExchangeRate)) {
+//                    Toast.makeText(context,getString(R.string.warning_exrate_empty),
+//                            Toast.LENGTH_SHORT).show();
+//                } else {
+//                    quantity = checkIfStringIsEmpty(currencyExchangeRate)
+//                            ? 1
+//                            : Integer.parseInt(AddCurrency.this.quantity.getText().toString());
+//                    CurrencyRepo sql = new CurrencyRepo();
+//                    Currency currency = new Currency(0, currencyName, currencyCountry, quantity,
+//                            Double.parseDouble(currencyExchangeRate),
+//                            0,false, true);
     }
 }
