@@ -38,12 +38,7 @@ public class ListGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.deprecated_tab_main_groups, container, false);
 
         Button addGroupBtn = view.findViewById(R.id.btn_group_list_add);
-        addGroupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickAddGroup();
-            }
-        });
+        addGroupBtn.setOnClickListener(v -> onClickAddGroup());
 
         List<Group> groups = new GroupRepo().getAllGroups();
         adapter = new GroupRVAdapter(context, groups);

@@ -1,6 +1,5 @@
 package cz.milandufek.dluzniceklite;
 
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
@@ -51,13 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Floating Button (add payment)
         FloatingActionButton fab = findViewById(R.id.fab_payment_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddExpense.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AddExpense.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
         });
     }
 

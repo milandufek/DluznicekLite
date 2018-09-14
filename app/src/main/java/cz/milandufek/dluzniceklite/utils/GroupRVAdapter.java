@@ -78,52 +78,43 @@ public class GroupRVAdapter
         holder.groupInfo.setText(groupInfo);
 
         // set group as active
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyPreferences sp = new MyPreferences(context.getApplicationContext());
-                sp.setActiveGroupId(groupId);
-                sp.setActiveGroupName(groupNameText);
-                sp.setActiveGroupCurrencyId(groupCurrencyId);
+        holder.parentLayout.setOnClickListener(v -> {
+            MyPreferences sp = new MyPreferences(context.getApplicationContext());
+            sp.setActiveGroupId(groupId);
+            sp.setActiveGroupName(groupNameText);
+            sp.setActiveGroupCurrencyId(groupCurrencyId);
 
-                String setAsActive = groupNameText + " " + context.getString(R.string.group_set_as_active);
+            String setAsActive = groupNameText + " " + context.getString(R.string.group_set_as_active);
 
-                refreshActivity();
+            refreshActivity();
 
-                Toast.makeText(context, setAsActive, Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(context, setAsActive, Toast.LENGTH_SHORT).show();
         });
 
         // popup menu edit/delete
-        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
-                popupMenu.inflate(R.menu.menu_item_onclick);
-                popupMenu.setGravity(Gravity.END);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_edit_item:
-                                onClickEdit(holder, groupId);
-                                Toast.makeText(context,"TODO: Edit item " + groupNameText,
-                                        Toast.LENGTH_SHORT).show();
-                                return true;
+        holder.parentLayout.setOnLongClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+            popupMenu.inflate(R.menu.menu_item_onclick);
+            popupMenu.setGravity(Gravity.END);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.action_edit_item:
+                        onClickEdit(holder, groupId);
+                        Toast.makeText(context, "TODO: Edit item " + groupNameText,
+                                Toast.LENGTH_SHORT).show();
+                        return true;
 
-                            case R.id.action_delete_item:
-                                onClickDelete(holder, groupNameText);
-                                return true;
+                    case R.id.action_delete_item:
+                        onClickDelete(holder, groupNameText);
+                        return true;
 
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                popupMenu.show();
+                    default:
+                        return false;
+                }
+            });
+            popupMenu.show();
 
-                return true;
-            }
+            return true;
         });
     }
 
@@ -135,29 +126,21 @@ public class GroupRVAdapter
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.really_want_to_delete_group)
                 .setMessage(groupNameText)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int groupId = groups.get(h.getAdapterPosition()).getId();
-                        GroupRepo repo = new GroupRepo();
-                        repo.deleteGroup(groupId);
-                        groups.remove(h.getAdapterPosition());
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    int groupId = groups.get(h.getAdapterPosition()).getId();
+                    GroupRepo repo = new GroupRepo();
+                    repo.deleteGroup(groupId);
+                    groups.remove(h.getAdapterPosition());
 
-                        notifyItemRemoved(h.getAdapterPosition());
-                        notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
+                    notifyItemRemoved(h.getAdapterPosition());
+                    notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
 
-                        int activeGroupId = new MyPreferences(context).getActiveGroupId();
-                        changeActiveGroupToFirstAvailable();
-                        if (groupId == activeGroupId)
-                            refreshActivity();
-                    }
+                    int activeGroupId = new MyPreferences(context).getActiveGroupId();
+                    changeActiveGroupToFirstAvailable();
+                    if (groupId == activeGroupId)
+                        refreshActivity();
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

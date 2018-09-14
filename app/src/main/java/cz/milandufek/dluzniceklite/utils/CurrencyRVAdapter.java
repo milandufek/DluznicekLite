@@ -8,7 +8,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -51,33 +50,27 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
         holder.currencyValue.setText(currency.get(position).getCurrencyInfo());
 
         // delete button
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final int currencyId = currency.get(holder.getAdapterPosition()).getId();
+        holder.parentLayout.setOnClickListener(v -> {
+            final int currencyId = currency.get(holder.getAdapterPosition()).getId();
 
-                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
-                popupMenu.inflate(R.menu.menu_item_onclick);
-                popupMenu.setGravity(Gravity.END);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_edit_item:
-                                onClickEdit(holder, currencyId);
-                                return true;
+            PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+            popupMenu.inflate(R.menu.menu_item_onclick);
+            popupMenu.setGravity(Gravity.END);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.action_edit_item:
+                        onClickEdit(holder, currencyId);
+                        return true;
 
-                            case R.id.action_delete_item:
-                                onClickDelete(holder, currencyId);
-                                return true;
+                    case R.id.action_delete_item:
+                        onClickDelete(holder, currencyId);
+                        return true;
 
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
+                    default:
+                        return false;
+                }
+            });
+            popupMenu.show();
         });
     }
 
@@ -90,20 +83,14 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.really_want_to_delete_currency)
                 .setMessage(currency.get(h.getAdapterPosition()).getName())
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        CurrencyRepo db = new CurrencyRepo();
-                        db.deleteCurrency(currencyId);
-                        currency.remove(h.getAdapterPosition());
-                        notifyItemRemoved(h.getAdapterPosition());
-                        notifyItemRangeChanged(0, currency.size());
-                    }
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    CurrencyRepo db = new CurrencyRepo();
+                    db.deleteCurrency(currencyId);
+                    currency.remove(h.getAdapterPosition());
+                    notifyItemRemoved(h.getAdapterPosition());
+                    notifyItemRangeChanged(0, currency.size());
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
                 });
 
         builder.show();

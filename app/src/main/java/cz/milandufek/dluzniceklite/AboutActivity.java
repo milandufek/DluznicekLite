@@ -1,27 +1,8 @@
 package cz.milandufek.dluzniceklite;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.models.Expense;
-import cz.milandufek.dluzniceklite.models.Group;
-import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.models.Transaction;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
 
 public class AboutActivity extends AppCompatActivity {
     private static final String TAG = "AboutActivity";

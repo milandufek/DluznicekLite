@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -83,33 +81,27 @@ public class ExpenseRVAdapter
             info.append(" ");
         holder.expenseInfo.setText(info);
 
-        holder.itemExpense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(context, holder.itemExpense);
-                popupMenu.inflate(R.menu.menu_item_onclick);
-                popupMenu.setGravity(Gravity.END);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_edit_item:
-                                onClickEdit(holder, expenseId);
-                                Toast.makeText(context,"TODO: Edit item ",
-                                        Toast.LENGTH_SHORT).show();
-                                return true;
+        holder.itemExpense.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.itemExpense);
+            popupMenu.inflate(R.menu.menu_item_onclick);
+            popupMenu.setGravity(Gravity.END);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.action_edit_item:
+                        onClickEdit(holder, expenseId);
+                        Toast.makeText(context, "TODO: Edit item ",
+                                Toast.LENGTH_SHORT).show();
+                        return true;
 
-                            case R.id.action_delete_item:
-                                onClickDelete(holder, expenseId);
-                                return true;
+                    case R.id.action_delete_item:
+                        onClickDelete(holder, expenseId);
+                        return true;
 
-                            default:
-                                return false;
-                        }
-                    }
-                });
-                popupMenu.show();
-            }
+                    default:
+                        return false;
+                }
+            });
+            popupMenu.show();
         });
     }
 
@@ -121,23 +113,15 @@ public class ExpenseRVAdapter
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.really_want_to_delete_expense)
                 .setMessage(expensesItems.get(h.getAdapterPosition()).getReason())
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ExpenseRepo repo = new ExpenseRepo();
-                        repo.deleteExpense(id);
-                        expensesItems.remove(h.getAdapterPosition());
-                        notifyItemRemoved(h.getAdapterPosition());
-                        notifyItemRangeChanged(h.getAdapterPosition(), expensesItems.size());
-                        refreshActivity();
-                    }
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                    ExpenseRepo repo = new ExpenseRepo();
+                    repo.deleteExpense(id);
+                    expensesItems.remove(h.getAdapterPosition());
+                    notifyItemRemoved(h.getAdapterPosition());
+                    notifyItemRangeChanged(h.getAdapterPosition(), expensesItems.size());
+                    refreshActivity();
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

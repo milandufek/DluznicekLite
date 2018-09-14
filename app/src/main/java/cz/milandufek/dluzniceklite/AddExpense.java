@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.Time;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,11 +31,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -139,24 +135,21 @@ public class AddExpense extends AppCompatActivity {
         setupTimePicker();
 
         // save button - insert data into database
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String howMuchText = howMuch.getText().toString().trim();
-                if (howMuchText.length() <= 0 || howMuchText.equals("0")) {
-                    Toast.makeText(context, getString(R.string.howmuch_is_null),
+        btnAdd.setOnClickListener(v -> {
+            String howMuchText = howMuch.getText().toString().trim();
+            if (howMuchText.length() <= 0 || howMuchText.equals("0")) {
+                Toast.makeText(context, getString(R.string.howmuch_is_null),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                if (saveExpense()) {
+                    Toast.makeText(context, getString(R.string.saved),
                             Toast.LENGTH_SHORT).show();
+                    startActivity(getParentActivityIntent());
+                    finish();
                 } else {
-                    if (saveExpense()) {
-                        Toast.makeText(context, getString(R.string.saved),
-                                Toast.LENGTH_SHORT).show();
-                        startActivity(getParentActivityIntent());
-                        finish();
-                    } else {
-                        Log.d(TAG, "Cannot insert data...");
-                        Toast.makeText(context, getString(R.string.error),
-                                Toast.LENGTH_SHORT).show();
-                    }
+                    Log.d(TAG, "Cannot insert data...");
+                    Toast.makeText(context, getString(R.string.error),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -258,32 +251,26 @@ public class AddExpense extends AppCompatActivity {
             ratioMinus.setVisibility(View.INVISIBLE);
             final ImageButton ratioPlus  = addView.findViewById(R.id.ibtn_expense_ratioplus);
 
-            ratioPlus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int newValue = Integer.parseInt(ratioValue.getText().toString());
-                    if (newValue <= 2)
-                        ratioMinus.setVisibility(View.VISIBLE);
+            ratioPlus.setOnClickListener(v -> {
+                int newValue = Integer.parseInt(ratioValue.getText().toString());
+                if (newValue <= 2)
+                    ratioMinus.setVisibility(View.VISIBLE);
 
-                    newValue++;
-                    totalRatiosToPay++;
-                    ratioValue.setText(String.valueOf(newValue));
-                    updateMemberLinesByRation();
-                }
+                newValue++;
+                totalRatiosToPay++;
+                ratioValue.setText(String.valueOf(newValue));
+                updateMemberLinesByRation();
             });
 
-            ratioMinus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int newValue = Integer.parseInt(ratioValue.getText().toString());
-                    if (newValue <= 2)
-                        ratioMinus.setVisibility(View.INVISIBLE);
+            ratioMinus.setOnClickListener(v -> {
+                int newValue = Integer.parseInt(ratioValue.getText().toString());
+                if (newValue <= 2)
+                    ratioMinus.setVisibility(View.INVISIBLE);
 
-                    newValue--;
-                    totalRatiosToPay--;
-                    ratioValue.setText(String.valueOf(newValue));
-                    updateMemberLinesByRation();
-                }
+                newValue--;
+                totalRatiosToPay--;
+                ratioValue.setText(String.valueOf(newValue));
+                updateMemberLinesByRation();
             });
 
             final EditText memberAmount = addView.findViewById(R.id.et_expense_amount);
@@ -325,56 +312,53 @@ public class AddExpense extends AppCompatActivity {
 
             CheckBox willPay = addView.findViewById(R.id.chbox_expense_member);
             willPay.setChecked(true);
-            willPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        int colorIfChecked = getResources().getColor(R.color.colorBlack);
-                        memberName.setTextColor(colorIfChecked);
+            willPay.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    int colorIfChecked = getResources().getColor(R.color.colorBlack);
+                    memberName.setTextColor(colorIfChecked);
 
-                        ratioValue.setText("1");
-                        ratioValue.setTextColor(colorIfChecked);
-                        ratioValue.setVisibility(View.VISIBLE);
-                        ratioValue.setKeyListener((KeyListener) ratioValue.getTag());
+                    ratioValue.setText("1");
+                    ratioValue.setTextColor(colorIfChecked);
+                    ratioValue.setVisibility(View.VISIBLE);
+                    ratioValue.setKeyListener((KeyListener) ratioValue.getTag());
 
-                        ratioSeparator.setVisibility(View.VISIBLE);
-                        ratioTotal.setVisibility(View.VISIBLE);
-                        ratioPlus.setVisibility(View.VISIBLE);
+                    ratioSeparator.setVisibility(View.VISIBLE);
+                    ratioTotal.setVisibility(View.VISIBLE);
+                    ratioPlus.setVisibility(View.VISIBLE);
 
-                        memberAmount.setText("0");
-                        memberAmount.setTextColor(colorIfChecked);
-                        memberAmount.setVisibility(View.VISIBLE);
-                        if (rbtManually.isChecked()) {
-                            setEditTextFocusable(memberAmount);
-                        } else {
-                            unsetEditTextFocusable(memberAmount);
-                        }
-
-                        currency.setVisibility(View.VISIBLE);
+                    memberAmount.setText("0");
+                    memberAmount.setTextColor(colorIfChecked);
+                    memberAmount.setVisibility(View.VISIBLE);
+                    if (rbtManually.isChecked()) {
+                        setEditTextFocusable(memberAmount);
                     } else {
-                        int colorIfNotChecked = getResources().getColor(R.color.colorGray);
-                        memberName.setTextColor(colorIfNotChecked);
-
-                        ratioValue.setText("");
-                        ratioValue.setTextColor(colorIfNotChecked);
-                        ratioValue.setVisibility(View.GONE);
-                        ratioValue.setKeyListener(null);
-
-                        ratioSeparator.setVisibility(View.GONE);
-                        ratioTotal.setVisibility(View.GONE);
-                        ratioMinus.setVisibility(View.GONE);
-                        ratioPlus.setVisibility(View.GONE);
-
-                        memberAmount.setText("0");
-                        memberAmount.setVisibility(View.GONE);
-                        memberAmount.setTextColor(colorIfNotChecked);
-                        memberAmount.setKeyListener(null);
-
-                        currency.setVisibility(View.GONE);
+                        unsetEditTextFocusable(memberAmount);
                     }
 
-                    updateWhoPaysContainer();
+                    currency.setVisibility(View.VISIBLE);
+                } else {
+                    int colorIfNotChecked = getResources().getColor(R.color.colorGray);
+                    memberName.setTextColor(colorIfNotChecked);
+
+                    ratioValue.setText("");
+                    ratioValue.setTextColor(colorIfNotChecked);
+                    ratioValue.setVisibility(View.GONE);
+                    ratioValue.setKeyListener(null);
+
+                    ratioSeparator.setVisibility(View.GONE);
+                    ratioTotal.setVisibility(View.GONE);
+                    ratioMinus.setVisibility(View.GONE);
+                    ratioPlus.setVisibility(View.GONE);
+
+                    memberAmount.setText("0");
+                    memberAmount.setVisibility(View.GONE);
+                    memberAmount.setTextColor(colorIfNotChecked);
+                    memberAmount.setKeyListener(null);
+
+                    currency.setVisibility(View.GONE);
                 }
+
+                updateWhoPaysContainer();
             });
 
             whoPaysContainer.addView(addView);
@@ -574,43 +558,37 @@ public class AddExpense extends AppCompatActivity {
         date.setText(getString(R.string.today));
 
         // set date from calendar
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+        date.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog dialog = new DatePickerDialog(
-                        context,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        dateSetListener,
-                        year,
-                        month,
-                        day);
-                Objects.requireNonNull(dialog.getWindow())
-                        .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
+            DatePickerDialog dialog = new DatePickerDialog(
+                    context,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    dateSetListener,
+                    year,
+                    month,
+                    day);
+            Objects.requireNonNull(dialog.getWindow())
+                    .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
         });
 
-        dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month = month + 1;
-                String monthZeroPrefix = "";
-                String dayZeroPrefix = "";
+        dateSetListener = (datePicker, year, month, day) -> {
+            month = month + 1;
+            String monthZeroPrefix = "";
+            String dayZeroPrefix = "";
 
-                if (month < 10)
-                    monthZeroPrefix = "0";
-                if (day < 10)
-                    dayZeroPrefix = "0";
+            if (month < 10)
+                monthZeroPrefix = "0";
+            if (day < 10)
+                dayZeroPrefix = "0";
 
-                String dateText = day + "." + month + "." + year;
-                dateDb = year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
-                date.setText(dateText);
-            }
+            String dateText = day + "." + month + "." + year;
+            dateDb = year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
+            date.setText(dateText);
         };
     }
 
@@ -622,39 +600,33 @@ public class AddExpense extends AppCompatActivity {
         timeDb = new MyDateTime().getTimeNow();
         time.setText(getString(R.string.now));
 
-        time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int hours = cal.get(Calendar.HOUR_OF_DAY);
-                int minutes = cal.get(Calendar.MINUTE);
+        time.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int hours = cal.get(Calendar.HOUR_OF_DAY);
+            int minutes = cal.get(Calendar.MINUTE);
 
-                TimePickerDialog dialog = new TimePickerDialog(
-                        context,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        timeSetListener,
-                        hours,
-                        minutes,
-                        true);
-                Objects.requireNonNull(dialog.getWindow())
-                        .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
+            TimePickerDialog dialog = new TimePickerDialog(
+                    context,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    timeSetListener,
+                    hours,
+                    minutes,
+                    true);
+            Objects.requireNonNull(dialog.getWindow())
+                    .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
         });
 
-        timeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String hourZeroPrefix = "";
-                String minuteZeroPrefix = "";
-                if (hourOfDay < 10)
-                    hourZeroPrefix = "0";
-                if (minute < 10)
-                    minuteZeroPrefix = "0";
+        timeSetListener = (view, hourOfDay, minute) -> {
+            String hourZeroPrefix = "";
+            String minuteZeroPrefix = "";
+            if (hourOfDay < 10)
+                hourZeroPrefix = "0";
+            if (minute < 10)
+                minuteZeroPrefix = "0";
 
-                timeDb = hourZeroPrefix + hourOfDay + ":" + minuteZeroPrefix + minute;
-                time.setText(timeDb);
-            }
+            timeDb = hourZeroPrefix + hourOfDay + ":" + minuteZeroPrefix + minute;
+            time.setText(timeDb);
         };
     }
 
@@ -662,12 +634,9 @@ public class AddExpense extends AppCompatActivity {
      *  Setup radio buttons to change ration calculation
      */
     private void setupRationRButtons() {
-        typeCalculation.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                hideSoftKeyboard();
-                updateWhoPaysContainer();
-            }
+        typeCalculation.setOnCheckedChangeListener((group, checkedId) -> {
+            hideSoftKeyboard();
+            updateWhoPaysContainer();
         });
     }
 
@@ -677,25 +646,22 @@ public class AddExpense extends AppCompatActivity {
      *  If not checked then list of payers is visible with other tools to adjust the payments
      */
     private void setupPaymentForAllCheckBox() {
-        forAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                hideSoftKeyboard();
-                if (isChecked) {
-                    refreshSummaryLine();
-                    forAllInfo.setVisibility(View.VISIBLE);
-                    rbtnRatio.setVisibility(View.GONE);
-                    rbtManually.setVisibility(View.GONE);
+        forAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            hideSoftKeyboard();
+            if (isChecked) {
+                refreshSummaryLine();
+                forAllInfo.setVisibility(View.VISIBLE);
+                rbtnRatio.setVisibility(View.GONE);
+                rbtManually.setVisibility(View.GONE);
 
-                    whoPaysContainer.setVisibility(View.GONE);
-                } else {
-                    forAllInfo.setVisibility(View.GONE);
-                    rbtnRatio.setVisibility(View.VISIBLE);
-                    rbtManually.setVisibility(View.VISIBLE);
+                whoPaysContainer.setVisibility(View.GONE);
+            } else {
+                forAllInfo.setVisibility(View.GONE);
+                rbtnRatio.setVisibility(View.VISIBLE);
+                rbtManually.setVisibility(View.VISIBLE);
 
-                    whoPaysContainer.setVisibility(View.VISIBLE);
-                    updateWhoPaysContainer();
-                }
+                whoPaysContainer.setVisibility(View.VISIBLE);
+                updateWhoPaysContainer();
             }
         });
     }

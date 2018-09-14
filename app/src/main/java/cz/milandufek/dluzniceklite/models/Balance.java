@@ -11,12 +11,7 @@ public class Balance {
     public Balance() {
     }
 
-    public static Comparator<Balance> SortByBalance = new Comparator<Balance>() {
-        @Override
-        public int compare(Balance o1, Balance o2) {
-            return Double.compare(o1.getBalance(), o2.getBalance());
-        }
-    };
+    public static Comparator<Balance> SortByBalance = (o1, o2) -> Double.compare(o1.getBalance(), o2.getBalance());
 
     public int getGroupId() {
         return groupId;

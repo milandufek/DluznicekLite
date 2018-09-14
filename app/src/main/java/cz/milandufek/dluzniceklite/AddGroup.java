@@ -55,44 +55,33 @@ public class AddGroup extends AppCompatActivity {
 
         // generate container with EditTexts for members
         ImageButton btnAddMember = findViewById(R.id.btn_group_member2add);
-        btnAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: add member");
-                if (memberNameIn.getText().toString().isEmpty()) {
-                    Toast.makeText(context,getString(R.string.warning_member_empty), Toast.LENGTH_SHORT).show();
-                } else {
-                    LayoutInflater layoutInflater =
-                            (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    assert layoutInflater != null;
-                    final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
+        btnAddMember.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: add member");
+            if (memberNameIn.getText().toString().isEmpty()) {
+                showText(R.string.warning_member_empty);
+            } else {
+                LayoutInflater layoutInflater =
+                        (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                assert layoutInflater != null;
+                final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
 
-                    EditText textOut = addView.findViewById(R.id.et_groupmember_add);
-                    textOut.setText(memberNameIn.getText().toString());
-                    memberNameIn.setText("");
-                    ImageButton btnRemove = addView.findViewById(R.id.btn_groupmember_remove);
+                EditText textOut = addView.findViewById(R.id.et_groupmember_add);
+                textOut.setText(memberNameIn.getText().toString());
+                memberNameIn.setText("");
+                ImageButton btnRemove = addView.findViewById(R.id.btn_groupmember_remove);
 
-                    final View.OnClickListener thisListener = new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Log.d(TAG, "onClick: add parent");
-                            ((LinearLayout) addView.getParent()).removeView(addView);
-                        }
-                    };
+                final View.OnClickListener thisListener = v1 -> {
+                    Log.d(TAG, "onClick: add parent");
+                    ((LinearLayout) addView.getParent()).removeView(addView);
+                };
 
-                    btnRemove.setOnClickListener(thisListener);
-                    container.addView(addView);
-                }
+                btnRemove.setOnClickListener(thisListener);
+                container.addView(addView);
             }
         });
 
         // save button
-        mBtnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveBtnOnClick();
-            }
-        });
+        mBtnAdd.setOnClickListener(v -> saveBtnOnClick());
     }
 
     /**
@@ -105,16 +94,9 @@ public class AddGroup extends AppCompatActivity {
         Log.d(TAG, "onClick: save button");
         String groupName = AddGroup.this.groupName.getText().toString();
         if (groupName.equals("")) {
-            Toast.makeText(context, getString(R.string.group_name_is_empty),
-                    Toast.LENGTH_SHORT).show();
+            showText(R.string.group_name_is_empty);
         } else if (checkIfGroupExists(groupName)) {
-            Toast.makeText(context,
-                    context.getString(R.string.group) +
-                            " " +
-                            groupName +
-                            " " +
-                            getString(R.string.group_already_exists),
-                    Toast.LENGTH_SHORT).show();
+            showText(getString(R.string.group) + " " + groupName + " " + getString(R.string.group_already_exists));
         } else {
             // save group
             GroupRepo repo = new GroupRepo();
@@ -122,10 +104,10 @@ public class AddGroup extends AppCompatActivity {
             long newGroupId = repo.insertGroup(group);
             if (newGroupId != -1) {
                 group.setId((int) newGroupId);
-                Toast.makeText(context,getString(R.string.group_saved), Toast.LENGTH_SHORT).show();
+                showText(R.string.group_saved);
             } else {
                 Log.d(TAG, "Cannot insert data...");
-                Toast.makeText(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
+                showText(R.string.error);
                 // go back to parent activity
                 startActivity(getParentActivityIntent());
             }
@@ -220,6 +202,19 @@ public class AddGroup extends AppCompatActivity {
         sp.setActiveGroupId(group.getId());
         sp.setActiveGroupCurrencyId(group.getCurrency());
         sp.setActiveGroupName(group.getName());
+    }
+
+    private void showText(int resourceId, int duration) {
+        Toast.makeText(this, getString(resourceId), duration).show();
+    }
+    private void showText(int resourceId) {
+        showText(resourceId, Toast.LENGTH_SHORT);
+    }
+    private void showText(String text, int duration) {
+        Toast.makeText(this, text, duration).show();
+    }
+    private void showText(String text) {
+        showText(text, Toast.LENGTH_SHORT);
     }
 
     @Override

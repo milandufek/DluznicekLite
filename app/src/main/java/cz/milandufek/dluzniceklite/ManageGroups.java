@@ -29,13 +29,10 @@ public class ManageGroups extends AppCompatActivity {
 
         // Floating Button
         FloatingActionButton fab = findViewById(R.id.fab_group_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ManageGroups.this, AddGroup.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(ManageGroups.this, AddGroup.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
         });
     }
 

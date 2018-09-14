@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,22 +47,16 @@ public class SettleUpRVAdapter
         holder.creditor.setText(transactions.get(position).getTo());
         holder.amount.setText(String.valueOf(transactions.get(position).getAmount()) + " CZK");
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
-                popupMenu.inflate(R.menu.menu_item_settleup_onclick);
-                popupMenu.setGravity(Gravity.END);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        // TODO OnClick to settle-up the debt
-                        Toast.makeText(context, "TODO: vyrovnej dluh", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
+        holder.parentLayout.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(context, holder.parentLayout);
+            popupMenu.inflate(R.menu.menu_item_settleup_onclick);
+            popupMenu.setGravity(Gravity.END);
+            popupMenu.setOnMenuItemClickListener(item -> {
+                // TODO OnClick to settle-up the debt
+                Toast.makeText(context, "TODO: vyrovnej dluh", Toast.LENGTH_SHORT).show();
+                return true;
+            });
+            popupMenu.show();
         });
     }
 

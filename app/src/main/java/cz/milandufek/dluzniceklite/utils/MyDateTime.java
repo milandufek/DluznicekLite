@@ -1,7 +1,5 @@
 package cz.milandufek.dluzniceklite.utils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class MyDateTime {
