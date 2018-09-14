@@ -4,6 +4,7 @@ public class Transaction {
 
     private double amount;
     private int id, debtor_id, expense_id;
+    private boolean isSettleUpTransaction;
 
     public Transaction() {
     }
@@ -13,6 +14,14 @@ public class Transaction {
         this.amount = amount;
         this.debtor_id = debtor_id;
         this.expense_id = expense_id;
+    }
+
+    public Transaction(int id, int debtor_id, int expense_id, double amount, boolean isSettleUpTransaction) {
+        this.id = id;
+        this.amount = amount;
+        this.debtor_id = debtor_id;
+        this.expense_id = expense_id;
+        this.isSettleUpTransaction = isSettleUpTransaction;
     }
 
 
@@ -46,5 +55,13 @@ public class Transaction {
 
     public void setExpense_id(int expense_id) {
         this.expense_id = expense_id;
+    }
+
+    public boolean getIsSettleUpTransaction() {
+        return isSettleUpTransaction;
+    }
+
+    public void setIsSettleUpTransaction() {
+        this.isSettleUpTransaction = isSettleUpTransaction;
     }
 }

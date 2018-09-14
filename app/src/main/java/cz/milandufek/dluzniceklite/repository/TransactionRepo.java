@@ -21,6 +21,7 @@ public class TransactionRepo implements BaseColumns {
     static final String _DEBTOR_ID = "debtor_id";
     static final String _EXPENSE_ID = "expense_id";
     static final String _AMOUNT = "amount";
+    static final String _SETTLEUP_TRANSACTION = "settleup_transaction";
 
     private static final String ALL_COLS[] = { _ID, _DEBTOR_ID, _EXPENSE_ID, _AMOUNT};
 
@@ -30,6 +31,7 @@ public class TransactionRepo implements BaseColumns {
             _DEBTOR_ID + " INTEGER NOT NULL, " +
             _EXPENSE_ID + " INTEGER NOT NULL, " +
             _AMOUNT + " FLOAT NOT NULL, " +
+            _SETTLEUP_TRANSACTION + " INTEGER DEFAULT NULL, " +
                 "FOREIGN KEY (" + _DEBTOR_ID + " ) " +
                 "REFERENCES " + GroupMemberRepo.TABLE_NAME + "(" + GroupMemberRepo._ID + ") " +
                 "ON DELETE CASCADE, " +
@@ -49,6 +51,7 @@ public class TransactionRepo implements BaseColumns {
         values.put(_AMOUNT, transaction.getAmount());
         values.put(_DEBTOR_ID, transaction.getDebtor_id());
         values.put(_EXPENSE_ID, transaction.getExpense_id());
+        values.put(_SETTLEUP_TRANSACTION, transaction.getIsSettleUpTransaction());
 
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
 
@@ -71,6 +74,7 @@ public class TransactionRepo implements BaseColumns {
                 values.put(_DEBTOR_ID, transactions.get(i).getDebtor_id());
                 values.put(_EXPENSE_ID, transactions.get(i).getExpense_id());
                 values.put(_AMOUNT, transactions.get(i).getAmount());
+                values.put(_SETTLEUP_TRANSACTION, transactions.get(i).getIsSettleUpTransaction());
 
                 if(db.insert(TABLE_NAME,null, values) > -1) {
                     rowsAffected++;
@@ -157,7 +161,6 @@ public class TransactionRepo implements BaseColumns {
      */
     public Cursor selectBalance(int groupId) {
         // balance already grouped by sql
-
 //        SELECT debtor_id, group_members.name , SUM(amount * quantity / exchange_rate) AS balance
 //        FROM transactions
 //        INNER JOIN group_members

@@ -7,7 +7,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -42,7 +41,6 @@ public class SettleUpRVAdapter
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-
         holder.debtor.setText(transactions.get(position).getFrom());
         holder.creditor.setText(transactions.get(position).getTo());
         holder.amount.setText(String.valueOf(transactions.get(position).getAmount()) + " CZK");

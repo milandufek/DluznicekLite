@@ -21,13 +21,14 @@ import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 
 public class SettleUpFragment extends Fragment {
-    private static final String TAG = "SettleUpFragment";
+    private static final String TAG = SettleUpFragment.class.toString();
     private Context context;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.tab_main_settleup, container, false);
 
         context = getActivity();

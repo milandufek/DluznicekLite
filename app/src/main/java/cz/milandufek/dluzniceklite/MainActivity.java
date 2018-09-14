@@ -1,5 +1,7 @@
 package cz.milandufek.dluzniceklite;
 
+import cz.milandufek.dluzniceklite.models.Currency;
+import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
@@ -18,6 +20,9 @@ import android.view.View;
 
 import com.facebook.stetho.Stetho;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -30,6 +35,29 @@ public class MainActivity extends AppCompatActivity {
 
         // SQL explorer plugin
         Stetho.initializeWithDefaults(this);
+
+
+//        List<Currency> currencies = new ArrayList<>();
+//        currencies.add(new Currency(0,"CZK","Česká Republika",
+//                1,1,1,true,false));
+//        currencies.add(new Currency(1,"USD","USA",
+//                1,20,1,false,true));
+//        currencies.add(new Currency(2,"EUR","EMU",
+//                1,25,1,false,true));
+//        currencies.add(new Currency(3,"DNG","Vietnam",
+//                1000,0.97,1,false,true));
+//        currencies.add(new Currency(4,"LKR","Srí Lanka",
+//                7,7,1,false,true));
+//        currencies.add(new Currency(5,"GPB","Velká Británie",
+//                1,29.5,1,false,true));
+//        currencies.add(new Currency(6,"ISK","Island",
+//                100,20.5,1,false,true));
+//        currencies.add(new Currency(7,"BTC","Nikde",
+//                1,100000,1,false,true));
+//        CurrencyRepo currencyRepo = new CurrencyRepo();
+//        for (int i = 0; currencies.size() > i; i++) {
+//            currencyRepo.insertCurrency(currencies.get(i));
+//        }
 
         // set active group name
         String title = getActiveGroupName();
