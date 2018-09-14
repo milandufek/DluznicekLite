@@ -17,11 +17,10 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
         this.activity = activity;
     }
 
-    private void showText(int resourceId, int duration) {
+    public void showText(int resourceId, int duration) {
         Toast.makeText(activity, activity.getString(resourceId), duration).show();
     }
-
-    private void showText(int resourceId) {
+    public void showText(int resourceId) {
         showText(resourceId, Toast.LENGTH_SHORT);
     }
 
