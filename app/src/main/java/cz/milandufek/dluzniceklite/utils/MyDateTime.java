@@ -7,9 +7,6 @@ public class MyDateTime {
     public MyDateTime() {
     }
 
-    // TODO rewrite using DataTimeFormater, return date instead of String
-    // maybe possible only in Android 5/6
-
     /**
      * Get time now
      * Format HH:mm (24h)

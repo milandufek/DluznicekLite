@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fadingEdge="horizontal"
-
-    app:layout_insetEdge="none">
+    app:layout_insetEdge="none"
+    android:foreground="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/tv_expense_item_reason"
