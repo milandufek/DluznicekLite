@@ -1,16 +1,21 @@
 package cz.milandufek.dluzniceklite;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import cz.milandufek.dluzniceklite.models.Currency;
+import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 
 public class AddCurrency extends AppCompatActivity {
 
     private static final String TAG = AddCurrency.class.toString();
+    private EditText name, country, quantity, exchangeRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,31 +23,51 @@ public class AddCurrency extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_currency);
 
-        EditText name = findViewById(R.id.et_currency_name);
-        EditText country = findViewById(R.id.et_currency_country);
-        EditText quantity = findViewById(R.id.et_currency_quantity);
-        EditText exchangeRate = findViewById(R.id.et_currency_exchrate);
-        Button btnAdd = findViewById(R.id.btn_currency_add);
-
-        int parsedQuantity = getFieldValueAsInt(R.id.et_currency_quantity);
-        double parsedExchangeRate = getFieldValueAsDouble(R.id.et_currency_exchrate);
-        Currency currency = new Currency(0, getFieldValue(R.id.et_currency_name),
-                getFieldValue(R.id.et_currency_country), parsedQuantity, parsedExchangeRate, 0, false, true);
+        name = (EditText) findViewById(R.id.et_currency_name);
+        country = (EditText) findViewById(R.id.et_currency_country);
+        quantity = (EditText) findViewById(R.id.et_currency_quantity);
+        exchangeRate = (EditText) findViewById(R.id.et_currency_exchrate);
 
         // save button
-        btnAdd.setOnClickListener(new AddCurrencyOnClickListener(currency, this));
+        Button btnAdd = findViewById(R.id.btn_currency_add);
+        btnAdd.setOnClickListener(new AddCurrencyOnClickListener(this));
     }
 
-    private String getFieldValue(final int resourceId) {
-        return findViewById(resourceId).toString();
+    public Currency getCurrency() {
+        String currencyName = getFieldValue(name);
+        String currencyCountry = country.getText().toString();
+        String currencyExchangeRate = exchangeRate.getText().toString();
+        String currencyQuantity = quantity.getText().toString();
+
+        Currency currency = null;
+        if (currencyName.isEmpty()) {
+            showText(R.string.warning_currency_empty);
+        } else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
+            showText(R.string.warning_currency_exists);
+        } else if (currencyExchangeRate.isEmpty()) {
+            showText(R.string.warning_exrate_empty);
+        } else {
+            if (currencyQuantity.isEmpty())
+                currencyQuantity = "1";
+            currency = new Currency(0, currencyName, currencyCountry,
+                    Integer.valueOf(currencyQuantity),
+                    Double.parseDouble(currencyExchangeRate),
+                    0,false, true);
+        }
+
+        return currency;
     }
 
-    private int getFieldValueAsInt(final int resourceId) {
-        return Integer.parseInt(getFieldValue(resourceId));
+    private void showText(int resourceId, int duration) {
+        Toast.makeText(this, getString(resourceId), duration).show();
     }
 
-    private double getFieldValueAsDouble(final int resourceId) {
-        return Double.parseDouble(getFieldValue(resourceId));
+    private void showText(int resourceId) {
+        showText(resourceId, Toast.LENGTH_SHORT);
+    }
+
+    private String getFieldValue(final EditText field) {
+        return field.getText().toString();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package cz.milandufek.dluzniceklite;
 
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,15 +11,9 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
     private static final String TAG = AddCurrencyOnClickListener.class.toString();
 
     private final CurrencyRepo sql = new CurrencyRepo();
-    private final Currency currency;
-    private final AppCompatActivity activity;
+    private final AddCurrency activity;
 
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public AddCurrencyOnClickListener(final Currency currency, final AppCompatActivity activity) {
-        this.currency = currency;
+    AddCurrencyOnClickListener(final AddCurrency activity) {
         this.activity = activity;
     }
 
@@ -29,53 +21,21 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
         Toast.makeText(activity, activity.getString(resourceId), duration).show();
     }
 
-    void showText(int resourceId) {
+    private void showText(int resourceId) {
         showText(resourceId, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onClick(View v) {
-        Log.d(TAG, "onClick: save");
-        String currencyName = currency.getName();
-        String currencyExchangeRate = String.valueOf(currency.getExchangeRate());
+        saveCurrency(activity.getCurrency());
+    }
 
-
-        if (currencyName.isEmpty()) {
-            showText(R.string.warning_currency_empty);
-        } else if (sql.checkIfCurrencyExists(currencyName)) {
-            showText(R.string.warning_currency_exists);
-        } else if (currencyExchangeRate.isEmpty()) { // is this even possible?
-            // TODO this must be resolved before loading the value into String
-            showText(R.string.warning_exrate_empty);
-        } else {
-            if (sql.insertCurrency(currency) > 0) {
-                showText(R.string.saved);
-                // go back to parent activity
-                activity.startActivity(activity.getParentActivityIntent());
-            } else {
-                showText(R.string.error);
-            }
+    private void saveCurrency(Currency currency) {
+        CurrencyRepo sql = new CurrencyRepo();
+        if (currency != null && sql.insertCurrency(currency) > 0) {
+            showText(R.string.saved);
+            // go back to parent activity
+            activity.startActivity(activity.getParentActivityIntent());
         }
-
-
-        //                if (checkIfStringIsEmpty(currencyName)) {
-//                    Toast.makeText(context,getString(R.string.warning_currency_empty),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//                else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
-//                    Toast.makeText(context, getString(R.string.warning_currency_exists),
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//                else if (checkIfStringIsEmpty(currencyExchangeRate)) {
-//                    Toast.makeText(context,getString(R.string.warning_exrate_empty),
-//                            Toast.LENGTH_SHORT).show();
-//                } else {
-//                    quantity = checkIfStringIsEmpty(currencyExchangeRate)
-//                            ? 1
-//                            : Integer.parseInt(AddCurrency.this.quantity.getText().toString());
-//                    CurrencyRepo sql = new CurrencyRepo();
-//                    Currency currency = new Currency(0, currencyName, currencyCountry, quantity,
-//                            Double.parseDouble(currencyExchangeRate),
-//                            0,false, true);
     }
 }

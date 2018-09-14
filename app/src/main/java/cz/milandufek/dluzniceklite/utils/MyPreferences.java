@@ -10,43 +10,41 @@ public class MyPreferences {
     private static final String SP_ACTIVE_GROUP_NAME = "active_group_name";
     private static final String SP_ACTIVE_CID = "active_group_currency";
 
-
-    // TODO rename to just MyPreferences
-    private final SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor spEditor;
+    private final SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     public MyPreferences(Context context) {
-        this.sharedPreferences = context.getApplicationContext()
+        this.preferences = context.getApplicationContext()
                 .getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public void setActiveGroupId(int groupId) {
-        spEditor = sharedPreferences.edit();
-        spEditor.putInt(SP_ACTIVE_GID, groupId);
-        spEditor.apply();
+        editor = preferences.edit();
+        editor.putInt(SP_ACTIVE_GID, groupId);
+        editor.apply();
     }
 
     public void setActiveGroupName(String groupName) {
-        spEditor = sharedPreferences.edit();
-        spEditor.putString(SP_ACTIVE_GROUP_NAME, groupName);
-        spEditor.apply();
+        editor = preferences.edit();
+        editor.putString(SP_ACTIVE_GROUP_NAME, groupName);
+        editor.apply();
     }
 
     public void setActiveGroupCurrencyId(int currencyId) {
-        spEditor = sharedPreferences.edit();
-        spEditor.putInt(SP_ACTIVE_CID, currencyId);
-        spEditor.apply();
+        editor = preferences.edit();
+        editor.putInt(SP_ACTIVE_CID, currencyId);
+        editor.apply();
     }
 
     public int getActiveGroupId() {
-        return sharedPreferences.getInt(SP_ACTIVE_GID,0);
+        return preferences.getInt(SP_ACTIVE_GID,0);
     }
 
     public String getActiveGroupName() {
-        return sharedPreferences.getString(SP_ACTIVE_GROUP_NAME, "");
+        return preferences.getString(SP_ACTIVE_GROUP_NAME, "");
     }
 
     public int getActiveGroupCurrency() {
-        return sharedPreferences.getInt(SP_ACTIVE_CID,0);
+        return preferences.getInt(SP_ACTIVE_CID,0);
     }
 }

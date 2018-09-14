@@ -1,6 +1,7 @@
 package cz.milandufek.dluzniceklite.utils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 public class MyDateTime {
@@ -19,6 +20,7 @@ public class MyDateTime {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
+
         String hourZeroPrefix = "";
         String minuteZeroPrefix = "";
         if (hour < 10)
@@ -27,6 +29,11 @@ public class MyDateTime {
             minuteZeroPrefix = "0";
 
         return hourZeroPrefix + hour + ":" + minuteZeroPrefix + minute;
+
+        // requires API26+
+//        LocalDate date = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//        return date.format(formatter);
     }
 
     /**
@@ -47,5 +54,10 @@ public class MyDateTime {
             dayZeroPrefix = "0";
 
         return year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
+
+        // requires API26+
+//        LocalDate date = LocalDate.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD");
+//        return date.format(formatter);
     }
 }

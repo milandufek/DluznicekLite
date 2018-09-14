@@ -54,8 +54,8 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_QUANTITY, currency.getQuantity());
         values.put(_EXCHANGE_RATE, currency.getExchangeRate());
         values.put(_BASE_CURRENCY, currency.getBaseCurrency());
-        values.put(_IS_BASE_CURRENCY, currency.getIsBaseCurrency());
-        values.put(_IS_DELETABLE, currency.getIsDeletable());
+        values.put(_IS_BASE_CURRENCY, MyNumbers.booleanToNumber(currency.getIsBaseCurrency()));
+        values.put(_IS_DELETABLE, MyNumbers.booleanToNumber(currency.getIsDeletable()));
 
         SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
         return db.insert(TABLE_NAME, null, values);

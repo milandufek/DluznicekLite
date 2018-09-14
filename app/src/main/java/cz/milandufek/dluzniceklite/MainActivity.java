@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
+import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;

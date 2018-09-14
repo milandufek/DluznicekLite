@@ -261,7 +261,7 @@ public class AddExpense extends AppCompatActivity {
             ratioPlus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int newValue = Integer.valueOf(ratioValue.getText().toString());
+                    int newValue = Integer.parseInt(ratioValue.getText().toString());
                     if (newValue <= 2)
                         ratioMinus.setVisibility(View.VISIBLE);
 
@@ -275,7 +275,7 @@ public class AddExpense extends AppCompatActivity {
             ratioMinus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int newValue = Integer.valueOf(ratioValue.getText().toString());
+                    int newValue = Integer.parseInt(ratioValue.getText().toString());
                     if (newValue <= 2)
                         ratioMinus.setVisibility(View.INVISIBLE);
 
@@ -303,7 +303,7 @@ public class AddExpense extends AppCompatActivity {
                                 EditText amountPerMember = memberLine.findViewById(R.id.et_expense_amount);
                                 String amountTmp = amountPerMember.getText().toString();
                                 if (amountTmp.trim().length() > 0) {
-                                    amountTotal += Float.valueOf(amountTmp);
+                                    amountTotal += Float.parseFloat(amountTmp);
                                 }
                             }
                         }
@@ -709,7 +709,7 @@ public class AddExpense extends AppCompatActivity {
         forAllInfoText.append(memberNames.size());
         String howMuchText = howMuch.getText().toString().trim();
         if (! howMuchText.equals("")) {
-            if (Double.valueOf(howMuchText) > 0) {
+            if (Double.parseDouble(howMuchText) > 0) {
                 forAllInfoText.append(" x ");
                 forAllInfoText.append(howMuchText);
                 forAllInfoText.append(" ");
@@ -767,7 +767,7 @@ public class AddExpense extends AppCompatActivity {
                 willPay = memberLine.findViewById(R.id.chbox_expense_member);
                 amountPerMemberTv = memberLine.findViewById(R.id.et_expense_amount);
                 if (amountPerMemberTv.getText().toString().trim().length() > 0) {
-                    expensePerMember = Double.valueOf(amountPerMemberTv.getText().toString().trim());
+                    expensePerMember = Double.parseDouble(amountPerMemberTv.getText().toString().trim());
                 } else {
                     expensePerMember = 0;
                 }
