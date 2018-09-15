@@ -85,7 +85,7 @@ public class DebtCalculator {
     private List<Balance> getBalances(int groupId, int currencyId) {
         List<Balance> balances = new ArrayList<>();
 
-        Cursor cursor = new TransactionRepo().selectBalance(groupId);
+        Cursor cursor = new TransactionRepo().selectBalances(groupId);
         while (cursor.moveToNext()) {
             Balance balance = new Balance();
                 balance.setGroupId(groupId);

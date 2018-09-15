@@ -50,9 +50,18 @@ public class SettleUpRVAdapter
             popupMenu.inflate(R.menu.menu_item_settleup_onclick);
             popupMenu.setGravity(Gravity.END);
             popupMenu.setOnMenuItemClickListener(item -> {
-                // TODO OnClick to settle-up the debt
-                Toast.makeText(context, "TODO: vyrovnej dluh", Toast.LENGTH_SHORT).show();
-                return true;
+                switch (item.getItemId()) {
+                    case R.id.action_settleup_item:
+                        //onClickSettleUp(holder, debtorId, creditorId, amount);
+                        return true;
+
+                    case R.id.action_settleup_part_item:
+                        //onClickSettleUpPartially(holder, debtorId, creditorId, amount);
+                        return true;
+
+                    default:
+                        return false;
+                }
             });
             popupMenu.show();
         });
@@ -61,6 +70,14 @@ public class SettleUpRVAdapter
     @Override
     public int getItemCount() {
         return transactions.size();
+    }
+
+    private void onClickSettleUp(ViewHolder holder, int debtorId, int creditorId, double amount) {
+
+    }
+
+    private void onClickSettleUpPartially(ViewHolder holder, int debtorId, int creditorId, double amount) {
+
     }
 
     /**

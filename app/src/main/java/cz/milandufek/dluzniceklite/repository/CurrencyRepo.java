@@ -3,6 +3,7 @@ package cz.milandufek.dluzniceklite.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
@@ -112,6 +113,18 @@ public class CurrencyRepo implements BaseColumns {
         );
 
         return currency;
+    }
+
+    public int getBaseCurrency() {
+        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        String[] cols = {_ID};
+        String[] selectionArgs = {"1"};
+
+        Cursor cursor = db.query(TABLE_NAME, cols, _IS_BASE_CURRENCY + " = ?", selectionArgs,
+                null, null, null, null);
+
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
     /**

@@ -16,10 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
-import cz.milandufek.dluzniceklite.models.ExpenseSummary;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.models.SummaryExpense;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.ExpenseRVAdapter;
@@ -30,7 +28,6 @@ public class ListExpenseFragment extends Fragment {
     private static final String TAG = "ListExpenseFragment";
 
     private Context context;
-    private Currency baseCurrency;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,7 +93,7 @@ public class ListExpenseFragment extends Fragment {
 
     private void setupSummaryView(View view) {
         TextView summaryTitle = view.findViewById(R.id.tv_expense_summary_title);
-        ExpenseSummary summaryValues = initDataSummary();
+        SummaryExpense summaryValues = new Summary().initExpenseSummary(context);
         String titleText = getString(R.string.total_spent);
         summaryTitle.setText(titleText);
 
@@ -106,43 +103,5 @@ public class ListExpenseFragment extends Fragment {
         sumSpent.append(" ");
         sumSpent.append(summaryValues.getCurrencyName());
         summarySum.setText(sumSpent);
-    }
-
-    /**
-     * Select currency name and total amount spent, converted to active group base currency
-     * @return ExpenseSummary [ currencyName, totalSpent ]
-     */
-    private ExpenseSummary initDataSummary() {
-        MyPreferences sp = new MyPreferences(context);
-        int groupId = sp.getActiveGroupId();
-        int currencyId = sp.getActiveGroupCurrency();
-
-        String baseCurrencyName = new CurrencyRepo().getCurrency(1).getName();
-        Cursor cursorSummary = new ExpenseRepo().selectTotalSpent(groupId);
-
-        double sumAmountInBaseCurrency = 0;
-        while (cursorSummary.moveToNext()) {
-            int cId = cursorSummary.getInt(0);
-            if (cId == currencyId) {
-                int quantity = cursorSummary.getInt(2);
-                int exchangeRate = cursorSummary.getInt(3);
-                double amount = cursorSummary.getDouble(4);
-                sumAmountInBaseCurrency += ( amount / quantity * exchangeRate );
-            } else {
-                sumAmountInBaseCurrency += cursorSummary.getDouble(4);
-            }
-
-            Log.d(TAG, "initDataSummary: sum = " + sumAmountInBaseCurrency);
-        }
-
-        sumAmountInBaseCurrency *= -1;
-        sumAmountInBaseCurrency = MyNumbers.roundIt(sumAmountInBaseCurrency, 2);
-        // TODO recalculate to selected currency
-
-        ExpenseSummary expenseSummary = new ExpenseSummary();
-        expenseSummary.setCurrencyName(baseCurrencyName);
-        expenseSummary.setSumSpent(sumAmountInBaseCurrency);
-
-        return expenseSummary;
     }
 }

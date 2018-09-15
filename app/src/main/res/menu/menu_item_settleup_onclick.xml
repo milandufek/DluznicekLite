@@ -4,5 +4,8 @@
     <item
         android:id="@+id/action_settleup_item"
         android:title="@string/settleup" />
+    <item
+        android:id="@+id/action_settleup_part_item"
+        android:title="@string/settleup_part" />
 
 </menu>

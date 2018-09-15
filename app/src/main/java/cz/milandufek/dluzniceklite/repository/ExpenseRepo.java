@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class ExpenseRepo implements BaseColumns {
 
@@ -117,7 +118,7 @@ public class ExpenseRepo implements BaseColumns {
     /**
      * Select summary
      */
-    public Cursor selectTotalSpent(int groupId) {
+    public Cursor selectTotalSpent(int groupId, boolean includeSettleUps) {
 //        SELECT currencies._id, currencies.name, currencies.quantity, currencies.exchange_rate, SUM(transactions.amount)
 //        FROM expenses
 //        INNER JOIN currencies ON expenses.currency_id = currencies._id
@@ -140,6 +141,9 @@ public class ExpenseRepo implements BaseColumns {
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                     " AND " +
                     TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + " <= " + 0 +
+                    " AND " +
+                    TransactionRepo.TABLE_NAME + "." + TransactionRepo._SETTLEUP_TRANSACTION +
+                        " <= " + MyNumbers.booleanToNumber(includeSettleUps) +
                 " GROUP BY " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME +
                 ";";
 

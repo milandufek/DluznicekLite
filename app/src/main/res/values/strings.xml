@@ -21,6 +21,7 @@
     <string name="delete">Smazat</string>
     <string name="edit">Upravit</string>
     <string name="settleup">Vyrovnat dluh</string>
+    <string name="settleup_part">Vyrovnat část dluhu</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="big_dot">•</string>
@@ -48,7 +49,7 @@
 
     <!-- ABOUT -->
     <string name="author">Autor: Milan Dufek</string>
-    <string name="version">Verze: 1.0</string>
+    <string name="version">Verze: 1.0_alpha</string>
 
     <!-- GROUPS -->
     <string name="group">Skupina</string>
@@ -76,7 +77,7 @@
     <string name="toast_default_currency_created">Primární měna vytvořena</string>
     <string name="really_want_to_delete_currency">Smazat měnu?</string>
 
-    <!-- ADD/EDIT PAYMENT -->
+    <!-- PAYMENTS -->
     <string name="who_pays">Platil(a)</string>
     <string name="how_much">Částka</string>
     <string name="for_who">Za koho</string>
@@ -95,6 +96,4 @@
     <string name="today">dnes</string>
     <string name="now">teď</string>
     <string name="really_want_to_delete_expense">Smazat výdaj?</string>
-
-
 </resources>

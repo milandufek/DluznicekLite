@@ -159,7 +159,7 @@ public class TransactionRepo implements BaseColumns {
      * @param groupId
      * @return cursor with transactions
      */
-    public Cursor selectBalance(int groupId) {
+    public Cursor selectBalances(int groupId) {
         // balance already grouped by sql
 //        SELECT debtor_id, group_members.name , SUM(amount * quantity / exchange_rate) AS balance
 //        FROM transactions
