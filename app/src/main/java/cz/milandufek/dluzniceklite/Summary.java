@@ -17,7 +17,7 @@ public class Summary {
 
     private CurrencyRepo sqlCurrency = new CurrencyRepo();
 
-    SummaryExpense initExpenseSummary(Context context) {
+    SummaryExpense initSummaryExpense(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
 
@@ -38,7 +38,7 @@ public class Summary {
         return new SummaryExpense(currencyId, currencyName, sumAmount);
     }
 
-    SummarySettleUp initSettleUpSummary(Context context) {
+    SummarySettleUp initSummarySettleUp(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
         int currencyId = sp.getActiveGroupCurrency();

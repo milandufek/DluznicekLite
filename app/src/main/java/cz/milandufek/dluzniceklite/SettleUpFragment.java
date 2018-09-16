@@ -80,7 +80,7 @@ public class SettleUpFragment extends Fragment {
 
     private void setupSummaryView(View view) {
         TextView summaryTitle = view.findViewById(R.id.tv_settleup_summary);
-        SummarySettleUp summaryValues = new Summary().initSettleUpSummary(context);
+        SummarySettleUp summaryValues = new Summary().initSummarySettleUp(context);
         String titleText = getString(R.string.remains_to_settleup);
         summaryTitle.setText(titleText);
 

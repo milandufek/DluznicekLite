@@ -93,7 +93,7 @@ public class ListExpenseFragment extends Fragment {
 
     private void setupSummaryView(View view) {
         TextView summaryTitle = view.findViewById(R.id.tv_expense_summary_title);
-        SummaryExpense summaryValues = new Summary().initExpenseSummary(context);
+        SummaryExpense summaryValues = new Summary().initSummaryExpense(context);
         String titleText = getString(R.string.total_spent);
         summaryTitle.setText(titleText);
 
