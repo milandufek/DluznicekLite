@@ -82,7 +82,7 @@ public class DebtCalculator {
      * @param currencyId
      * @return Cursor
      */
-    private List<Balance> getBalances(int groupId, int currencyId) {
+    public List<Balance> getBalances(int groupId, int currencyId) {
         List<Balance> balances = new ArrayList<>();
 
         Cursor cursor = new TransactionRepo().selectBalances(groupId);

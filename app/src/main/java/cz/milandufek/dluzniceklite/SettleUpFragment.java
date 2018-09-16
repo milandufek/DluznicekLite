@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.Balance;
 import cz.milandufek.dluzniceklite.models.SummarySettleUp;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
@@ -25,6 +26,8 @@ import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 public class SettleUpFragment extends Fragment {
     private static final String TAG = SettleUpFragment.class.toString();
     private Context context;
+
+    private List<Balance> balances;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

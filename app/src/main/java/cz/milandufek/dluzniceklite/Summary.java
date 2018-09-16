@@ -3,26 +3,23 @@ package cz.milandufek.dluzniceklite;
 import android.content.Context;
 import android.database.Cursor;
 
-import cz.milandufek.dluzniceklite.models.Currency;
+import java.util.List;
+
+import cz.milandufek.dluzniceklite.models.Balance;
 import cz.milandufek.dluzniceklite.models.SummaryExpense;
-import cz.milandufek.dluzniceklite.models.SummaryItem;
 import cz.milandufek.dluzniceklite.models.SummarySettleUp;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.utils.MyNumbers;
+import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class Summary {
 
-    private int type;
-
-    // TODO resolve both summary types in one method
+    private CurrencyRepo sqlCurrency = new CurrencyRepo();
 
     SummaryExpense initExpenseSummary(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
-
-        CurrencyRepo sqlCurrency = new CurrencyRepo();
 
         Cursor cursorSummary = new ExpenseRepo().selectTotalSpent(groupId, false);
         double sumAmountInBaseCurrency = 0;
@@ -30,24 +27,13 @@ public class Summary {
             int quantity = cursorSummary.getInt(2);
             int exchangeRate = cursorSummary.getInt(3);
             double amount = cursorSummary.getDouble(4);
-            sumAmountInBaseCurrency += ( amount / quantity * exchangeRate );
+            sumAmountInBaseCurrency += ( amount / quantity * exchangeRate ) * -1;
         }
 
-        double sumAmount = sumAmountInBaseCurrency;
-        String currencyName;
         int currencyId = sp.getActiveGroupCurrency();
-        int baseCurrency = sqlCurrency.getBaseCurrency();
-        if (currencyId != baseCurrency) {
-            Currency activeCurrency = sqlCurrency.getCurrency(currencyId);
-            currencyId = activeCurrency.getId();
-            sumAmount = ( sumAmountInBaseCurrency / activeCurrency.getExchangeRate() * activeCurrency.getQuantity() );
-            currencyName = activeCurrency.getName();
-        } else {
-            currencyName = sqlCurrency.getCurrency(1).getName();
-        }
-
-        sumAmount *= -1;
-        sumAmount = MyNumbers.roundIt(sumAmount, 2);
+        String currencyName = sqlCurrency.getCurrency(currencyId).getName();
+        int baseCurrency = sqlCurrency.getBaseCurrencyId();
+        double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
 
         return new SummaryExpense(currencyId, currencyName, sumAmount);
     }
@@ -55,33 +41,19 @@ public class Summary {
     SummarySettleUp initSettleUpSummary(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
-
-        CurrencyRepo sqlCurrency = new CurrencyRepo();
-
-        Cursor cursorSummary = new ExpenseRepo().selectTotalSpent(groupId, true);
-        double sumAmountInBaseCurrency = 0;
-        while (cursorSummary.moveToNext()) {
-            int quantity = cursorSummary.getInt(2);
-            int exchangeRate = cursorSummary.getInt(3);
-            double amount = cursorSummary.getDouble(4);
-            sumAmountInBaseCurrency += ( amount / quantity * exchangeRate );
-        }
-
-        double sumAmount = sumAmountInBaseCurrency;
-        String currencyName;
         int currencyId = sp.getActiveGroupCurrency();
-        int baseCurrency = sqlCurrency.getBaseCurrency();
-        if (currencyId != baseCurrency) {
-            Currency activeCurrency = sqlCurrency.getCurrency(currencyId);
-            currencyId = activeCurrency.getId();
-            sumAmount = ( sumAmountInBaseCurrency / activeCurrency.getExchangeRate() * activeCurrency.getQuantity() );
-            currencyName = activeCurrency.getName();
-        } else {
-            currencyName = sqlCurrency.getCurrency(1).getName();
+
+        List<Balance> balances = new DebtCalculator().getBalances(groupId, currencyId);
+
+        double sumAmountInBaseCurrency = 0;
+        for(Balance balance : balances) {
+            if (balance.getBalance() >= 0)
+                sumAmountInBaseCurrency += balance.getBalance();
         }
 
-        sumAmount *= -1;
-        sumAmount = MyNumbers.roundIt(sumAmount, 2);
+        int baseCurrency = sqlCurrency.getBaseCurrencyId();
+        String currencyName = sqlCurrency.getCurrency(currencyId).getName();
+        double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
 
         return new SummarySettleUp(currencyId, currencyName, sumAmount);
     }

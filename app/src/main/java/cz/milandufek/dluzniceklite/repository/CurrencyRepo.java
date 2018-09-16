@@ -115,7 +115,7 @@ public class CurrencyRepo implements BaseColumns {
         return currency;
     }
 
-    public int getBaseCurrency() {
+    public int getBaseCurrencyId() {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
         String[] cols = {_ID};
         String[] selectionArgs = {"1"};
