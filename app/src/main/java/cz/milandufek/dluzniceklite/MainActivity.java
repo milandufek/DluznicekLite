@@ -1,8 +1,17 @@
 package cz.milandufek.dluzniceklite;
 
 import cz.milandufek.dluzniceklite.models.Currency;
+import cz.milandufek.dluzniceklite.models.Expense;
+import cz.milandufek.dluzniceklite.models.Group;
+import cz.milandufek.dluzniceklite.models.GroupMember;
+import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
+import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
+import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
@@ -36,28 +45,8 @@ public class MainActivity extends AppCompatActivity {
         // SQL explorer plugin
         Stetho.initializeWithDefaults(this);
 
-
-//        List<Currency> currencies = new ArrayList<>();
-//        currencies.add(new Currency(0,"CZK","Česká Republika",
-//                1,1,1,true,false));
-//        currencies.add(new Currency(1,"USD","USA",
-//                1,20,1,false,true));
-//        currencies.add(new Currency(2,"EUR","EMU",
-//                1,25,1,false,true));
-//        currencies.add(new Currency(3,"DNG","Vietnam",
-//                1000,0.97,1,false,true));
-//        currencies.add(new Currency(4,"LKR","Srí Lanka",
-//                7,7,1,false,true));
-//        currencies.add(new Currency(5,"GPB","Velká Británie",
-//                1,29.5,1,false,true));
-//        currencies.add(new Currency(6,"ISK","Island",
-//                100,20.5,1,false,true));
-//        currencies.add(new Currency(7,"BTC","Nikde",
-//                1,100000,1,false,true));
-//        CurrencyRepo currencyRepo = new CurrencyRepo();
-//        for (int i = 0; currencies.size() > i; i++) {
-//            currencyRepo.insertCurrency(currencies.get(i));
-//        }
+        // refill SQLite test data
+        //refillTestData();
 
         // set active group name
         String title = getActiveGroupName();
@@ -109,6 +98,86 @@ public class MainActivity extends AppCompatActivity {
     private String getActiveGroupName() {
         MyPreferences sp = new MyPreferences(this);
         return sp.getActiveGroupName();
+    }
+
+    private void initCurrencies() {
+        List<Currency> currencies = new ArrayList<>();
+        currencies.add(new Currency(0,"CZK","Česká Republika",
+                1,1,1,true,false));
+        currencies.add(new Currency(1,"USD","USA",
+                1,20,1,false,true));
+        currencies.add(new Currency(2,"EUR","EMU",
+                1,25,1,false,true));
+        currencies.add(new Currency(3,"DNG","Vietnam",
+                1000,0.97,1,false,true));
+        currencies.add(new Currency(4,"LKR","Srí Lanka",
+                7,7,1,false,true));
+        currencies.add(new Currency(5,"GPB","Velká Británie",
+                1,29.5,1,false,true));
+        currencies.add(new Currency(6,"ISK","Island",
+                100,20.5,1,false,true));
+        CurrencyRepo currencyRepo = new CurrencyRepo();
+        for (int i = 0; currencies.size() > i; i++) {
+            currencyRepo.insertCurrency(currencies.get(i));
+        }
+    }
+
+    private void refillTestData() {
+        GroupRepo groupRepo = new GroupRepo();
+        GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
+        ExpenseRepo expenseRepo = new ExpenseRepo();
+        TransactionRepo transactionRepo = new TransactionRepo();
+
+        // delete all groups
+        List<Group> groups = groupRepo.getAllGroups();
+        for (Group group : groups) {
+            groupRepo.deleteGroup(group.getId());
+        }
+
+        // insert groups & members
+        long groupId = groupRepo.insertGroup(new Group(0,"Mololockove", 2, "lol"));
+        String[] groupMembers = { "Mock", "Lock", "Lolok", "Clock", "Qock" };
+        for (String member : groupMembers) {
+            GroupMember groupMember = new GroupMember(0, (int) groupId, member, null, null, null, false);
+            long memberId = groupMemberRepo.insertGroupMember(groupMember);
+        }
+
+        // insert expense & transactions
+        Expense expense = new Expense(0,
+                1, (int) groupId, 1, "Večeře",
+                MyDateTime.getDateToday(), MyDateTime.getDateToday());
+        long expenseId = expenseRepo.insertExpense(expense);
+        List<Transaction> transactions = new ArrayList<>();
+        transactions.add(new Transaction(0, 1, (int) expenseId, 500));
+        transactions.add(new Transaction(0,2, (int) expenseId, 500));
+        transactions.add(new Transaction(0,3, (int) expenseId, 500));
+        transactions.add(new Transaction(0,4, (int) expenseId, 500));
+        transactions.add(new Transaction(0,5, (int) expenseId, 500));
+        transactionRepo.insertTransactions(transactions);
+        transactions.clear();
+
+        expense = new Expense(0,
+                1, (int) groupId, 2, "Oběd",
+                MyDateTime.getDateToday(), MyDateTime.getDateToday());
+        expenseId = expenseRepo.insertExpense(expense);
+        transactions = new ArrayList<>();
+        transactions.add(new Transaction(0,2, (int) expenseId, 50));
+        transactions.add(new Transaction(0,3, (int) expenseId, 50));
+        transactions.add(new Transaction(0,4, (int) expenseId, 50));
+        transactions.add(new Transaction(0,5, (int) expenseId, 50));
+        transactionRepo.insertTransactions(transactions);
+        transactions.clear();
+
+        expense = new Expense(0,
+                1, (int) groupId, 3, "Snídaně",
+                MyDateTime.getDateToday(), MyDateTime.getDateToday());
+        expenseId = expenseRepo.insertExpense(expense);
+        transactions = new ArrayList<>();
+        transactions.add(new Transaction(0, 1, (int) expenseId, 50));
+        transactions.add(new Transaction(0,2, (int) expenseId, 50));
+        transactions.add(new Transaction(0,5, (int) expenseId, 50));
+        transactionRepo.insertTransactions(transactions);
+        transactions.clear();
     }
 
     /**

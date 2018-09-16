@@ -21,17 +21,16 @@ import static java.util.Collections.sort;
  */
 public class DebtCalculator {
     private static final String TAG = "DebtCalculator";
-    private Context context;
 
     public DebtCalculator() {
     }
 
-    public List<HashMap<String, Object>> calculateDebts(int groupId, int currencyId) {
+    public List<HashMap<String,Object>> calculateDebts(int groupId, int currencyId) {
         Log.d(TAG, "calculateDebts method started");
         List<Balance> balances = new LinkedList<>(getBalances(groupId, currencyId));
 
-        List<HashMap<String,Object>> debts = new LinkedList<>();
-        double tolerance = 0.01;
+        List<HashMap<String,Object>> debts = new ArrayList<>();
+        double tolerance = 0.05;
 
         int resolvedMembers = 0;
         int totalMembers = balances.size();

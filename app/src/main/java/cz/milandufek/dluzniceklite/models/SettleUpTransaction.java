@@ -2,7 +2,8 @@ package cz.milandufek.dluzniceklite.models;
 
 public class SettleUpTransaction {
 
-    private String from, to, currency;
+    private String from, to;
+    private Currency currency;
     private int fromId, toId, currencyId;
     private double amount;
 
@@ -25,11 +26,11 @@ public class SettleUpTransaction {
         this.to = to;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +16,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Balance;
-import cz.milandufek.dluzniceklite.models.SummarySettleUp;
+import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
+import cz.milandufek.dluzniceklite.models.SummarySettleUp;
+import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 
 public class SettleUpFragment extends Fragment {
+
     private static final String TAG = SettleUpFragment.class.toString();
     private Context context;
-
-    private List<Balance> balances;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,25 +53,26 @@ public class SettleUpFragment extends Fragment {
         List<SettleUpTransaction> transactions = new ArrayList<>();
 
         MyPreferences sp = new MyPreferences(context);
-        int activeCurrencyId = sp.getActiveGroupCurrency();
+        int activeCurrencyId = sp.getActiveGroupCurrencyId();
         int activeGroupId = sp.getActiveGroupId();
+        Currency baseCurrency = new CurrencyRepo().getBaseCurrency();
+        Currency activeCurrency = new CurrencyRepo().getCurrency(activeCurrencyId);
 
         List<HashMap<String, Object>> debts = new DebtCalculator()
                 .calculateDebts(activeGroupId, activeCurrencyId);
 
-        Log.d(TAG, "Listing debts:");
         for (HashMap debt : debts) {
-            String from = debt.get("from").toString();
-            String amount = debt.get("amount").toString();
-            String to = debt.get("to").toString();
-            Log.d(TAG, "Debt: \n" + from + "(" + amount + ") -> " + to);
-        }
+            Balance from = (Balance) debt.get("from");
+            Balance to = (Balance) debt.get("to");
+            double amount = CurrencyOperation.exchangeAmount((double) debt.get("amount"), baseCurrency.getId(), activeCurrencyId);
 
-        for (HashMap debt : debts) {
             SettleUpTransaction transaction = new SettleUpTransaction();
-            transaction.setFrom(debt.get("from").toString());
-            transaction.setTo(debt.get("to").toString());
-            transaction.setAmount(Double.valueOf(debt.get("amount").toString()));
+                transaction.setFrom(from.getMemberName());
+                transaction.setFromId(from.getMemberId());
+                transaction.setTo(to.getMemberName());
+                transaction.setToId(to.getMemberId());
+                transaction.setAmount(amount);
+                transaction.setCurrency(activeCurrency);
             transactions.add(transaction);
         }
 

@@ -30,9 +30,9 @@ public class Summary {
             sumAmountInBaseCurrency += ( amount / quantity * exchangeRate ) * -1;
         }
 
-        int currencyId = sp.getActiveGroupCurrency();
+        int currencyId = sp.getActiveGroupCurrencyId();
         String currencyName = sqlCurrency.getCurrency(currencyId).getName();
-        int baseCurrency = sqlCurrency.getBaseCurrencyId();
+        int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
 
         return new SummaryExpense(currencyId, currencyName, sumAmount);
@@ -41,7 +41,7 @@ public class Summary {
     SummarySettleUp initSummarySettleUp(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
-        int currencyId = sp.getActiveGroupCurrency();
+        int currencyId = sp.getActiveGroupCurrencyId();
 
         List<Balance> balances = new DebtCalculator().getBalances(groupId, currencyId);
 
@@ -51,7 +51,7 @@ public class Summary {
                 sumAmountInBaseCurrency += balance.getBalance();
         }
 
-        int baseCurrency = sqlCurrency.getBaseCurrencyId();
+        int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         String currencyName = sqlCurrency.getCurrency(currencyId).getName();
         double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
 

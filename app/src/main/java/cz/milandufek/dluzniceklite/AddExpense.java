@@ -19,8 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -28,7 +26,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -206,7 +203,7 @@ public class AddExpense extends AppCompatActivity {
         currency.setAdapter(spinnerAdapter);
 
         // select active currency for group
-        int selectedItem = new MyPreferences(context).getActiveGroupCurrency();
+        int selectedItem = new MyPreferences(context).getActiveGroupCurrencyId();
         currencySelectedId = currencyIds.indexOf(selectedItem);
         currency.setSelection(currencySelectedId);
         currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -554,7 +551,7 @@ public class AddExpense extends AppCompatActivity {
      * Set today as a default value
      */
     private void setupDatePicker() {
-        dateDb = new MyDateTime().getDateToday();
+        dateDb = MyDateTime.getDateToday();
         date.setText(getString(R.string.today));
 
         // set date from calendar
@@ -597,7 +594,7 @@ public class AddExpense extends AppCompatActivity {
      * Set now as a default value
      */
     private void setupTimePicker() {
-        timeDb = new MyDateTime().getTimeNow();
+        timeDb = MyDateTime.getTimeNow();
         time.setText(getString(R.string.now));
 
         time.setOnClickListener(v -> {

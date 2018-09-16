@@ -16,7 +16,7 @@ public class CurrencyOperation {
         CurrencyRepo sql = new CurrencyRepo();
         double exchangedAmount;
 
-        if (newCurrencyId == sql.getBaseCurrencyId()) {
+        if (newCurrencyId == sql.getBaseCurrency().getId()) {
             exchangedAmount = amount;
         } else {
                 Currency originCurrency = sql.getCurrency(originCurrencyId);

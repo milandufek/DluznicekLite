@@ -115,16 +115,25 @@ public class CurrencyRepo implements BaseColumns {
         return currency;
     }
 
-    public int getBaseCurrencyId() {
+    public Currency getBaseCurrency() {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        String[] cols = {_ID};
         String[] selectionArgs = {"1"};
 
-        Cursor cursor = db.query(TABLE_NAME, cols, _IS_BASE_CURRENCY + " = ?", selectionArgs,
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _IS_BASE_CURRENCY + " = ?", selectionArgs,
                 null, null, null, null);
 
         cursor.moveToFirst();
-        return cursor.getInt(0);
+
+        return new Currency(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getInt(3),
+                cursor.getDouble(4),
+                cursor.getInt(5),
+                MyNumbers.numberToBoolean(cursor.getInt(6)),
+                MyNumbers.numberToBoolean(cursor.getInt(7))
+        );
     }
 
     /**

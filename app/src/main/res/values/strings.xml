@@ -96,4 +96,6 @@
     <string name="today">dnes</string>
     <string name="now">teď</string>
     <string name="really_want_to_delete_expense">Smazat výdaj?</string>
+    <string name="settleup_reason">Vyrovnání</string>
+    <string name="settleup_part_reason">Částečné vyrovnání</string>
 </resources>

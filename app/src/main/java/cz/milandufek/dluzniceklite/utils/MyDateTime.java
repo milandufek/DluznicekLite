@@ -4,14 +4,14 @@ import java.util.Calendar;
 
 public class MyDateTime {
 
-    public MyDateTime() {
+    private MyDateTime() {
     }
 
     /**
      * Get time now
      * Format HH:mm (24h)
      */
-    public String getTimeNow() {
+    public static String getTimeNow() {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
@@ -34,7 +34,7 @@ public class MyDateTime {
     /**
      * Get today's date in YYYY-MM-DD format
      */
-    public String getDateToday() {
+    public static String getDateToday() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);

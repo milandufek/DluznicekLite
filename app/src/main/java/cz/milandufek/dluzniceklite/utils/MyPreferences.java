@@ -44,7 +44,7 @@ public class MyPreferences {
         return preferences.getString(SP_ACTIVE_GROUP_NAME, "");
     }
 
-    public int getActiveGroupCurrency() {
+    public int getActiveGroupCurrencyId() {
         return preferences.getInt(SP_ACTIVE_CID,0);
     }
 }
