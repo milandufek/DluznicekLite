@@ -130,8 +130,8 @@ public class GroupRVAdapter
                     int groupId = groups.get(h.getAdapterPosition()).getId();
                     GroupRepo repo = new GroupRepo();
                     repo.deleteGroup(groupId);
-                    groups.remove(h.getAdapterPosition());
 
+                    groups.remove(h.getAdapterPosition());
                     notifyItemRemoved(h.getAdapterPosition());
                     notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
 

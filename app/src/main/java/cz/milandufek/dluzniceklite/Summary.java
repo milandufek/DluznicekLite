@@ -16,6 +16,7 @@ import cz.milandufek.dluzniceklite.utils.MyPreferences;
 public class Summary {
 
     private CurrencyRepo sqlCurrency = new CurrencyRepo();
+    private static final double TOLERANCE = 0.02;
 
     SummaryExpense initSummaryExpense(Context context) {
         MyPreferences sp = new MyPreferences(context);
@@ -54,6 +55,8 @@ public class Summary {
         int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         String currencyName = sqlCurrency.getCurrency(currencyId).getName();
         double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
+        if (sumAmount <= TOLERANCE)
+            sumAmount = 0;
 
         return new SummarySettleUp(currencyId, currencyName, sumAmount);
     }

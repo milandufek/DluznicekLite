@@ -119,7 +119,8 @@ public class SettleUpRVAdapter
     private void removeItemFromList(ViewHolder h) {
         transactions.remove(h.getAdapterPosition());
         notifyItemRemoved(h.getAdapterPosition());
-        notifyItemRangeChanged(h.getAdapterPosition(), transactions.size());
+        notifyItemRangeChanged(h.getAdapterPosition(), getItemCount());
+        notifyDataSetChanged();
     }
 
     /**
