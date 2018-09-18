@@ -52,8 +52,7 @@ public class MyPreferences {
     public boolean checkFirstStart() {
         if (preferences.getBoolean(SP_FIRST_RUN, true)) {
             editor = preferences.edit();
-            editor.putBoolean(SP_FIRST_RUN, false);
-            editor.apply();
+            editor.putBoolean(SP_FIRST_RUN, false).apply();
             return true;
         } else {
             return false;

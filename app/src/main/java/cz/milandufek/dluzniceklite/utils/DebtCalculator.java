@@ -22,7 +22,7 @@ import static java.util.Collections.sort;
  */
 public class DebtCalculator {
 
-    private static final String TAG = "DebtCalculator";
+    private static final String TAG = DebtCalculator.class.toString();
     private static final double TOLERANCE = 0.1;
 
     public DebtCalculator() {
@@ -30,6 +30,7 @@ public class DebtCalculator {
 
     public List<HashMap<String,Object>> calculateDebts(int groupId, int currencyId) {
         Log.d(TAG, "calculateDebts method started");
+
         List<Balance> balances = new ArrayList<>(getBalances(groupId, currencyId));
         List<HashMap<String,Object>> debts = new ArrayList<>();
 
@@ -41,30 +42,30 @@ public class DebtCalculator {
             Log.d(TAG, "calculateDebts: Resolved members " + resolvedMembers);
 
             sort(balances, Balance.SortByBalance);
+            Log.d(TAG, "calculateDebts: balances " + balances);
             Balance creditor = balances.get(0);
             Balance debtor = balances.get(balances.size() - 1);
 
+            // TODO tuning
             double amount;
             double creditorShouldReceive = Math.abs(creditor.getBalance());
             double debtorShouldSend = Math.abs(debtor.getBalance());
+            if ((creditorShouldReceive + debtorShouldSend) <= (2 * TOLERANCE))
+                break;
             if (debtorShouldSend > creditorShouldReceive) {
                 amount = creditorShouldReceive;
-                creditor.setBalance(creditor.getBalance() - amount);
-                debtor.setBalance(debtor.getBalance() + amount);
             } else {
                 amount = debtorShouldSend;
-                creditor.setBalance(creditor.getBalance() + amount);
-                debtor.setBalance(debtor.getBalance() - amount);
             }
-
-//            creditor.setBalance(creditor.getBalance() + amount);
-//            debtor.setBalance(debtor.getBalance() - amount);
 
             HashMap<String,Object> values = new HashMap<>();
             values.put("from", debtor);
             values.put("amount", amount);
             values.put("to", creditor);
             debts.add(values);
+
+            creditor.setBalance(creditor.getBalance() + amount);
+            debtor.setBalance(debtor.getBalance() - amount);
 
             creditorShouldReceive = Math.abs(creditor.getBalance());
             debtorShouldSend = Math.abs(debtor.getBalance());
@@ -74,12 +75,10 @@ public class DebtCalculator {
                 resolvedMembers++;
 
             ListIterator<HashMap<String,Object>> iterator = debts.listIterator();
-            Log.d(TAG, "calculateDebts: TOLERANCE " + TOLERANCE);
             while (iterator.hasNext()) {
                 double nextAmount = (double) iterator.next().get("amount");
                 Log.d(TAG, "calculateDebts: amount " + nextAmount);
                 if (nextAmount <= TOLERANCE) {
-                    Log.d(TAG, "calculateDebts: removing " + nextAmount);
                     iterator.remove();
                 }
             }
