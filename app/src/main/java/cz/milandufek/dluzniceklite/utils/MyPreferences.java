@@ -9,6 +9,7 @@ public class MyPreferences {
     private static final String SP_ACTIVE_GID = "active_group_id";
     private static final String SP_ACTIVE_GROUP_NAME = "active_group_name";
     private static final String SP_ACTIVE_CID = "active_group_currency";
+    private static final String SP_FIRST_RUN = "first_run";
 
     private final SharedPreferences preferences;
     private SharedPreferences.Editor editor;
@@ -37,7 +38,7 @@ public class MyPreferences {
     }
 
     public int getActiveGroupId() {
-        return preferences.getInt(SP_ACTIVE_GID,0);
+        return preferences.getInt(SP_ACTIVE_GID,1);
     }
 
     public String getActiveGroupName() {
@@ -45,6 +46,17 @@ public class MyPreferences {
     }
 
     public int getActiveGroupCurrencyId() {
-        return preferences.getInt(SP_ACTIVE_CID,0);
+        return preferences.getInt(SP_ACTIVE_CID,1);
+    }
+
+    public boolean checkFirstStart() {
+        if (preferences.getBoolean(SP_FIRST_RUN, true)) {
+            editor = preferences.edit();
+            editor.putBoolean(SP_FIRST_RUN, false);
+            editor.apply();
+            return true;
+        } else {
+            return false;
+        }
     }
 }

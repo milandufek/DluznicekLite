@@ -10,7 +10,8 @@ public class Currency {
     private final double exchangeRate;
     private final boolean isBaseCurrency, isDeletable;
 
-    // TODO think about using builder pattern and Java.util.Currency
+    // TODO think about using builder pattern
+
     public Currency(int id, String name, String country, int quantity, double exchangeRate,
                     int baseCurrency, boolean isBaseCurrency, boolean isDeletable) {
 

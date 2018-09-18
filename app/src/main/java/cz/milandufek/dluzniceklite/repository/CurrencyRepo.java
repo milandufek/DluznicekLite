@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class CurrencyRepo implements BaseColumns {
 
+    private static final String TAG = "CurrencyRepo";
     private Context context;
 
     public static final String TABLE_NAME = "currencies";
@@ -82,8 +84,8 @@ public class CurrencyRepo implements BaseColumns {
                     cursor.getInt(5),
                     MyNumbers.numberToBoolean(cursor.getInt(6)),
                     MyNumbers.numberToBoolean(cursor.getInt(7))));
+            cursor.close();
         }
-        cursor.close();
 
         return currency;
     }
@@ -100,40 +102,48 @@ public class CurrencyRepo implements BaseColumns {
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
                 null, null, null, null);
 
-        cursor.moveToFirst();
-        Currency currency = new Currency(
-            cursor.getInt(0),
-            cursor.getString(1),
-            cursor.getString(2),
-            cursor.getInt(3),
-            cursor.getDouble(4),
-            cursor.getInt(5),
-            MyNumbers.numberToBoolean(cursor.getInt(6)),
-            MyNumbers.numberToBoolean(cursor.getInt(7))
-        );
+        Currency currency = null;
+        while (cursor.moveToNext()) {
+            currency = new Currency(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getDouble(4),
+                    cursor.getInt(5),
+                    MyNumbers.numberToBoolean(cursor.getInt(6)),
+                    MyNumbers.numberToBoolean(cursor.getInt(7))
+            );
+            cursor.close();
+        }
 
         return currency;
     }
 
     public Currency getBaseCurrency() {
         SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
-        String[] selectionArgs = {"1"};
+        String[] selectionArgs = { "1" };
 
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _IS_BASE_CURRENCY + " = ?", selectionArgs,
-                null, null, null, null);
+                null, null, null, "1");
 
-        cursor.moveToFirst();
+        //cursor.moveToFirst();
+        Currency currency = null;
+        while (cursor.moveToNext()) {
+            currency = new Currency(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getDouble(4),
+                    cursor.getInt(5),
+                    MyNumbers.numberToBoolean(cursor.getInt(6)),
+                    MyNumbers.numberToBoolean(cursor.getInt(7))
+            );
+            cursor.close();
+        }
 
-        return new Currency(
-                cursor.getInt(0),
-                cursor.getString(1),
-                cursor.getString(2),
-                cursor.getInt(3),
-                cursor.getDouble(4),
-                cursor.getInt(5),
-                MyNumbers.numberToBoolean(cursor.getInt(6)),
-                MyNumbers.numberToBoolean(cursor.getInt(7))
-        );
+        return currency;
     }
 
     /**

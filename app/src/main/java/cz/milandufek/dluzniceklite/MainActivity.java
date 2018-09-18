@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    //  TODO Room Database connection + DAO + repository + ViewMode + LiveData (MVVM)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +48,11 @@ public class MainActivity extends AppCompatActivity {
         // SQL explorer plugin
         Stetho.initializeWithDefaults(this);
 
-        // refill SQLite test data
-        //refillTestData();
+        // refill SQLite test data on first start
+        if (new MyPreferences(this).checkFirstStart()) {
+            initCurrencies();
+            refillTestData();
+        }
 
         // set active group name
         String title = getActiveGroupName();
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the X tabbed activity
-        SectionsPageAdapter pageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
+        new SectionsPageAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         ViewPager mViewPager = findViewById(R.id.ll_group_container);
@@ -117,16 +123,15 @@ public class MainActivity extends AppCompatActivity {
         currencies.add(new Currency(6,"ISK","Island",
                 100,20.5,1,false,true));
         CurrencyRepo currencyRepo = new CurrencyRepo();
-        for (int i = 0; currencies.size() > i; i++) {
-            currencyRepo.insertCurrency(currencies.get(i));
+        for (Currency currency : currencies) {
+            long result = currencyRepo.insertCurrency(currency);
+            Log.d(TAG, "initCurrencies: inserting currency ID: " + result);
         }
     }
 
     private void refillTestData() {
         GroupRepo groupRepo = new GroupRepo();
         GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
-        ExpenseRepo expenseRepo = new ExpenseRepo();
-        TransactionRepo transactionRepo = new TransactionRepo();
 
         // delete all groups
         List<Group> groups = groupRepo.getAllGroups();
@@ -135,49 +140,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // insert groups & members
-        long groupId = groupRepo.insertGroup(new Group(0,"Mololockove", 2, "lol"));
-        String[] groupMembers = { "Mock", "Lock", "Lolok", "Clock", "Qock" };
+        String groupName = "Mololockove";
+        long groupId = groupRepo.insertGroup(new Group(0,groupName, 2, "Mock mock"));
+        String[] groupMembers = { "Mock", "Lock", "Nock", "Clock", "Qock", "Lolock" };
+        Log.d(TAG, "refillTestData: group inserted: id = " + groupId);
         for (String member : groupMembers) {
             GroupMember groupMember = new GroupMember(0, (int) groupId, member, null, null, null, false);
-            long memberId = groupMemberRepo.insertGroupMember(groupMember);
+            groupMemberRepo.insertGroupMember(groupMember);
         }
 
-        // insert expense & transactions
-        Expense expense = new Expense(0,
-                1, (int) groupId, 1, "Večeře",
-                MyDateTime.getDateToday(), MyDateTime.getDateToday());
-        long expenseId = expenseRepo.insertExpense(expense);
-        List<Transaction> transactions = new ArrayList<>();
-        transactions.add(new Transaction(0, 1, (int) expenseId, 500));
-        transactions.add(new Transaction(0,2, (int) expenseId, 500));
-        transactions.add(new Transaction(0,3, (int) expenseId, 500));
-        transactions.add(new Transaction(0,4, (int) expenseId, 500));
-        transactions.add(new Transaction(0,5, (int) expenseId, 500));
-        transactionRepo.insertTransactions(transactions);
-        transactions.clear();
-
-        expense = new Expense(0,
-                1, (int) groupId, 2, "Oběd",
-                MyDateTime.getDateToday(), MyDateTime.getDateToday());
-        expenseId = expenseRepo.insertExpense(expense);
-        transactions = new ArrayList<>();
-        transactions.add(new Transaction(0,2, (int) expenseId, 50));
-        transactions.add(new Transaction(0,3, (int) expenseId, 50));
-        transactions.add(new Transaction(0,4, (int) expenseId, 50));
-        transactions.add(new Transaction(0,5, (int) expenseId, 50));
-        transactionRepo.insertTransactions(transactions);
-        transactions.clear();
-
-        expense = new Expense(0,
-                1, (int) groupId, 3, "Snídaně",
-                MyDateTime.getDateToday(), MyDateTime.getDateToday());
-        expenseId = expenseRepo.insertExpense(expense);
-        transactions = new ArrayList<>();
-        transactions.add(new Transaction(0, 1, (int) expenseId, 50));
-        transactions.add(new Transaction(0,2, (int) expenseId, 50));
-        transactions.add(new Transaction(0,5, (int) expenseId, 50));
-        transactionRepo.insertTransactions(transactions);
-        transactions.clear();
+        MyPreferences preferences = new MyPreferences(this);
+        preferences.setActiveGroupId((int) groupId);
+        preferences.setActiveGroupName(groupName);
     }
 
     /**
