@@ -84,7 +84,6 @@ public class CurrencyRepo implements BaseColumns {
                     cursor.getInt(5),
                     MyNumbers.numberToBoolean(cursor.getInt(6)),
                     MyNumbers.numberToBoolean(cursor.getInt(7))));
-            cursor.close();
         }
 
         return currency;
