@@ -8,9 +8,16 @@ public class ExpenseItem {
     private double amount;
     private String date, time;
 
-    public ExpenseItem() {
+    public ExpenseItem(int id, String reason, String payer, String currency, String debtors, double amount, String date, String time) {
+        this.id = id;
+        this.reason = reason;
+        this.payer = payer;
+        this.currency = currency;
+        this.debtors = debtors;
+        this.amount = amount;
+        this.date = date;
+        this.time = time;
     }
-
 
     public int getId() {
         return id;

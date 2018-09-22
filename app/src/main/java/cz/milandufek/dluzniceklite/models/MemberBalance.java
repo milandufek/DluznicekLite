@@ -2,16 +2,16 @@ package cz.milandufek.dluzniceklite.models;
 
 import java.util.Comparator;
 
-public class Balance {
+public class MemberBalance {
 
     private int groupId, memberId, currencyId;
     private String memberName;
     private double balance;
 
-    public Balance() {
+    public MemberBalance() {
     }
 
-    public static Comparator<Balance> SortByBalance = (o1, o2) -> Double.compare(o1.getBalance(), o2.getBalance());
+    public static Comparator<MemberBalance> SortByBalance = (o1, o2) -> Double.compare(o1.getBalance(), o2.getBalance());
 
     public int getGroupId() {
         return groupId;

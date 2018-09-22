@@ -11,10 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,36 +28,43 @@
         <activity
             android:name=".ExportDataActivity"
             android:label="@string/title_activity_export_data"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
 
         <!-- Currency -->
         <activity
             android:name=".ListCurrency"
             android:label="@string/title_manage_currency"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AddCurrency"
             android:label="@string/title_add_currency"
-            android:parentActivityName=".ListCurrency" />
+            android:parentActivityName=".ListCurrency"
+            android:screenOrientation="portrait" />
 
         <!-- payments -->
         <activity
             android:name=".AddExpense"
             android:label="@string/title_add_payment"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <!-- groups -->
         <activity
             android:name=".AddGroup"
             android:label="@string/title_add_group"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ManageGroups"
             android:label="@string/action_manage_groups"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

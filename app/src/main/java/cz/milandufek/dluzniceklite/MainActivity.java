@@ -1,17 +1,12 @@
 package cz.milandufek.dluzniceklite;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
-import cz.milandufek.dluzniceklite.utils.MyDateTime;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
@@ -26,7 +21,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.facebook.stetho.Stetho;
 
@@ -36,14 +30,14 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    //  TODO Room Database connection + DAO + repository + ViewMode + LiveData (MVVM)
+    //  TODO Room Database connection + DAO + repository + AndroidViewModel + LiveData (MVVM)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DbHelper.getInstance(getApplicationContext()).getWritableDatabase();
+        MyDbHelper.getInstance(getApplicationContext()).getWritableDatabase();
 
         // SQL explorer plugin
         Stetho.initializeWithDefaults(this);
@@ -54,22 +48,19 @@ public class MainActivity extends AppCompatActivity {
             refillTestData();
         }
 
-        // set active group name
-        String title = getActiveGroupName();
-
         Toolbar toolbar = findViewById(R.id.toolbar_main);
-        toolbar.setTitle(title);
+        toolbar.setTitle(getActiveGroupName());
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the X tabbed activity
-        new SectionsPageAdapter(getSupportFragmentManager());
+        //new SectionsPageAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        ViewPager mViewPager = findViewById(R.id.ll_group_container);
-        setupViewPager(mViewPager);
+        ViewPager viewPager = findViewById(R.id.ll_group_container);
+        setupViewPager(viewPager);
 
         TabLayout tabLayout = findViewById(R.id.tabs_main_activity);
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
         // Floating Button (add payment)
         FloatingActionButton fab = findViewById(R.id.fab_payment_add);

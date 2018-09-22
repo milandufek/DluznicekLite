@@ -3,16 +3,14 @@ package cz.milandufek.dluzniceklite.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class CurrencyRepo implements BaseColumns {
@@ -60,7 +58,7 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_BASE_CURRENCY, MyNumbers.booleanToNumber(currency.getIsBaseCurrency()));
         values.put(_IS_DELETABLE, MyNumbers.booleanToNumber(currency.getIsDeletable()));
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         return db.insert(TABLE_NAME, null, values);
     }
 
@@ -70,20 +68,12 @@ public class CurrencyRepo implements BaseColumns {
      * @return List<Currency>
      */
     public List<Currency> getAllCurrency() {
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
 
         List<Currency> currency = new ArrayList<>();
         while (cursor.moveToNext()) {
-            currency.add(new Currency(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getDouble(4),
-                    cursor.getInt(5),
-                    MyNumbers.numberToBoolean(cursor.getInt(6)),
-                    MyNumbers.numberToBoolean(cursor.getInt(7))));
+            currency.add(buildCurrency(cursor));
         }
 
         return currency;
@@ -95,7 +85,7 @@ public class CurrencyRepo implements BaseColumns {
      * @return
      */
     public Currency getCurrency(int id) {
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] selectionArgs = {String.valueOf(id)};
 
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
@@ -103,16 +93,7 @@ public class CurrencyRepo implements BaseColumns {
 
         Currency currency = null;
         while (cursor.moveToNext()) {
-            currency = new Currency(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getDouble(4),
-                    cursor.getInt(5),
-                    MyNumbers.numberToBoolean(cursor.getInt(6)),
-                    MyNumbers.numberToBoolean(cursor.getInt(7))
-            );
+            currency = buildCurrency(cursor);
             cursor.close();
         }
 
@@ -120,25 +101,15 @@ public class CurrencyRepo implements BaseColumns {
     }
 
     public Currency getBaseCurrency() {
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] selectionArgs = { "1" };
 
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _IS_BASE_CURRENCY + " = ?", selectionArgs,
                 null, null, null, "1");
 
-        //cursor.moveToFirst();
         Currency currency = null;
         while (cursor.moveToNext()) {
-            currency = new Currency(
-                    cursor.getInt(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getDouble(4),
-                    cursor.getInt(5),
-                    MyNumbers.numberToBoolean(cursor.getInt(6)),
-                    MyNumbers.numberToBoolean(cursor.getInt(7))
-            );
+            currency = buildCurrency(cursor);
             cursor.close();
         }
 
@@ -155,10 +126,9 @@ public class CurrencyRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
-        int rows = db.delete(TABLE_NAME, selection, selectionArgs);
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
-        return rows;
+        return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 
     /** TODO update
@@ -178,7 +148,7 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_BASE_CURRENCY, currency.getIsBaseCurrency());
         values.put(_IS_DELETABLE, currency.getIsDeletable());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int update = db.update(TABLE_NAME, values,
                 _ID + " = ? ", new String[] { String.valueOf(id) } );
 
@@ -191,7 +161,7 @@ public class CurrencyRepo implements BaseColumns {
      * @return
      */
     public boolean checkIfCurrencyExists(String name) {
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] column = { _NAME };
         String selection = _NAME + " = ?";
         String[] selectionArgs = { name };
@@ -201,5 +171,18 @@ public class CurrencyRepo implements BaseColumns {
         cursor.close();
 
         return exists;
+    }
+
+    private Currency buildCurrency(Cursor cursor) {
+        return new Currency(
+                cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_COUNTRY)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(_QUANTITY)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(_EXCHANGE_RATE)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(_BASE_CURRENCY)),
+                MyNumbers.numberToBoolean(cursor.getInt(cursor.getColumnIndexOrThrow(_IS_BASE_CURRENCY))),
+                MyNumbers.numberToBoolean(cursor.getInt(cursor.getColumnIndexOrThrow(_IS_DELETABLE)))
+        );
     }
 }

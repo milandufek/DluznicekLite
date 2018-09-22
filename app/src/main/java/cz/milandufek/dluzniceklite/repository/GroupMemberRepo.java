@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class GroupMemberRepo implements BaseColumns {
@@ -58,7 +58,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_DESCRIPTION, groupMember.getDescription());
         values.put(_IS_ME, groupMember.getIsMe());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.insert(TABLE_NAME,null, values);
     }
@@ -69,7 +69,7 @@ public class GroupMemberRepo implements BaseColumns {
      * @return number of rows affected
      */
     public long insertGroupMembers(List<GroupMember> groupMembers) {
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int rowsAffected = 0;
         int membersCount = groupMembers.size();
         try {
@@ -107,24 +107,24 @@ public class GroupMemberRepo implements BaseColumns {
      * @param groupId
      * @return List of group members
      */
-    public List<GroupMember> selectGroupMembers(int groupId) {
+    public List<GroupMember> getAllGroupMembers(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
                 null, null, _NAME);
 
         List<GroupMember> members = new ArrayList<>();
         while (cursor.moveToNext()) {
             GroupMember member = new GroupMember(
-                cursor.getInt(0),
-                cursor.getInt(1),
-                cursor.getString(2),
-                cursor.getString(3),
-                cursor.getString(4),
-                cursor.getString(5),
-                MyNumbers.numberToBoolean(cursor.getInt(6))
+                cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(_GROUP_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_EMAIL)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_CONTACT)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_DESCRIPTION)),
+                MyNumbers.numberToBoolean(cursor.getInt(cursor.getColumnIndexOrThrow(_IS_ME)))
             );
             members.add(member);
         }
@@ -153,7 +153,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_DESCRIPTION, groupMember.getDescription());
         values.put(_IS_ME, groupMember.getIsMe());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int update = db.update(TABLE_NAME, values, selection, selectionArgs);
 
         return update == 1;
@@ -168,7 +168,7 @@ public class GroupMemberRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 }

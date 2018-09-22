@@ -2,7 +2,7 @@ package cz.milandufek.dluzniceklite.utils;
 
 import java.util.Calendar;
 
-public class MyDateTime {
+public final class MyDateTime {
 
     private MyDateTime() {
     }

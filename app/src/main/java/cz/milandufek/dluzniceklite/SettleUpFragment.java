@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.models.Balance;
+import cz.milandufek.dluzniceklite.models.MemberBalance;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
-import cz.milandufek.dluzniceklite.models.SummarySettleUp;
+import cz.milandufek.dluzniceklite.models.SummarySettleUpItem;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
@@ -61,11 +61,11 @@ public class SettleUpFragment extends Fragment {
         Currency activeCurrency = new CurrencyRepo().getCurrency(activeCurrencyId);
 
         List<HashMap<String, Object>> debts = new DebtCalculator()
-                .calculateDebts(activeGroupId, activeCurrencyId);
+                .calculateDebts(activeGroupId);
 
         for (HashMap debt : debts) {
-            Balance from = (Balance) debt.get("from");
-            Balance to = (Balance) debt.get("to");
+            MemberBalance from = (MemberBalance) debt.get("from");
+            MemberBalance to = (MemberBalance) debt.get("to");
             double amount = CurrencyOperation.exchangeAmount((double) debt.get("amount"), baseCurrency.getId(), activeCurrencyId);
 
             SettleUpTransaction transaction = new SettleUpTransaction();
@@ -83,7 +83,7 @@ public class SettleUpFragment extends Fragment {
 
     private void setupSummaryView(View view) {
         TextView summaryTitle = view.findViewById(R.id.tv_settleup_summary);
-        SummarySettleUp summaryValues = new Summary().initSummarySettleUp(context);
+        SummarySettleUpItem summaryValues = new Summary().initSummarySettleUp(context);
         String titleText = getString(R.string.remains_to_settleup);
         summaryTitle.setText(titleText);
 

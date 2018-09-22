@@ -3,7 +3,7 @@ package cz.milandufek.dluzniceklite.models;
 /**
  *  Class for object - currency
  */
-public class Currency {
+public final class Currency {
 
     private final int id, quantity, baseCurrency;
     private final String name, country;

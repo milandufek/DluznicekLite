@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 
 public class GroupRepo implements BaseColumns {
     private static final String TAG = "GroupRepo";
@@ -48,7 +48,7 @@ public class GroupRepo implements BaseColumns {
         values.put(_CURRENCY_ID, group.getCurrency());
         values.put(_DESCRIPTION, group.getDescription());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         return db.insert(TABLE_NAME ,null, values);
     }
 
@@ -64,7 +64,7 @@ public class GroupRepo implements BaseColumns {
         values.put(_CURRENCY_ID, group.getCurrency());
         values.put(_DESCRIPTION, group.getDescription());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int update = db.update(TABLE_NAME, values,
                 _ID + " = ? ", new String[] { String.valueOf(id) } );
 
@@ -77,7 +77,7 @@ public class GroupRepo implements BaseColumns {
      */
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<>();
-        SQLiteDatabase db =  DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db =  MyDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null,
                 null, null, _ID);
 
@@ -105,7 +105,7 @@ public class GroupRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }

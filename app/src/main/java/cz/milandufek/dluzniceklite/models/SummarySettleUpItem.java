@@ -1,17 +1,12 @@
 package cz.milandufek.dluzniceklite.models;
 
-import android.arch.lifecycle.ViewModel;
-
-public class SummarySettleUp extends ViewModel {
+public final class SummarySettleUpItem {
 
     private int currencyId;
     private String currencyName;
     private double sumToSettleUp;
 
-    public SummarySettleUp() {
-    }
-
-    public SummarySettleUp(int currencyId, String currencyName, double sumToSettleUp) {
+    public SummarySettleUpItem(int currencyId, String currencyName, double sumToSettleUp) {
         this.currencyId = currencyId;
         this.currencyName = currencyName;
         this.sumToSettleUp = sumToSettleUp;

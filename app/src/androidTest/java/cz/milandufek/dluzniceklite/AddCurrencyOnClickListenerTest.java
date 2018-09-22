@@ -2,7 +2,6 @@ package cz.milandufek.dluzniceklite;
 
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.junit.Test;
@@ -10,7 +9,6 @@ import org.junit.runner.RunWith;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;

@@ -5,21 +5,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 
-public class DbHelper extends SQLiteOpenHelper {
-    private static final String TAG = "DbHelper";
+public class MyDbHelper extends SQLiteOpenHelper {
+    private static final String TAG = "MyDbHelper";
 
     private final Context context;
-    private static DbHelper instance = null;
+    private static MyDbHelper instance = null;
 
     private static final String DATABASE_NAME = "dluznicek";
     private static final int DATABASE_VERSION = 1;
@@ -27,11 +23,11 @@ public class DbHelper extends SQLiteOpenHelper {
     /**
      * Get DB instance as a singleton
      * @param context
-     * @return DbHelper instance
+     * @return MyDbHelper instance
      */
-    public synchronized static DbHelper getInstance(Context context) {
+    public synchronized static MyDbHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new DbHelper(context.getApplicationContext());
+            instance = new MyDbHelper(context.getApplicationContext());
         }
         return instance;
     }
@@ -40,7 +36,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * Private constructor  to prevent direct instantiation.
      * Make a call to static method "getInstance()" instead.
      */
-    private DbHelper(Context context) {
+    private MyDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }

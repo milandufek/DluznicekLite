@@ -7,10 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.MemberBalance;
+import cz.milandufek.dluzniceklite.models.SummaryTransactionItem;
 import cz.milandufek.dluzniceklite.models.Transaction;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 
 public class TransactionRepo implements BaseColumns {
     private static final String TAG = "TransactionRepo";
@@ -53,7 +56,7 @@ public class TransactionRepo implements BaseColumns {
         values.put(_EXPENSE_ID, transaction.getExpense_id());
         values.put(_SETTLEUP_TRANSACTION, transaction.getIsSettleUpTransaction());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.insert(TABLE_NAME,null, values);
     }
@@ -64,7 +67,7 @@ public class TransactionRepo implements BaseColumns {
      * @return number of rows affected
      */
     public long insertTransactions(List<Transaction> transactions) {
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int rowsAffected = 0;
         int transactionsCount = transactions.size();
         try {
@@ -99,11 +102,11 @@ public class TransactionRepo implements BaseColumns {
      * @param expenseId
      * @return transaction of expenseId
      */
-    public Cursor selectTransactions(int expenseId) {
+    public Cursor getTransactions(int expenseId) {
         String selection = _EXPENSE_ID + " = ?";
         String[] selectionArgs = { String.valueOf(expenseId) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
 
         return db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
                 null, null, _EXPENSE_ID);
@@ -117,7 +120,7 @@ public class TransactionRepo implements BaseColumns {
     public int deleteTransaction(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
@@ -130,7 +133,7 @@ public class TransactionRepo implements BaseColumns {
     public int deleteTransactions(int expenseId) {
         String selection = _EXPENSE_ID + " = ?";
         String[] selectionArgs = { String.valueOf(expenseId) };
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
@@ -140,8 +143,8 @@ public class TransactionRepo implements BaseColumns {
      * @param expenseId
      * @return transaction
      */
-    public Cursor selectTransactionForExpense(int expenseId) {
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+    public List<SummaryTransactionItem> getTransactionsForExpense(int expenseId) {
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT "
                 + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " + _AMOUNT +
                 " FROM " + TABLE_NAME +
@@ -151,7 +154,18 @@ public class TransactionRepo implements BaseColumns {
                 " AND " + _AMOUNT + " >= " + 0 +
                 ";";
 
-        return db.rawQuery(query, null, null);
+        Cursor cursor = db.rawQuery(query, null, null);
+
+        List<SummaryTransactionItem> transactions = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            SummaryTransactionItem item = new SummaryTransactionItem(
+                cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberRepo._NAME)),
+                cursor.getDouble(cursor.getColumnIndexOrThrow(_AMOUNT))
+            );
+            transactions.add(item);
+        }
+
+        return transactions;
     }
 
     /**
@@ -159,7 +173,7 @@ public class TransactionRepo implements BaseColumns {
      * @param groupId
      * @return cursor with transactions
      */
-    public Cursor selectBalances(int groupId) {
+    public List<MemberBalance> getBalances(int groupId) {
         // balance already grouped by sql
 //        SELECT debtor_id, group_members.name , SUM(amount * exchange_rate / quantity) AS balance
 //        FROM transactions
@@ -173,7 +187,7 @@ public class TransactionRepo implements BaseColumns {
 //        GROUP BY debtor_id
 //        ORDER BY debtor_id
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT " +
                 TransactionRepo._DEBTOR_ID + ", " +
                 GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " +
@@ -209,6 +223,19 @@ public class TransactionRepo implements BaseColumns {
                 ";";
         Log.d(TAG, "query: " + query);
 
-        return db.rawQuery(query, null, null);
+        Cursor cursor = db.rawQuery(query, null, null);
+
+        List<MemberBalance> memberBalances = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            MemberBalance memberBalance = new MemberBalance();
+            memberBalance.setGroupId(groupId);
+            memberBalance.setMemberId(cursor.getInt(0));
+            memberBalance.setMemberName(cursor.getString(1));
+            memberBalance.setBalance(cursor.getDouble(2));
+            memberBalances.add(memberBalance);
+        }
+
+        return memberBalances;
     }
 }

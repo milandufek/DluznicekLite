@@ -6,8 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.milandufek.dluzniceklite.CurrencyOperation;
 import cz.milandufek.dluzniceklite.models.Expense;
-import cz.milandufek.dluzniceklite.utils.DbHelper;
+import cz.milandufek.dluzniceklite.models.ExpenseItem;
+import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
+import cz.milandufek.dluzniceklite.models.SummaryTransactionItem;
+import cz.milandufek.dluzniceklite.utils.DebtCalculator;
+import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class ExpenseRepo implements BaseColumns {
@@ -57,7 +65,7 @@ public class ExpenseRepo implements BaseColumns {
         values.put(_DATE, expense.getDate());
         values.put(_TIME, expense.getTime());
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.insert(TABLE_NAME,null, values);
     }
@@ -67,15 +75,29 @@ public class ExpenseRepo implements BaseColumns {
      * @param groupId
      * @return expenses of group
      */
-    public Cursor selectExpenses(int groupId) {
+    public List<Expense> selectExpenses(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
+        List<Expense> expenses = new ArrayList<>();
 
-        return db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
                 null, null, _GROUP_ID);
 
+        while (cursor.moveToNext()) {
+            expenses.add(new Expense(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(_PAYER_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(_GROUP_ID)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(_CURRENCY_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(_REASON)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(_DATE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(_TIME)))
+            );
+        }
+
+        return expenses;
     }
 
     /**
@@ -87,7 +109,7 @@ public class ExpenseRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
@@ -96,11 +118,11 @@ public class ExpenseRepo implements BaseColumns {
      * Select all expenses for group in format suitable for ExpenseItem
      * @param groupId
      */
-    public Cursor selectExpenseItems(int groupId) {
+    public List<ExpenseItem> getAllExpenseItems(int groupId) {
         String query = "SELECT " +
                 TABLE_NAME + "." + _ID + ", " +
-                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + ", " +
+                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + " AS " + GroupMemberRepo._NAME + ", " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + " AS " + CurrencyRepo._NAME + ", " +
                 _REASON + ", " + _DATE + ", " + _TIME +
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
@@ -110,15 +132,46 @@ public class ExpenseRepo implements BaseColumns {
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                 " ORDER BY " + _DATE + " DESC, " + _TIME + " DESC" +
                 ";";
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null, null);
 
-        return db.rawQuery(query, null, null);
+        List<ExpenseItem> expenseItems = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            int expenseId = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
+            double sum = 0;
+            List<SummaryTransactionItem> transactions = new TransactionRepo()
+                    .getTransactionsForExpense(expenseId);
+            StringBuilder debtors = new StringBuilder();
+            String separator = "";
+            for (SummaryTransactionItem item : transactions) {
+                debtors.append(separator);
+                separator = ", ";
+                debtors.append(item.getMemberName()); // member name
+                sum += item.getAmount(); // amount
+            }
+            sum = MyNumbers.roundIt(sum, 2);
+
+            ExpenseItem expenseItem = new ExpenseItem(
+                    expenseId,
+                    cursor.getString(cursor.getColumnIndexOrThrow(_REASON)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberRepo._NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(CurrencyRepo._NAME)),
+                    debtors.toString(),
+                    sum,
+                    cursor.getString(cursor.getColumnIndexOrThrow(_DATE)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(_TIME))
+            );
+
+            expenseItems.add(expenseItem);
+        }
+
+        return expenseItems;
     }
 
     /**
      * Select summary
      */
-    public Cursor selectTotalSpent(int groupId, boolean includeSettleUps) {
+    public SummaryExpenseItem selectTotalSpent(int groupId, int activeGroupCurrencyId, boolean includeSettleUps) {
 //        SELECT currencies._id, currencies.name, currencies.quantity, currencies.exchange_rate, SUM(transactions.amount)
 //        FROM expenses
 //        INNER JOIN currencies ON expenses.currency_id = currencies._id
@@ -130,7 +183,7 @@ public class ExpenseRepo implements BaseColumns {
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + ", " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._QUANTITY + ", " +
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._EXCHANGE_RATE + ", " +
-                "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ") " +
+                "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ") AS " + TransactionRepo._AMOUNT +
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + CurrencyRepo.TABLE_NAME +
                 " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " +
@@ -147,9 +200,26 @@ public class ExpenseRepo implements BaseColumns {
                 " GROUP BY " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME +
                 ";";
 
-        SQLiteDatabase db = DbHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
 
-        return db.rawQuery(query, null, null);
+        Cursor cursor = db.rawQuery(query, null, null);
+
+        double sumAmountInBaseCurrency = 0;
+        while (cursor.moveToNext()) {
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._QUANTITY));
+            int exchangeRate = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._EXCHANGE_RATE));
+            double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(TransactionRepo._AMOUNT));
+            sumAmountInBaseCurrency += ( amount / quantity * exchangeRate ) * -1;
+        }
+
+        CurrencyRepo sqlCurrency = new CurrencyRepo();
+        String currencyName = sqlCurrency.getCurrency(activeGroupCurrencyId).getName();
+        int baseCurrency = sqlCurrency.getBaseCurrency().getId();
+        double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, activeGroupCurrencyId);
+        if (sumAmount <= DebtCalculator.TOLERANCE)
+            sumAmount = 0;
+
+        return new SummaryExpenseItem(activeGroupCurrencyId, currencyName, sumAmount);
     }
 
 }

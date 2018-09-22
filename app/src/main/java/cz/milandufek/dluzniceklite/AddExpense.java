@@ -157,7 +157,7 @@ public class AddExpense extends AppCompatActivity {
      */
     private void selectAllGroupMembers() {
         int groupId = new MyPreferences(context).getActiveGroupId();
-        List<GroupMember> allGroupMembers = new GroupMemberRepo().selectGroupMembers(groupId);
+        List<GroupMember> allGroupMembers = new GroupMemberRepo().getAllGroupMembers(groupId);
         for (GroupMember groupMember : allGroupMembers) {
             memberIds.add(groupMember.getId());
             memberNames.add(groupMember.getName());
@@ -700,18 +700,18 @@ public class AddExpense extends AppCompatActivity {
      * @return true if success
      */
     private boolean saveExpense() {
-        Expense expense = new Expense();
-        expense.setId(0);
-        expense.setPayerId(whoPaysIdSelected);
-        expense.setGroupId(new MyPreferences(context).getActiveGroupId());
-        expense.setCurrencyId(currencySelectedId);
         String reasonText = reason.getText().toString();
-        if (reasonText.isEmpty()) {
+        if (reasonText.isEmpty())
             reasonText = getString(R.string.reason_empty);
-        }
-        expense.setReason(reasonText);
-        expense.setDate(dateDb);
-        expense.setTime(timeDb);
+
+        Expense expense = new Expense(
+                0,
+                whoPaysIdSelected,
+                new MyPreferences(context).getActiveGroupId(),
+                currencySelectedId,
+                reasonText,
+                dateDb,
+                timeDb);
 
         ExpenseRepo expenseRepo = new ExpenseRepo();
         long newExpenseId = expenseRepo.insertExpense(expense);
@@ -737,21 +737,23 @@ public class AddExpense extends AppCompatActivity {
             }
 
             if (willPay.isChecked()) {
-                Transaction transaction = new Transaction();
-                transaction.setId(0);
-                transaction.setDebtor_id(memberIds.get(i));
-                transaction.setAmount(expensePerMember);
-                transaction.setExpense_id((int) newExpenseId);
+                Transaction transaction = new Transaction(0,
+                        memberIds.get(i),
+                        (int) newExpenseId,
+                        expensePerMember
+                );
                 transactions.add(transaction);
             }
         }
 
         // add also positive expense for payer
-        Transaction transaction = new Transaction();
-        transaction.setId(0);
-        transaction.setDebtor_id(whoPaysIdSelected);
-        transaction.setAmount(getHowMuchTotal() * -1);
-        transaction.setExpense_id((int) newExpenseId);
+        Transaction transaction = new Transaction(
+                0,
+                whoPaysIdSelected,
+                ((int) newExpenseId),
+        getHowMuchTotal() * -1
+        );
+
         transactions.add(transaction);
 
         TransactionRepo transactionRepo = new TransactionRepo();
