@@ -2,6 +2,7 @@ package cz.milandufek.dluzniceklite.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.EditCurrency;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.models.Currency;
@@ -57,7 +59,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.action_edit_item:
-                        onClickEdit(holder, currencyId);
+                        onClickEdit(currencyId);
                         return true;
 
                     case R.id.action_delete_item:
@@ -72,9 +74,11 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
         });
     }
 
-    private void onClickEdit(ViewHolder h, int id) {
-        // TODO onClickEdit
-        Toast.makeText(context,"TODO: Edit item " + id, Toast.LENGTH_SHORT).show();
+    private void onClickEdit(int id) {
+        Intent intent = new Intent(context, EditCurrency.class);
+        intent.putExtra("CURRENCY_ID", id);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
     }
 
     private void onClickDelete(final ViewHolder h, final int currencyId) {

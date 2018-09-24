@@ -1,6 +1,7 @@
 package cz.milandufek.dluzniceklite.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.PopupMenu;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
@@ -121,6 +123,14 @@ public class SettleUpRVAdapter
         notifyItemRemoved(h.getAdapterPosition());
         notifyItemRangeChanged(h.getAdapterPosition(), getItemCount());
         notifyDataSetChanged();
+        refreshActivity();
+    }
+
+    // TODO better to use LiveData instead of
+    private void refreshActivity() {
+        Intent newActivity = new Intent(context, MainActivity.class);
+        newActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(newActivity);
     }
 
     /**

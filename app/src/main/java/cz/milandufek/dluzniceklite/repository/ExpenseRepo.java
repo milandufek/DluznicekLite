@@ -138,9 +138,11 @@ public class ExpenseRepo implements BaseColumns {
         List<ExpenseItem> expenseItems = new ArrayList<>();
         while (cursor.moveToNext()) {
             int expenseId = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
-            double sum = 0;
+
             List<SummaryTransactionItem> transactions = new TransactionRepo()
                     .getTransactionsForExpense(expenseId);
+
+            double sum = 0;
             StringBuilder debtors = new StringBuilder();
             String separator = "";
             for (SummaryTransactionItem item : transactions) {
@@ -149,7 +151,6 @@ public class ExpenseRepo implements BaseColumns {
                 debtors.append(item.getMemberName()); // member name
                 sum += item.getAmount(); // amount
             }
-            sum = MyNumbers.roundIt(sum, 2);
 
             ExpenseItem expenseItem = new ExpenseItem(
                     expenseId,
@@ -157,7 +158,7 @@ public class ExpenseRepo implements BaseColumns {
                     cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberRepo._NAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(CurrencyRepo._NAME)),
                     debtors.toString(),
-                    sum,
+                    MyNumbers.roundIt(sum, 2),
                     cursor.getString(cursor.getColumnIndexOrThrow(_DATE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(_TIME))
             );

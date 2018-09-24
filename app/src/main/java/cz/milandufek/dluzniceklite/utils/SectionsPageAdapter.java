@@ -7,11 +7,16 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import cz.milandufek.dluzniceklite.ListExpenseFragment;
 
 /**
  * Managing fragments inside app
  */
 public class SectionsPageAdapter extends FragmentPagerAdapter {
+
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> fragmentTitleList = new ArrayList<>();
 
@@ -22,6 +27,16 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
 
     public SectionsPageAdapter(FragmentManager fm) {
         super(fm);
+    }
+
+    public final void refreshAllFragments() {
+        for (Fragment fragment : fragmentList) {
+            fragment.getFragmentManager()
+                    .beginTransaction()
+                    .detach(fragment)
+                    .attach(fragment)
+                    .commit();
+        }
     }
 
     @Override

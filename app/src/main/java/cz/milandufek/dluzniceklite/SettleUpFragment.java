@@ -28,7 +28,7 @@ import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
 public class SettleUpFragment extends Fragment {
 
     private static final String TAG = SettleUpFragment.class.toString();
-    private Context context;
+    private Context context = getContext();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

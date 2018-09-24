@@ -24,7 +24,7 @@ public class DebtCalculator {
     public DebtCalculator() {
     }
 
-    public List<HashMap<String,Object>> calculateDebts(int groupId) {
+    public synchronized List<HashMap<String,Object>> calculateDebts(int groupId) {
         Log.d(TAG, "calculateDebts method started");
 
         List<MemberBalance> memberBalances = new ArrayList<>(new TransactionRepo().getBalances(groupId));

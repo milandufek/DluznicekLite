@@ -8,6 +8,7 @@
     <string name="title_add_payment">Nová platba</string>
     <string name="title_manage_currency">Spáva měn</string>
     <string name="title_add_currency">Nová měna</string>
+    <string name="title_edit_currency">Upravit měnu</string>
     <string name="title_activity_export_data">Export data</string>
     <string name="tab_payments">Platby</string>
     <string name="tab_settleup">Vyrovnání</string>

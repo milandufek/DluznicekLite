@@ -11,6 +11,7 @@ import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "MainActivity";
 
     //  TODO Room Database connection + DAO + repository + AndroidViewModel + LiveData (MVVM)
@@ -52,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(getActiveGroupName());
         setSupportActionBar(toolbar);
 
-        // Create the adapter that will return a fragment for each of the X tabbed activity
-        //new SectionsPageAdapter(getSupportFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = findViewById(R.id.ll_group_container);
         setupViewPager(viewPager);
@@ -76,15 +75,19 @@ public class MainActivity extends AppCompatActivity {
      * @param viewPager
      */
     private void setupViewPager(ViewPager viewPager) {
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
+        SectionsPageAdapter sectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
         ListExpenseFragment listExpenseFragment = new ListExpenseFragment();
-        adapter.addFragment(listExpenseFragment, getString(R.string.tab_payments));
+        sectionsPageAdapter.addFragment(listExpenseFragment, getString(R.string.tab_payments));
 
         SettleUpFragment settleUpFragment = new SettleUpFragment();
-        adapter.addFragment(settleUpFragment, getString(R.string.tab_settleup));
+        sectionsPageAdapter.addFragment(settleUpFragment, getString(R.string.tab_settleup));
 
-        viewPager.setAdapter(adapter);
+        //        Fragment fragment = getSupportFragmentManager()
+//                .findFragmentByTag("android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
+//        listExpenseFragment.refreshFragment(fragment);
+
+        viewPager.setAdapter(sectionsPageAdapter);
         viewPager.setCurrentItem(0);
     }
 
