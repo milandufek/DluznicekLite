@@ -25,9 +25,9 @@ public class AddCurrencyOnClickListenerTest {
         // we set up the right conditions that we want to test
         final Currency currencyWithEmptyName = new Currency(0, "", "b", 1, 1.0, 0, false, true);
         final AddCurrency activity = mock(AddCurrency.class);
-        final AddCurrencyOnClickListener tested = new AddCurrencyOnClickListener(activity);
+        final CurrencyOnClickListener tested = new CurrencyOnClickListener(activity, CurrencyOnClickListener.ADD);
         // spy() from the Mockito framework will allow us to check which methods were called
-        final AddCurrencyOnClickListener spied = spy(tested);
+        final CurrencyOnClickListener spied = spy(tested);
         // force this method to be empty, so that we don't need to worry about Android main/worker
         doNothing().when(spied).showText(anyInt());
         spied.onClick(mock(View.class)); // call the code we want to test

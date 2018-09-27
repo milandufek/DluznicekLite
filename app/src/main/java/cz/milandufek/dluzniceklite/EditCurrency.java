@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.List;
-
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 
@@ -35,6 +33,6 @@ public class EditCurrency extends AppCompatActivity {
         exchangeRate.setText(String.valueOf(currency.getExchangeRate()));
 
         Button btnAdd = findViewById(R.id.btn_currency_add);
-        btnAdd.setOnClickListener(new EditCurrencyOnClickListener(this));
+        btnAdd.setOnClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.EDIT, id));
     }
 }

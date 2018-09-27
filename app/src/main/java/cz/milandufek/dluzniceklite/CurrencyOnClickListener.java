@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -7,17 +8,28 @@ import android.widget.Toast;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 
-class AddCurrencyOnClickListener implements View.OnClickListener {
+class CurrencyOnClickListener implements View.OnClickListener {
 
-    private static final String TAG = AddCurrencyOnClickListener.class.toString();
+    private static final String TAG = CurrencyOnClickListener.class.toString();
 
-    private final CurrencyRepo sql = new CurrencyRepo();
-    private final AddCurrency activity;
+    static final int ADD  = 1;
+    static final int EDIT = 2;
+
+    private final AppCompatActivity activity;
+    private final int action;
+    private int currencyId = 0;
 
     private EditText name, country, quantity, exchangeRate;
 
-    AddCurrencyOnClickListener(final AddCurrency activity) {
+    CurrencyOnClickListener(AppCompatActivity activity, int action) {
         this.activity = activity;
+        this.action   = action;
+    }
+
+    CurrencyOnClickListener(AppCompatActivity activity, int action, int currencyId) {
+        this.activity = activity;
+        this.action   = action;
+        this.currencyId = currencyId;
     }
 
     @Override
@@ -27,26 +39,31 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
         quantity = activity.findViewById(R.id.et_currency_quantity);
         exchangeRate = activity.findViewById(R.id.et_currency_exchrate);
 
-        saveCurrency(getCurrency());
+        switch (action) {
+            case ADD:   addCurrency(getCurrency());     break;
+            case EDIT:  editCurrency(getCurrency());    break;
+        }
     }
 
     public Currency getCurrency() {
         String currencyName = getFieldValue(name);
-        String currencyCountry = country.getText().toString();
-        String currencyExchangeRate = exchangeRate.getText().toString();
-        String currencyQuantity = quantity.getText().toString();
+        String currencyCountry = getFieldValue(country);
+        String currencyExchangeRate = getFieldValue(exchangeRate);
+        String currencyQuantity = getFieldValue(quantity);
 
         Currency currency = null;
         if (currencyName.isEmpty()) {
             showText(R.string.warning_currency_empty);
-        } else if (new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
+        } else if (currencyName.length() < 3) {
+            showText(R.string.warning_code_not_3_chars);
+        } else if (action == ADD && new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
             showText(R.string.warning_currency_exists);
         } else if (currencyExchangeRate.isEmpty()) {
             showText(R.string.warning_exrate_empty);
         } else {
             if (currencyQuantity.isEmpty())
                 currencyQuantity = "1";
-            currency = new Currency(0, currencyName, currencyCountry,
+            currency = new Currency(currencyId, currencyName, currencyCountry,
                     Integer.valueOf(currencyQuantity),
                     Double.parseDouble(currencyExchangeRate),
                     0,false, true);
@@ -55,13 +72,19 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
         return currency;
     }
 
-    private void saveCurrency(Currency currency) {
+    private void addCurrency(Currency currency) {
         CurrencyRepo sql = new CurrencyRepo();
         if (currency != null && sql.insertCurrency(currency) > 0) {
             showText(R.string.saved);
-            // go back to parent activity
-            activity.startActivity(activity.getParentActivityIntent());
-            activity.finish();
+            goBackToParentActivity();
+        }
+    }
+
+    private void editCurrency(Currency currency) {
+        CurrencyRepo sql = new CurrencyRepo();
+        if (currency != null && sql.updateCurrency(currency)) {
+            showText(R.string.saved);
+            goBackToParentActivity();
         }
     }
 
@@ -74,5 +97,10 @@ class AddCurrencyOnClickListener implements View.OnClickListener {
 
     private String getFieldValue(final EditText field) {
         return field.getText().toString();
+    }
+
+    private void goBackToParentActivity() {
+        activity.startActivity(activity.getParentActivityIntent());
+        activity.finish();
     }
 }

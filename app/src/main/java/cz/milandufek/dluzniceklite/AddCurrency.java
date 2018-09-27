@@ -17,7 +17,7 @@ public class AddCurrency extends AppCompatActivity {
 
         // save button
         Button btnAdd = findViewById(R.id.btn_currency_add);
-        btnAdd.setOnClickListener(new AddCurrencyOnClickListener(this));
+        btnAdd.setOnClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
     }
 
     @Override

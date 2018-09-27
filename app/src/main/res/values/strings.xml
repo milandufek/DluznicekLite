@@ -33,6 +33,7 @@
     <string name="warning_currency_empty">Název měny je prázdný</string>
     <string name="warning_currency_exists">Tato měna již existuje</string>
     <string name="warning_exrate_empty">Kurz měny je prázdný</string>
+    <string name="warning_code_not_3_chars">Název musí být 3 znaky</string>
 
     <!-- MENU -->
     <string name="save">Uložit</string>
