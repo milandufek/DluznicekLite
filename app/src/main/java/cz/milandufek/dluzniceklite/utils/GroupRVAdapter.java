@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.EditGroup;
 import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Group;
@@ -67,7 +68,7 @@ public class GroupRVAdapter
             groupInfo.append(member.getName());
         }
 
-        // TODO dependency on the screen resolution
+        // TODO if the payment is for all show just for all
         int maxInfoLength = 55;
         if (groupInfo.length() > maxInfoLength) {
             groupInfo.setLength(maxInfoLength - 3);
@@ -97,13 +98,11 @@ public class GroupRVAdapter
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.action_edit_item:
-                        onClickEdit(holder, groupId);
-                        Toast.makeText(context, "TODO: Edit item " + groupNameText,
-                                Toast.LENGTH_SHORT).show();
+                        onClickEdit(groupId);
                         return true;
 
                     case R.id.action_delete_item:
-                        onClickDelete(holder, groupNameText);
+                        onClickDelete(holder.getAdapterPosition(), groupNameText);
                         return true;
 
                     default:
@@ -116,22 +115,25 @@ public class GroupRVAdapter
         });
     }
 
-    private void onClickEdit(ViewHolder h, int id) {
-        // TODO onClickEdit
+    private void onClickEdit(int id) {
+        Intent intent = new Intent(context, EditGroup.class);
+        intent.putExtra("GROUP_ID", id);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
     }
 
-    private void onClickDelete(final ViewHolder h, String groupNameText) {
+    private void onClickDelete(final int position, String groupNameText) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.really_want_to_delete_group)
                 .setMessage(groupNameText)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    int groupId = groups.get(h.getAdapterPosition()).getId();
+                    int groupId = groups.get(position).getId();
                     GroupRepo repo = new GroupRepo();
                     repo.deleteGroup(groupId);
 
-                    groups.remove(h.getAdapterPosition());
-                    notifyItemRemoved(h.getAdapterPosition());
-                    notifyItemRangeChanged(h.getAdapterPosition(), groups.size());
+                    groups.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, groups.size());
 
                     int activeGroupId = new MyPreferences(context).getActiveGroupId();
                     changeActiveGroupToFirstAvailable();

@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity {
         SettleUpFragment settleUpFragment = new SettleUpFragment();
         sectionsPageAdapter.addFragment(settleUpFragment, getString(R.string.tab_settleup));
 
-        //        Fragment fragment = getSupportFragmentManager()
-//                .findFragmentByTag("android:switcher:" + viewPager.getId() + ":" + viewPager.getCurrentItem());
-//        listExpenseFragment.refreshFragment(fragment);
-
         viewPager.setAdapter(sectionsPageAdapter);
         viewPager.setCurrentItem(0);
     }

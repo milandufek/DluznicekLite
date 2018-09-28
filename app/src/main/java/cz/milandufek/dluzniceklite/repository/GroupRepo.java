@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 
@@ -77,23 +78,32 @@ public class GroupRepo implements BaseColumns {
      */
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<>();
+
         SQLiteDatabase db =  MyDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null,
                 null, null, _ID);
 
-        Group group;
         while (cursor.moveToNext()) {
-            group = new Group(
-                cursor.getInt(0),
-                cursor.getString(1),
-                cursor.getInt(2),
-                cursor.getString(3)
-            );
-            groups.add(group);
+            groups.add(buildGroup(cursor));
         }
         cursor.close();
 
         return groups;
+    }
+
+    public Group getGroup(int id) {
+        String[] selectionArgs = { String.valueOf(id) };
+
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs, null, null, null);
+
+        Group group = null;
+        while (cursor.moveToNext()) {
+            group = buildGroup(cursor);
+            cursor.close();
+        }
+
+        return group;
     }
 
     /**
@@ -108,5 +118,14 @@ public class GroupRepo implements BaseColumns {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
         return db.delete(TABLE_NAME, selection, selectionArgs);
+    }
+
+    private Group buildGroup(Cursor cursor) {
+        return new Group(
+                cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_NAME)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(_CURRENCY_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_DESCRIPTION))
+        );
     }
 }

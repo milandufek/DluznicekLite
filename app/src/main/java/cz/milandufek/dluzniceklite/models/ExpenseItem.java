@@ -50,4 +50,10 @@ public final class ExpenseItem {
     public String getCurrency() {
         return currency;
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id + " reason=" + reason + " payer=" + payer + " currency=" + currency +
+            " debtors=" + debtors + " amount=" + amount + " date=" + date + " time=" + time;
+    }
 }

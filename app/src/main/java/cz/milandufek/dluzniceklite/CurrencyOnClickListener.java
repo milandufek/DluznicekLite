@@ -15,15 +15,16 @@ class CurrencyOnClickListener implements View.OnClickListener {
     static final int ADD  = 1;
     static final int EDIT = 2;
 
-    private final AppCompatActivity activity;
-    private final int action;
-    private int currencyId = 0;
+    private AppCompatActivity activity;
+    private int action;
+    private int currencyId;
 
     private EditText name, country, quantity, exchangeRate;
 
     CurrencyOnClickListener(AppCompatActivity activity, int action) {
         this.activity = activity;
         this.action   = action;
+        this.currencyId = 0;
     }
 
     CurrencyOnClickListener(AppCompatActivity activity, int action, int currencyId) {
@@ -40,8 +41,12 @@ class CurrencyOnClickListener implements View.OnClickListener {
         exchangeRate = activity.findViewById(R.id.et_currency_exchrate);
 
         switch (action) {
-            case ADD:   addCurrency(getCurrency());     break;
-            case EDIT:  editCurrency(getCurrency());    break;
+            case ADD:
+                addCurrency(getCurrency());
+                break;
+            case EDIT:
+                editCurrency(getCurrency());
+                break;
         }
     }
 

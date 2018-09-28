@@ -131,11 +131,10 @@ public class CurrencyRepo implements BaseColumns {
         return db.delete(TABLE_NAME, selection, selectionArgs);
     }
 
-    /** TODO update
-     * Update a item_currency by given item_currency COL_ID
-     * Replace the current row_currency with @param 'contact'
+    /**
+     * Update given currency in DB
      * @param currency
-     * @return
+     * @return true if success
      */
     public boolean updateCurrency(Currency currency) {
         ContentValues values = new ContentValues();

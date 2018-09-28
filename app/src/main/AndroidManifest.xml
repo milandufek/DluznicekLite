@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cz.milandufek.dluzniceklite">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:fullBackupContent="@xml/my_backup_rules">
+        android:fullBackupContent="@xml/my_backup_rules"
+        tools:ignore="GoogleAppIndexingWarning"> <!-- TODO problem? -->
 
         <activity
             android:name=".MainActivity"
@@ -61,6 +63,7 @@
             android:label="@string/title_add_payment"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
+
         <!-- groups -->
         <activity
             android:name=".ManageGroups"
@@ -70,6 +73,11 @@
         <activity
             android:name=".AddGroup"
             android:label="@string/title_add_group"
+            android:parentActivityName=".ManageGroups"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditGroup"
+            android:label="@string/title_edit_group"
             android:parentActivityName=".ManageGroups"
             android:screenOrientation="portrait" />
     </application>

@@ -32,10 +32,9 @@ public class AddGroup extends AppCompatActivity {
 
     private Context context = this;
 
-    private EditText groupName;
+    private EditText groupName, memberNameIn;
     private Spinner selectCurrency;
     private int currencySelectedId;
-    private EditText memberNameIn;
     private LinearLayout container;
 
     @Override
@@ -50,7 +49,6 @@ public class AddGroup extends AppCompatActivity {
 
         Button mBtnAdd = findViewById(R.id.btn_group_add);
 
-        // spinner
         setupSpinnerWithCurrencies();
 
         // generate container with EditTexts for members
@@ -70,12 +68,12 @@ public class AddGroup extends AppCompatActivity {
                 memberNameIn.setText("");
                 ImageButton btnRemove = addView.findViewById(R.id.btn_groupmember_remove);
 
-                final View.OnClickListener thisListener = v1 -> {
+                final View.OnClickListener addMemberListener = v1 -> {
                     Log.d(TAG, "onClick: add parent");
                     ((LinearLayout) addView.getParent()).removeView(addView);
                 };
 
-                btnRemove.setOnClickListener(thisListener);
+                btnRemove.setOnClickListener(addMemberListener);
                 container.addView(addView);
             }
         });
@@ -94,9 +92,9 @@ public class AddGroup extends AppCompatActivity {
         Log.d(TAG, "onClick: save button");
         String groupName = AddGroup.this.groupName.getText().toString();
         if (groupName.equals("")) {
-            showText(R.string.group_name_is_empty);
+            showText(R.string.warning_group_name_is_empty);
         } else if (checkIfGroupExists(groupName)) {
-            showText(getString(R.string.group) + " " + groupName + " " + getString(R.string.group_already_exists));
+            showText(getString(R.string.group) + " " + groupName + " " + getString(R.string.warning_already_exists));
         } else {
             // save group
             GroupRepo repo = new GroupRepo();
@@ -148,19 +146,15 @@ public class AddGroup extends AppCompatActivity {
         }
 
         final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item,
-                currencyNames);
+                android.R.layout.simple_spinner_dropdown_item, currencyNames);
         selectCurrency.setAdapter(spinnerAdapter);
         selectCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currencySelectedId = currencyIds.get(position);
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // will not happen, hopefully...
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
     }
 
@@ -189,7 +183,6 @@ public class AddGroup extends AppCompatActivity {
         for (Group group : groups) {
             groupsInDb.add(group.getName());
         }
-
         return groupsInDb.contains(groupName);
     }
 

@@ -63,7 +63,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
                         return true;
 
                     case R.id.action_delete_item:
-                        onClickDelete(holder, currencyId);
+                        onClickDelete(holder.getAdapterPosition(), currencyId);
                         return true;
 
                     default:
@@ -81,15 +81,15 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
         context.startActivity(intent);
     }
 
-    private void onClickDelete(final ViewHolder h, final int currencyId) {
+    private void onClickDelete(final int position, final int currencyId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(R.string.really_want_to_delete_currency)
-                .setMessage(currency.get(h.getAdapterPosition()).getName())
+                .setMessage(currency.get(position).getName())
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     CurrencyRepo db = new CurrencyRepo();
                     db.deleteCurrency(currencyId);
-                    currency.remove(h.getAdapterPosition());
-                    notifyItemRemoved(h.getAdapterPosition());
+                    currency.remove(position);
+                    notifyItemRemoved(position);
                     notifyItemRangeChanged(0, currency.size());
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {

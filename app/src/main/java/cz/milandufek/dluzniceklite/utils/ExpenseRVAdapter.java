@@ -79,6 +79,8 @@ public class ExpenseRVAdapter
             info.append(" ");
         holder.expenseInfo.setText(info);
 
+        //Log.d(TAG, "onBindViewHolder: " + expensesItems.get(position).toString());
+
         holder.itemExpense.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(context, holder.itemExpense);
             popupMenu.inflate(R.menu.menu_item_onclick);
@@ -90,7 +92,6 @@ public class ExpenseRVAdapter
                         Toast.makeText(context, "TODO: Edit item ",
                                 Toast.LENGTH_SHORT).show();
                         return true;
-
                     case R.id.action_delete_item:
                         onClickDelete(holder, expenseId);
                         return true;

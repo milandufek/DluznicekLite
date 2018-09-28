@@ -25,9 +25,11 @@ public class ListExpenseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.tab_main_expenses, container, false);
 
         context = getActivity();
+
         int groupId = new MyPreferences(context).getActiveGroupId();
 
         setupSummaryView(view);

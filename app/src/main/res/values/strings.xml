@@ -5,6 +5,7 @@
     <string name="title_activity_settings">Nastavení</string>
     <string name="title_activity_about">O aplikaci</string>
     <string name="title_add_group">Nová skupina</string>
+    <string name="title_edit_group">Upravit skupinu</string>
     <string name="title_add_payment">Nová platba</string>
     <string name="title_manage_currency">Spáva měn</string>
     <string name="title_add_currency">Nová měna</string>
@@ -29,11 +30,16 @@
 
     <!-- WARNINGS / ERRORS -->
     <string name="error">Oooops něco se pokazilo…</string>
+
     <string name="warning_member_empty">Člen není vyplněn</string>
     <string name="warning_currency_empty">Název měny je prázdný</string>
     <string name="warning_currency_exists">Tato měna již existuje</string>
     <string name="warning_exrate_empty">Kurz měny je prázdný</string>
     <string name="warning_code_not_3_chars">Název musí být 3 znaky</string>
+
+    <string name="warning_group_name_is_empty">Název skupiny je prázdný…</string>
+    <string name="warning_already_exists">již existuje…"</string>
+
 
     <!-- MENU -->
     <string name="save">Uložit</string>
@@ -59,16 +65,14 @@
     <string name="group_name">Název skupiny</string>
     <string name="group_name_hint">Váš název…</string>
     <string name="select_currency">Hlavní měna</string>
-    <string name="group_member_names">Členové skupiny</string>
-    <string name="group_member_names_hint">Pepa</string>
+    <string name="group_member_names">Členové</string>
+    <string name="group_member_names_hint">Karel</string>
     <string name="btn_remove">Odstraň</string>
     <string name="btn_add">Přidej</string>
     <string name="btn_add_group">Přidej skupinu</string>
     <string name="group_set_as_active">je aktivní skupina</string>
     <string name="really_want_to_delete_group">Smazat skupinu?</string>
     <string name="group_saved">Skupina uložena</string>
-    <string name="group_name_is_empty">Název skupiny je prázdný…</string>
-    <string name="group_already_exists">již existuje…"</string>
 
     <!-- CURRENCY -->
     <string name="currency">Měna</string>

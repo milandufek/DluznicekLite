@@ -133,7 +133,7 @@ public class GroupMemberRepo implements BaseColumns {
         return members;
     }
 
-    /** TODO update
+    /**
      * Update a groupMember by given id ID
      * Replace the groupMember row with @param
      * @param groupMember
@@ -145,7 +145,6 @@ public class GroupMemberRepo implements BaseColumns {
         String[] selectionArgs = { String.valueOf(id) };
 
         ContentValues values = new ContentValues();
-        // _ID
         values.put(_GROUP_ID, groupMember.getGroupId());
         values.put(_NAME, groupMember.getName());
         values.put(_EMAIL, groupMember.getName());

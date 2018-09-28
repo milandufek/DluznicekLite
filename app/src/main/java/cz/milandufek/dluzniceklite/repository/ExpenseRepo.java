@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,8 @@ import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class ExpenseRepo implements BaseColumns {
+
+    private static final String TAG = "ExpenseRepo";
 
     private Context context;
 
@@ -121,9 +124,10 @@ public class ExpenseRepo implements BaseColumns {
     public List<ExpenseItem> getAllExpenseItems(int groupId) {
         String query = "SELECT " +
                 TABLE_NAME + "." + _ID + ", " +
-                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + " AS " + GroupMemberRepo._NAME + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + " AS " + CurrencyRepo._NAME + ", " +
-                _REASON + ", " + _DATE + ", " + _TIME +
+                _REASON + ", " +
+                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + " AS PAYER" + ", " +
+                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + " AS CURRENCY" + ", " +
+                 _DATE + ", " + _TIME +
                 " FROM " + TABLE_NAME +
                 " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
                 " ON " + _PAYER_ID + " = " + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
@@ -155,8 +159,8 @@ public class ExpenseRepo implements BaseColumns {
             ExpenseItem expenseItem = new ExpenseItem(
                     expenseId,
                     cursor.getString(cursor.getColumnIndexOrThrow(_REASON)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberRepo._NAME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(CurrencyRepo._NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow("PAYER")),
+                    cursor.getString(cursor.getColumnIndexOrThrow("CURRENCY")),
                     debtors.toString(),
                     MyNumbers.roundIt(sum, 2),
                     cursor.getString(cursor.getColumnIndexOrThrow(_DATE)),
