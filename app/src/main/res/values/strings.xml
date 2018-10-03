@@ -7,6 +7,7 @@
     <string name="title_add_group">Nová skupina</string>
     <string name="title_edit_group">Upravit skupinu</string>
     <string name="title_add_payment">Nová platba</string>
+    <string name="title_edit_payment">Upravit platbu</string>
     <string name="title_manage_currency">Spáva měn</string>
     <string name="title_add_currency">Nová měna</string>
     <string name="title_edit_currency">Upravit měnu</string>

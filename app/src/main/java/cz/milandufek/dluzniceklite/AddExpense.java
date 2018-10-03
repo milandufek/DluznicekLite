@@ -230,8 +230,8 @@ public class AddExpense extends AppCompatActivity {
      */
     private void setupWhoPaysContainer() {
         for (int i = 0; i < getCountMembers(); i++) {
-            LayoutInflater layoutInflater =
-                    (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert layoutInflater != null;
             @SuppressLint("InflateParams")
             final View addView = layoutInflater.inflate(R.layout.item_expense_member, null);

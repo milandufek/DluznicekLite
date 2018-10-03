@@ -1,14 +1,17 @@
 package cz.milandufek.dluzniceklite;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,10 +34,11 @@ public class EditGroup extends AppCompatActivity {
 
     private int groupId;
 
-    private EditText groupName, memberNameIn;
+    private EditText groupName, member2add;
     private Spinner selectCurrency;
     private int currencySelectedId;
     private LinearLayout container;
+    private ImageButton btnAddMember;
 
     final ArrayList<Integer> currencyIds = new ArrayList<>();
     final ArrayList<String> currencyNames = new ArrayList<>();
@@ -56,16 +60,72 @@ public class EditGroup extends AppCompatActivity {
         setupSpinnerWithCurrencies();
         selectCurrency.setSelection(currencyIds.indexOf(group.getCurrency()));
 
-        memberNameIn = findViewById(R.id.et_group_member2add);
+        member2add = findViewById(R.id.et_group_member2add);
+        btnAddMember = findViewById(R.id.btn_group_member2add);
         container = findViewById(R.id.ll_group_container);
-        List<GroupMember> groupMembers = new GroupMemberRepo().getAllGroupMembers(groupId);
 
+        GroupMemberRepo sqlMembers = new GroupMemberRepo();
+        List<GroupMember> groupMembers = sqlMembers.getAllGroupMembers(groupId);
+
+        LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
+
+        btnAddMember.setOnClickListener(v -> {
+            if (member2add.getText().toString().isEmpty()) {
+                showText(R.string.warning_member_empty);
+            } else {
+                long newMemberId = sqlMembers.insertGroupMember(
+                        new GroupMember(0, groupId, member2add.getText().toString(),
+                                "","","",false)
+                );
+
+                @SuppressLint("InflateParams")
+                final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
+                final View.OnClickListener removeMemberListener = remNew -> {
+                    sqlMembers.deleteGroupMember((int) newMemberId);
+                    ((LinearLayout) addView.getParent()).removeView(addView);
+                };
+
+                EditText memberName = addView.findViewById(R.id.et_member_name);
+                memberName.setText(member2add.getText().toString());
+                member2add.setText("");
+                ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
+                btnRemove.setOnClickListener(removeMemberListener);
+
+                container.addView(addView);
+            }
+        });
+
+        // add exiting members
+        for (GroupMember member : groupMembers) {
+            @SuppressLint("InflateParams")
+            final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
+            EditText memberName = addView.findViewById(R.id.et_member_name);
+            memberName.setText(member.getName());
+
+            final View.OnClickListener removeMemberListener = remExist -> {
+                sqlMembers.deleteGroupMember(member.getId());
+                ((LinearLayout) addView.getParent()).removeView(addView);
+            };
+
+            ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
+            // do not allow to remove members who already paid something
+            if (member.getAlreadyPaid()) {
+                btnRemove.setVisibility(View.GONE);
+            } else {
+                btnRemove.setOnClickListener(removeMemberListener);
+            }
+
+            container.addView(addView);
+        }
 
         Button btnSave = findViewById(R.id.btn_group_add);
         btnSave.setOnClickListener(v -> {
             updateGroup(getGroup());
         });
     }
+
 
     private void setupSpinnerWithCurrencies() {
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();

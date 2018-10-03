@@ -32,7 +32,7 @@ public class AddGroup extends AppCompatActivity {
 
     private Context context = this;
 
-    private EditText groupName, memberNameIn;
+    private EditText groupName, member2add;
     private Spinner selectCurrency;
     private int currencySelectedId;
     private LinearLayout container;
@@ -44,7 +44,7 @@ public class AddGroup extends AppCompatActivity {
 
         groupName = findViewById(R.id.et_group_name2add);
         selectCurrency = findViewById(R.id.spinner_group_currency);
-        memberNameIn = findViewById(R.id.et_group_member2add);
+        member2add = findViewById(R.id.et_group_member2add);
         container = findViewById(R.id.ll_group_container);
 
         Button mBtnAdd = findViewById(R.id.btn_group_add);
@@ -55,18 +55,18 @@ public class AddGroup extends AppCompatActivity {
         ImageButton btnAddMember = findViewById(R.id.btn_group_member2add);
         btnAddMember.setOnClickListener(v -> {
             Log.d(TAG, "onClick: add member");
-            if (memberNameIn.getText().toString().isEmpty()) {
+            if (member2add.getText().toString().isEmpty()) {
                 showText(R.string.warning_member_empty);
             } else {
-                LayoutInflater layoutInflater =
-                        (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 assert layoutInflater != null;
                 final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
 
-                EditText textOut = addView.findViewById(R.id.et_groupmember_add);
-                textOut.setText(memberNameIn.getText().toString());
-                memberNameIn.setText("");
-                ImageButton btnRemove = addView.findViewById(R.id.btn_groupmember_remove);
+                EditText member2remove = addView.findViewById(R.id.et_member_name);
+                member2remove.setText(member2add.getText().toString());
+                member2add.setText("");
+                ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
 
                 final View.OnClickListener addMemberListener = v1 -> {
                     Log.d(TAG, "onClick: add parent");
@@ -166,7 +166,7 @@ public class AddGroup extends AppCompatActivity {
         ArrayList<String> groupMembers =  new ArrayList<>();
         for (int i = 0; i < container.getChildCount(); i++) {
             View thisChild = container.getChildAt(i);
-            EditText childEditText = thisChild.findViewById(R.id.et_groupmember_add);
+            EditText childEditText = thisChild.findViewById(R.id.et_member_name);
             groupMembers.add(childEditText.getText().toString());
         }
         return groupMembers;

@@ -25,10 +25,10 @@ public class GroupMemberRepo implements BaseColumns {
     private static final String _EMAIL = "email";
     private static final String _CONTACT = "contact";
     private static final String _DESCRIPTION = "description";
-    private static final String _IS_ME = "is_me";
+    private static final String _ACTIVE_PAYMETS = "is_me";
 
     private static final String ALL_COLS[] = { _ID, _GROUP_ID, _NAME, _EMAIL,
-            _CONTACT, _DESCRIPTION, _IS_ME};
+            _CONTACT, _DESCRIPTION, _ACTIVE_PAYMETS};
 
     public static final String CREATE_TABLE_GROUP_MEMBER = "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -37,7 +37,7 @@ public class GroupMemberRepo implements BaseColumns {
             _EMAIL + " TEXT," +
             _CONTACT + " TEXT," +
             _DESCRIPTION + " TEXT," +
-            _IS_ME + " INTEGER, " +
+            _ACTIVE_PAYMETS + " INTEGER, " +
                 "FOREIGN KEY ( " + _GROUP_ID + ") " +
                 "REFERENCES " + GroupRepo.TABLE_NAME + "(" + GroupRepo._ID + ") " +
                 "ON DELETE CASCADE " +
@@ -56,7 +56,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_EMAIL, groupMember.getName());
         values.put(_CONTACT, groupMember.getContact());
         values.put(_DESCRIPTION, groupMember.getDescription());
-        values.put(_IS_ME, groupMember.getIsMe());
+        values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
 
         SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
 
@@ -82,7 +82,7 @@ public class GroupMemberRepo implements BaseColumns {
                 values.put(_EMAIL, groupMembers.get(i).getEmail());
                 values.put(_CONTACT, groupMembers.get(i).getContact());
                 values.put(_DESCRIPTION, groupMembers.get(i).getDescription());
-                values.put(_IS_ME, groupMembers.get(i).getIsMe());
+                values.put(_ACTIVE_PAYMETS, groupMembers.get(i).getAlreadyPaid());
 
                 if(db.insert(TABLE_NAME,null, values) > -1) {
                     rowsAffected++;
@@ -124,7 +124,7 @@ public class GroupMemberRepo implements BaseColumns {
                 cursor.getString(cursor.getColumnIndexOrThrow(_EMAIL)),
                 cursor.getString(cursor.getColumnIndexOrThrow(_CONTACT)),
                 cursor.getString(cursor.getColumnIndexOrThrow(_DESCRIPTION)),
-                MyNumbers.numberToBoolean(cursor.getInt(cursor.getColumnIndexOrThrow(_IS_ME)))
+                MyNumbers.numberToBoolean(cursor.getInt(cursor.getColumnIndexOrThrow(_ACTIVE_PAYMETS)))
             );
             members.add(member);
         }
@@ -150,7 +150,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_EMAIL, groupMember.getName());
         values.put(_CONTACT, groupMember.getContact());
         values.put(_DESCRIPTION, groupMember.getDescription());
-        values.put(_IS_ME, groupMember.getIsMe());
+        values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
 
         SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int update = db.update(TABLE_NAME, values, selection, selectionArgs);

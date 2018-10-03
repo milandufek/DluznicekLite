@@ -5,19 +5,19 @@
     android:foreground="?attr/selectableItemBackground">
 
     <EditText
-        android:id="@+id/et_groupmember_add"
+        android:id="@+id/et_member_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:maxLength="20"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/btn_groupmember_remove"/>
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/btn_member_remove"/>
 
     <ImageButton
-        android:id="@+id/btn_groupmember_remove"
+        android:id="@+id/btn_member_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:background="?attr/actionBarItemBackground"
         android:src="@drawable/round_remove_circle_black_36" />
 
