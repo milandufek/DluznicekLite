@@ -36,6 +36,16 @@ public class GroupRepo implements BaseColumns {
                 "ON DELETE CASCADE " +
             ");";
 
+
+    private Group buildGroup(Cursor cursor) {
+        return new Group(
+                cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_NAME)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(_CURRENCY_ID)),
+                cursor.getString(cursor.getColumnIndexOrThrow(_DESCRIPTION))
+        );
+    }
+
     /**
      * Insert a new item_group into the database
      * @param group
@@ -49,12 +59,11 @@ public class GroupRepo implements BaseColumns {
         values.put(_CURRENCY_ID, group.getCurrency());
         values.put(_DESCRIPTION, group.getDescription());
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        return db.insert(TABLE_NAME ,null, values);
+        return MyDbHelper.getInstance(context).getWritableDatabase()
+                .insert(TABLE_NAME ,null, values);
     }
 
     /**
-     * TODO Update group
      * @param group
      * @return reue if success
      */
@@ -65,9 +74,8 @@ public class GroupRepo implements BaseColumns {
         values.put(_CURRENCY_ID, group.getCurrency());
         values.put(_DESCRIPTION, group.getDescription());
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        int update = db.update(TABLE_NAME, values,
-                _ID + " = ? ", new String[] { String.valueOf(id) } );
+        int update = MyDbHelper.getInstance(context).getWritableDatabase()
+                .update(TABLE_NAME, values,_ID + " = ? ", new String[] { String.valueOf(id) } );
 
         return update == 1;
     }
@@ -79,9 +87,8 @@ public class GroupRepo implements BaseColumns {
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<>();
 
-        SQLiteDatabase db =  MyDbHelper.getInstance(context).getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null,
-                null, null, _ID);
+        Cursor cursor =  MyDbHelper.getInstance(context).getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
 
         while (cursor.moveToNext()) {
             groups.add(buildGroup(cursor));
@@ -94,8 +101,9 @@ public class GroupRepo implements BaseColumns {
     public Group getGroup(int id) {
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs, null, null, null);
+        Cursor cursor = MyDbHelper.getInstance(context).getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
+                        null, null, null);
 
         Group group = null;
         while (cursor.moveToNext()) {
@@ -115,17 +123,7 @@ public class GroupRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-
-        return db.delete(TABLE_NAME, selection, selectionArgs);
-    }
-
-    private Group buildGroup(Cursor cursor) {
-        return new Group(
-                cursor.getInt(cursor.getColumnIndexOrThrow(_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(_NAME)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(_CURRENCY_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(_DESCRIPTION))
-        );
+        return MyDbHelper.getInstance(context).getWritableDatabase()
+                .delete(TABLE_NAME, selection, selectionArgs);
     }
 }

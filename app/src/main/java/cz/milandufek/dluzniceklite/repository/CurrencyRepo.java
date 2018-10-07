@@ -43,7 +43,6 @@ public class CurrencyRepo implements BaseColumns {
 
     /**
      * Insert a new row_currency into the database
-     *
      * @param currency
      * @return row id or -1 if error
      */
@@ -58,8 +57,9 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_BASE_CURRENCY, MyNumbers.booleanToNumber(currency.getIsBaseCurrency()));
         values.put(_IS_DELETABLE, MyNumbers.booleanToNumber(currency.getIsDeletable()));
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        return db.insert(TABLE_NAME, null, values);
+        return MyDbHelper.getInstance(context)
+                .getWritableDatabase()
+                .insert(TABLE_NAME, null, values);
     }
 
     /**
@@ -68,8 +68,9 @@ public class CurrencyRepo implements BaseColumns {
      * @return List<Currency>
      */
     public List<Currency> getAllCurrency() {
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
+        Cursor cursor = MyDbHelper.getInstance(context)
+                .getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
 
         List<Currency> currency = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -85,10 +86,11 @@ public class CurrencyRepo implements BaseColumns {
      * @return
      */
     public Currency getCurrency(int id) {
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
+        Cursor cursor = MyDbHelper.getInstance(context)
+                .getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, _ID + " = ?", selectionArgs,
                 null, null, null, null);
 
         Currency currency = null;
@@ -101,10 +103,11 @@ public class CurrencyRepo implements BaseColumns {
     }
 
     public Currency getBaseCurrency() {
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] selectionArgs = { "1" };
 
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, _IS_BASE_CURRENCY + " = ?", selectionArgs,
+        Cursor cursor = MyDbHelper.getInstance(context)
+                .getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, _IS_BASE_CURRENCY + " = ?", selectionArgs,
                 null, null, null, "1");
 
         Currency currency = null;
@@ -126,9 +129,8 @@ public class CurrencyRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-
-        return db.delete(TABLE_NAME, selection, selectionArgs);
+        return MyDbHelper.getInstance(context).getWritableDatabase()
+                .delete(TABLE_NAME, selection, selectionArgs);
     }
 
     /**
@@ -138,7 +140,6 @@ public class CurrencyRepo implements BaseColumns {
      */
     public boolean updateCurrency(Currency currency) {
         ContentValues values = new ContentValues();
-        int id = currency.getId();
         values.put(_NAME, currency.getName());
         values.put(_COUNTRY, currency.getCountry());
         values.put(_QUANTITY, currency.getQuantity());
@@ -147,9 +148,9 @@ public class CurrencyRepo implements BaseColumns {
         values.put(_IS_BASE_CURRENCY, currency.getIsBaseCurrency());
         values.put(_IS_DELETABLE, currency.getIsDeletable());
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        int update = db.update(TABLE_NAME, values,
-                _ID + " = ? ", new String[] { String.valueOf(id) } );
+        int update = MyDbHelper.getInstance(context).getWritableDatabase()
+                .update(TABLE_NAME, values,
+                _ID + " = ? ", new String[] { String.valueOf(currency.getId()) } );
 
         return update == 1;
     }
@@ -160,12 +161,12 @@ public class CurrencyRepo implements BaseColumns {
      * @return
      */
     public boolean checkIfCurrencyExists(String name) {
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String[] column = { _NAME };
         String selection = _NAME + " = ?";
         String[] selectionArgs = { name };
 
-        Cursor cursor = db.query(TABLE_NAME, column, selection, selectionArgs,null,null, null);
+        Cursor cursor = MyDbHelper.getInstance(context).getReadableDatabase()
+                .query(TABLE_NAME, column, selection, selectionArgs,null,null, null);
         boolean exists = cursor.moveToFirst();
         cursor.close();
 

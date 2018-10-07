@@ -58,9 +58,8 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_DESCRIPTION, groupMember.getDescription());
         values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-
-        return db.insert(TABLE_NAME,null, values);
+        return MyDbHelper.getInstance(context).getWritableDatabase()
+                .insert(TABLE_NAME,null, values);
     }
 
     /**
@@ -111,8 +110,8 @@ public class GroupMemberRepo implements BaseColumns {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
+        Cursor cursor = MyDbHelper.getInstance(context).getReadableDatabase()
+                .query(TABLE_NAME, ALL_COLS, selection, selectionArgs,
                 null, null, _NAME);
 
         List<GroupMember> members = new ArrayList<>();
@@ -152,8 +151,8 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_DESCRIPTION, groupMember.getDescription());
         values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        int update = db.update(TABLE_NAME, values, selection, selectionArgs);
+        int update = MyDbHelper.getInstance(context).getWritableDatabase()
+                .update(TABLE_NAME, values, selection, selectionArgs);
 
         return update == 1;
     }
@@ -167,7 +166,7 @@ public class GroupMemberRepo implements BaseColumns {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-        return db.delete(TABLE_NAME, selection, selectionArgs);
+        return MyDbHelper.getInstance(context).getWritableDatabase()
+                .delete(TABLE_NAME, selection, selectionArgs);
     }
 }

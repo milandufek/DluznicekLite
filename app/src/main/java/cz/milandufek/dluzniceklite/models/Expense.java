@@ -42,4 +42,18 @@ public final class Expense {
     public String getReason() {
         return reason;
     }
+
+    @Override
+    public String toString() {
+        return "Expense = { " +
+                " id = " + id +
+                ", payerId = " + payerId +
+                ", groupId = " + groupId +
+                ", currencyId = " + currencyId +
+                ", reason = " + reason +
+                ", date = " + date +
+                ", time = " + time +
+                " }";
+
+    }
 }

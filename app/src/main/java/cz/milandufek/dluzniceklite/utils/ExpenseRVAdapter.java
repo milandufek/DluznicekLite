@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.EditExpense;
 import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
@@ -88,10 +89,9 @@ public class ExpenseRVAdapter
             popupMenu.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.action_edit_item:
-                        onClickEdit(holder, expenseId);
-                        Toast.makeText(context, "TODO: Edit item ",
-                                Toast.LENGTH_SHORT).show();
+                        onClickEdit(expenseId);
                         return true;
+
                     case R.id.action_delete_item:
                         onClickDelete(holder, expenseId);
                         return true;
@@ -104,8 +104,11 @@ public class ExpenseRVAdapter
         });
     }
 
-    private void onClickEdit(final ViewHolder h, final int id) {
-        // TODO edit
+    private void onClickEdit(final int id) {
+        Intent intent = new Intent(context, EditExpense.class);
+        intent.putExtra("EXPENSE_ID", id);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        context.startActivity(intent);
     }
 
     private void onClickDelete(final ViewHolder h, final int id) {
