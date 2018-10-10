@@ -263,6 +263,13 @@ public class EditExpense extends AppCompatActivity {
         };
     }
 
+    private void setEditTextFocusable(EditText et) {
+        et.setKeyListener((KeyListener) et.getTag());
+        et.setFocusable(true);
+        et.setFocusableInTouchMode(true);
+        et.setClickable(true);
+    }
+
     /**
      * Setup linear layout dynamically based on the number of members and filled data
      */
@@ -281,6 +288,7 @@ public class EditExpense extends AppCompatActivity {
             currency.setText(selectCurrency.getSelectedItem().toString());
 
             final CheckBox memberName = memberLine.findViewById(R.id.chbox_expense_edit_member);
+            memberName.setText(memberNames.get(i));
             final EditText memberAmount = memberLine.findViewById(R.id.et_expense_edit_amount);
 
             if (isMemberAlreadyPayer(memberIds.get(i))) {
@@ -290,7 +298,6 @@ public class EditExpense extends AppCompatActivity {
                 memberAmount.setTextColor(colorIfChecked);
             } else {
                 memberName.setChecked(false);
-                memberName.setText(memberNames.get(i));
                 memberName.setTextColor(colorIfNotChecked);
                 memberAmount.setText("0");
                 memberAmount.setVisibility(View.GONE);
@@ -305,9 +312,9 @@ public class EditExpense extends AppCompatActivity {
                     memberAmount.setTextColor(colorIfChecked);
                     memberAmount.setVisibility(View.VISIBLE);
                     currency.setVisibility(View.VISIBLE);
+                    setEditTextFocusable(memberAmount);
                 } else {
                     memberName.setTextColor(colorIfNotChecked);
-                    //memberAmount.setText("0");
                     memberAmount.setVisibility(View.GONE);
                     memberAmount.setTextColor(colorIfNotChecked);
                     memberAmount.setKeyListener(null);
