@@ -4,8 +4,9 @@ import java.util.Calendar;
 
 public final class MyDateTime {
 
-    private MyDateTime() {
-    }
+    private static final String TAG = MyDateTime.class.toString();;
+
+    private MyDateTime() { }
 
     /**
      * Get time now
@@ -32,7 +33,8 @@ public final class MyDateTime {
     }
 
     /**
-     * Get today's date in YYYY-MM-DD format
+     * Get today's date
+     * Format: YYYY-MM-DD format
      */
     public static String getDateToday() {
         Calendar cal = Calendar.getInstance();
@@ -54,5 +56,25 @@ public final class MyDateTime {
 //        LocalDate date = LocalDate.now();
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-DD");
 //        return date.format(formatter);
+    }
+
+    /**
+     * Convert date from DD.MM.YYYY to YYYY-MMM-DD
+     * @param date
+     * @return
+     */
+    public static String convertDateEuToUS(String date) {
+        String [] tokensDate = date.split(".");
+        return tokensDate[2] + "-" + tokensDate[1] + "-" + tokensDate[0];
+    }
+
+    /**
+     * Convert date from YYYY-MMM-DD to DD.MM.YYYY
+     * @param date
+     * @return
+     */
+    public static String convertDateUsToEu(String date) {
+        String [] tokensDate = date.split("-");
+        return tokensDate[2] + "." + tokensDate[1] + "." + tokensDate[0];
     }
 }

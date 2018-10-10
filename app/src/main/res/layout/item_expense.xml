@@ -12,11 +12,8 @@
         android:id="@+id/tv_expense_item_reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Reason"
-        android:textColor="@color/colorBlack"
-        android:textSize="20sp"
+        style="@style/RecyclerViewItemTitle"
+        android:text="@string/reason"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,11 +21,8 @@
         android:id="@+id/tv_expense_item_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Amount"
-        android:textColor="@color/colorBlack"
-        android:textSize="20sp"
+        style="@style/RecyclerViewItemTitle"
+        android:text="@string/how_much"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

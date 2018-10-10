@@ -64,7 +64,7 @@ public class AddExpense extends AppCompatActivity {
     private CheckBox forAll;
     private TextView forAllInfo;
     private RadioGroup typeCalculation;
-    private RadioButton rbtnRatio, rbtManually;
+    private RadioButton rbtnRatio, rbtnManually;
     private LinearLayout whoPaysContainer;
     private EditText reason;
     private TextView date, time;
@@ -83,7 +83,7 @@ public class AddExpense extends AppCompatActivity {
         forAllInfo = findViewById(R.id.tv_payment_forallinfo);
         typeCalculation = findViewById(R.id.rbtng_payment_ratio);
         rbtnRatio = findViewById(R.id.rbtn_payment_ratio);
-        rbtManually = findViewById(R.id.rbtn_payment_manually);
+        rbtnManually = findViewById(R.id.rbtn_payment_manually);
         whoPaysContainer = findViewById(R.id.ll_payment_container);
         reason = findViewById(R.id.et_payment_reason);
         date = findViewById(R.id.et_payment_date);
@@ -226,7 +226,7 @@ public class AddExpense extends AppCompatActivity {
     }
 
     /**
-     *  Setup linear layout dynamically based on the numer of members and filled data
+     *  Setup linear layout dynamically based on the number of members and filled data
      */
     private void setupWhoPaysContainer() {
         for (int i = 0; i < getCountMembers(); i++) {
@@ -276,7 +276,7 @@ public class AddExpense extends AppCompatActivity {
             memberAmount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (rbtManually.isChecked()) {
+                    if (rbtnManually.isChecked()) {
                         double amountTotal = 0;
                         View memberLine;
                         CheckBox memberWillPay;
@@ -297,11 +297,9 @@ public class AddExpense extends AppCompatActivity {
                 }
 
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 @Override
-                public void afterTextChanged(Editable s) {
-                }
+                public void afterTextChanged(Editable s) { }
             });
 
             final TextView currency = addView.findViewById(R.id.tv_expense_currency);
@@ -326,7 +324,7 @@ public class AddExpense extends AppCompatActivity {
                     memberAmount.setText("0");
                     memberAmount.setTextColor(colorIfChecked);
                     memberAmount.setVisibility(View.VISIBLE);
-                    if (rbtManually.isChecked()) {
+                    if (rbtnManually.isChecked()) {
                         setEditTextFocusable(memberAmount);
                     } else {
                         unsetEditTextFocusable(memberAmount);
@@ -522,7 +520,7 @@ public class AddExpense extends AppCompatActivity {
      * @param s text
      */
     private void howMuchOnTextChangeListener(CharSequence s) {
-        if (!rbtManually.isChecked()) {
+        if (!rbtnManually.isChecked()) {
             StringBuilder forAllInfoText = new StringBuilder(getString(R.string.payment_for_all));
             forAllInfoText.append(" ( ");
             forAllInfoText.append(getCountMembers());
@@ -583,9 +581,8 @@ public class AddExpense extends AppCompatActivity {
             if (day < 10)
                 dayZeroPrefix = "0";
 
-            String dateText = day + "." + month + "." + year;
             dateDb = year + "-" + monthZeroPrefix + month + "-" + dayZeroPrefix + day;
-            date.setText(dateText);
+            date.setText(MyDateTime.convertDateUsToEu(dateDb));
         };
     }
 
@@ -649,13 +646,13 @@ public class AddExpense extends AppCompatActivity {
                 refreshSummaryLine();
                 forAllInfo.setVisibility(View.VISIBLE);
                 rbtnRatio.setVisibility(View.GONE);
-                rbtManually.setVisibility(View.GONE);
+                rbtnManually.setVisibility(View.GONE);
 
                 whoPaysContainer.setVisibility(View.GONE);
             } else {
                 forAllInfo.setVisibility(View.GONE);
                 rbtnRatio.setVisibility(View.VISIBLE);
-                rbtManually.setVisibility(View.VISIBLE);
+                rbtnManually.setVisibility(View.VISIBLE);
 
                 whoPaysContainer.setVisibility(View.VISIBLE);
                 updateWhoPaysContainer();
