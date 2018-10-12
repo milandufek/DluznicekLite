@@ -127,6 +127,23 @@ public class ExpenseRepo implements BaseColumns {
                 .delete(TABLE_NAME, selection, selectionArgs);
     }
 
+    public boolean updateExpense(Expense expense) {
+        ContentValues values = new ContentValues();
+        values.put(_PAYER_ID,expense.getPayerId());
+        values.put(_GROUP_ID,expense.getGroupId());
+        values.put(_CURRENCY_ID, expense.getCurrencyId());
+        values.put(_REASON, expense.getReason());
+        values.put(_DATE, expense.getDate());
+        values.put(_TIME, expense.getTime());
+
+        int result = MyDbHelper.getInstance(context).getWritableDatabase()
+                .update(TABLE_NAME, values,
+                        "_ID = ?",
+                        new String[] { String.valueOf(expense.getId()) });
+
+        return result == 1;
+    }
+
     /**
      * Select all expenses for group in format suitable for ExpenseItem
      * @param groupId

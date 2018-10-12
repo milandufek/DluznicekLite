@@ -101,12 +101,11 @@ public class AddExpense extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 howMuchOnTextChangeListener(s);
             }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) { }
         });
 
         // spinner with payers (who pays)

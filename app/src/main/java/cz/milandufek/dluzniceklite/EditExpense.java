@@ -85,6 +85,8 @@ public class EditExpense extends AppCompatActivity {
         // set amount
         howMuch = findViewById(R.id.et_payment_edit_howmuch);
         howMuch.setText(String.valueOf(MyNumbers.roundIt(sumTransactionAmount(transactions), 3)));
+        unsetEditTextFocusable(howMuch);
+
 
         // setup whoPaysContainer with members who paid
         whoPaysContainer = findViewById(R.id.ll_payment_edit_container);
@@ -104,7 +106,7 @@ public class EditExpense extends AppCompatActivity {
 
         Button btnSave = findViewById(R.id.btn_payment_edit_save);
         btnSave.setOnClickListener(save -> {
-            updateExpense();
+            updateExpenseAndTransations();
             Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
         });
     }
@@ -270,6 +272,14 @@ public class EditExpense extends AppCompatActivity {
         et.setClickable(true);
     }
 
+
+    private void unsetEditTextFocusable(EditText et) {
+        et.setKeyListener(null);
+        et.setFocusable(false);
+        et.setFocusableInTouchMode(false);
+        et.setClickable(false);
+    }
+
     /**
      * Setup linear layout dynamically based on the number of members and filled data
      */
@@ -320,6 +330,8 @@ public class EditExpense extends AppCompatActivity {
                     memberAmount.setKeyListener(null);
                     currency.setVisibility(View.GONE);
                 }
+                // update how much total field
+                howMuch.setText(String.valueOf(getHowMuchTotal()));
             });
 
             memberAmount.setTag(memberAmount.getKeyListener());
@@ -354,7 +366,74 @@ public class EditExpense extends AppCompatActivity {
         }
     }
 
-    private boolean updateExpense() {
+    private boolean updateExpenseAndTransations() {
+        for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
+            List<Transaction> newTransactions = new ArrayList<>();
+            View memberLine = whoPaysContainer.getChildAt(i);
+            CheckBox memberWillPay = memberLine.findViewById(R.id.chbox_expense_edit_member);
+            if (memberWillPay.isChecked()) {
+                EditText memberAmount = memberLine.findViewById(R.id.et_expense_edit_amount);
+                newTransactions.add(new Transaction(0,
+                        memberIds.get(i),
+                        expense.getId(),
+                        getFieldValue(memberAmount))
+                );
+            }
+
+            updateExpense(new Expense(
+                    expense.getId(),
+                    memberIds.get(whoPays.getSelectedItemPosition()),
+                    groupId,
+                    currencyids.get(selectCurrency.getSelectedItemPosition()),
+                    getReasonText(),
+                    dateDb,
+                    timeDb)
+
+            );
+
+            updateTransactions(newTransactions);
+        }
+
         return true;
+    }
+
+    private boolean updateExpense(Expense expense) {
+        return new ExpenseRepo().updateExpense(expense);
+    }
+
+    private boolean updateTransactions(List<Transaction> transactions) {
+        TransactionRepo sql = new TransactionRepo();
+        sql.deleteTransactions(expense.getId());
+        return sql.insertTransactions(transactions) > 0;
+    }
+
+    private String getReasonText() {
+        String reasonText;
+        reasonText = reason.getText().toString().trim();
+        if (reasonText.isEmpty())
+            reasonText = getString(R.string.reason_empty);
+        return reasonText;
+    }
+
+    private double getHowMuchTotal() {
+        double amount = 0;
+        for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
+            View memberLine = whoPaysContainer.getChildAt(i);
+            CheckBox memberWillPay = memberLine.findViewById(R.id.chbox_expense_edit_member);
+            if (memberWillPay.isChecked()) {
+                EditText amountText = memberLine.findViewById(R.id.et_expense_edit_amount);
+                amount += getFieldValue(amountText);
+            }
+        }
+        return amount;
+    }
+
+    private double getFieldValue(EditText editText) {
+        double value = 0;
+        String valueText = editText.getText().toString().trim();
+        if (!valueText.isEmpty()) {
+            value = Double.parseDouble(valueText);
+        }
+        return value;
     }
 }
