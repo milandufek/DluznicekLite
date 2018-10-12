@@ -53,8 +53,8 @@ public class EditExpense extends AppCompatActivity {
     int groupId;
 
     private Spinner whoPays, selectCurrency;
-    private List<String> memberNames, currencyNames;
-    private List<Integer> memberIds, currencyids;
+    private List<String> memberNames;
+    private List<Integer> memberIds, currencyIds;
 
     private EditText howMuch, reason;
 
@@ -70,7 +70,7 @@ public class EditExpense extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_expense);
 
-        int expenseId = getIntent().getExtras().getInt("EXPENSE_ID");
+        int expenseId = Objects.requireNonNull(getIntent().getExtras()).getInt("EXPENSE_ID");
 
         groupId = new MyPreferences(this).getActiveGroupId();
 
@@ -104,10 +104,14 @@ public class EditExpense extends AppCompatActivity {
         time = findViewById(R.id.et_payment_edit_time);
         setupTimePicker();
 
+        // update expense
         Button btnSave = findViewById(R.id.btn_payment_edit_save);
         btnSave.setOnClickListener(save -> {
-            updateExpenseAndTransations();
-            Toast.makeText(this, "EDIT", Toast.LENGTH_SHORT).show();
+            if (updateExpenseAndTransations()) {
+                Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -137,8 +141,8 @@ public class EditExpense extends AppCompatActivity {
 
     private void setupSpinnerWithCurrencies() {
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
-        currencyNames = getCurrencyNames(currencies);
-        currencyids = getCurrencyIds(currencies);
+        List<String> currencyNames = getCurrencyNames(currencies);
+        currencyIds = getCurrencyIds(currencies);
         final ArrayAdapter<String> spinnerWithCurrencies = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -146,7 +150,7 @@ public class EditExpense extends AppCompatActivity {
         );
         selectCurrency = findViewById(R.id.spinner_payment_edit_currency);
         selectCurrency.setAdapter(spinnerWithCurrencies);
-        selectCurrency.setSelection(currencyids.indexOf(expense.getCurrencyId()));
+        selectCurrency.setSelection(currencyIds.indexOf(expense.getCurrencyId()));
     }
 
     private double sumTransactionAmount(List<Transaction> transactions) {
@@ -367,6 +371,9 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private boolean updateExpenseAndTransations() {
+        boolean resultExpenseUpdate = false;
+        boolean resultTransactionsUpdate = false;
+
         for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
             List<Transaction> newTransactions = new ArrayList<>();
             View memberLine = whoPaysContainer.getChildAt(i);
@@ -380,21 +387,21 @@ public class EditExpense extends AppCompatActivity {
                 );
             }
 
-            updateExpense(new Expense(
+            resultExpenseUpdate = updateExpense(new Expense(
                     expense.getId(),
                     memberIds.get(whoPays.getSelectedItemPosition()),
                     groupId,
-                    currencyids.get(selectCurrency.getSelectedItemPosition()),
+                    currencyIds.get(selectCurrency.getSelectedItemPosition()),
                     getReasonText(),
                     dateDb,
                     timeDb)
 
             );
 
-            updateTransactions(newTransactions);
+            resultTransactionsUpdate = updateTransactions(newTransactions);
         }
 
-        return true;
+        return resultExpenseUpdate & resultTransactionsUpdate;
     }
 
     private boolean updateExpense(Expense expense) {

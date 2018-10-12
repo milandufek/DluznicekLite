@@ -54,11 +54,6 @@ public class TransactionRepo implements BaseColumns {
         );
     }
 
-    /**
-     * Insert transaction into database
-     * @param transaction
-     * @return row id
-     */
     public long insertTransaction(Transaction transaction) {
         ContentValues values = new ContentValues();
         // _ID
@@ -72,11 +67,6 @@ public class TransactionRepo implements BaseColumns {
                 .insert(TABLE_NAME,null, values);
     }
 
-    /**
-     * Insert multiple transaction into database
-     * @param transactions
-     * @return number of rows affected
-     */
     public long insertTransactions(List<Transaction> transactions) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int rowsAffected = 0;
@@ -107,11 +97,6 @@ public class TransactionRepo implements BaseColumns {
         }
     }
 
-    /**
-     * Retrieve data
-     * @param expenseId
-     * @return transaction of expenseId
-     */
     public List<Transaction> getTransactions(int expenseId) {
         String selection = _EXPENSE_ID + " = ?" + " AND " + _AMOUNT + " >= ?";
         String[] selectionArgs = { String.valueOf(expenseId), "0" };
@@ -129,11 +114,6 @@ public class TransactionRepo implements BaseColumns {
         return transactions;
     }
 
-    /**
-     * Delete transaction from database
-     * @param id
-     * @return rows affected
-     */
     public int deleteTransaction(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
@@ -143,11 +123,6 @@ public class TransactionRepo implements BaseColumns {
                 .delete(TABLE_NAME, selection, selectionArgs);
     }
 
-    /**
-     * Delete transactions from database
-     * @param expenseId
-     * @return rows affected
-     */
     public int deleteTransactions(int expenseId) {
         String selection = _EXPENSE_ID + " = ?";
         String[] selectionArgs = { String.valueOf(expenseId) };
@@ -157,11 +132,6 @@ public class TransactionRepo implements BaseColumns {
                 .delete(TABLE_NAME, selection, selectionArgs);
     }
 
-    /**
-     * Select transaction for expenses ID with positive amount
-     * @param expenseId
-     * @return transaction
-     */
     public List<SummaryTransactionItem> getTransactionsForExpense(int expenseId) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT "
@@ -189,7 +159,6 @@ public class TransactionRepo implements BaseColumns {
 
     /**
      * Select all transaction for DebtCalculator activity
-     * @param groupId
      * @return cursor with transactions
      *
      *         SELECT debtor_id, group_members.name , SUM(amount * exchange_rate / quantity) AS balance
