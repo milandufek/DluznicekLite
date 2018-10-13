@@ -68,7 +68,6 @@ public class GroupRVAdapter
             groupInfo.append(member.getName());
         }
 
-        // TODO if the payment is for all show just for all
         int maxInfoLength = 55;
         if (groupInfo.length() > maxInfoLength) {
             groupInfo.setLength(maxInfoLength - 3);

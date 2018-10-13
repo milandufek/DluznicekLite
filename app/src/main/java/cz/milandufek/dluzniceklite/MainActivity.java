@@ -11,7 +11,6 @@ import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -31,8 +30,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
-    //  TODO Room Database connection + DAO + repository + AndroidViewModel + LiveData (MVVM)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

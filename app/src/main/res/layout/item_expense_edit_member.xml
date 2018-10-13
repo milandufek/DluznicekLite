@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:inputType="numberDecimal"
-        android:text="0"
         android:textColor="@color/colorBlack"
         android:textSize="18sp"
         android:textAlignment="textEnd"

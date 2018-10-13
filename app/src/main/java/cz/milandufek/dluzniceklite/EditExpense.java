@@ -107,9 +107,12 @@ public class EditExpense extends AppCompatActivity {
         // update expense
         Button btnSave = findViewById(R.id.btn_payment_edit_save);
         btnSave.setOnClickListener(save -> {
-            if (updateExpenseAndTransations()) {
+            if (saveUpdatedExpense()) {
                 Toast.makeText(this, getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                startActivity(getParentActivityIntent());
+                finish();
             } else {
+                Log.d(TAG, "Cannot insert data...");
                 Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
         });
@@ -304,19 +307,20 @@ public class EditExpense extends AppCompatActivity {
             final CheckBox memberName = memberLine.findViewById(R.id.chbox_expense_edit_member);
             memberName.setText(memberNames.get(i));
             final EditText memberAmount = memberLine.findViewById(R.id.et_expense_edit_amount);
+            memberAmount.setTag(memberAmount.getKeyListener());
 
             if (isMemberAlreadyPayer(memberIds.get(i))) {
                 memberName.setChecked(true);
                 memberName.setTextColor(colorIfChecked);
                 memberAmount.setText(String.valueOf(transactions.iterator().next().getAmount()));
                 memberAmount.setTextColor(colorIfChecked);
+                setEditTextFocusable(memberAmount);
             } else {
                 memberName.setChecked(false);
                 memberName.setTextColor(colorIfNotChecked);
-                memberAmount.setText("0");
+                //memberAmount.setText("0");
                 memberAmount.setVisibility(View.GONE);
                 memberAmount.setTextColor(colorIfNotChecked);
-                memberAmount.setKeyListener(null);
                 currency.setVisibility(View.GONE);
             }
 
@@ -370,36 +374,46 @@ public class EditExpense extends AppCompatActivity {
         }
     }
 
-    private boolean updateExpenseAndTransations() {
-        boolean resultExpenseUpdate = false;
-        boolean resultTransactionsUpdate = false;
+    private boolean saveUpdatedExpense() {
+        boolean resultExpenseUpdate, resultTransactionsUpdate;
+        List<Transaction> newTransactions = new ArrayList<>();
+        double amountTotal = 0;
 
         for (int i = 0; i < whoPaysContainer.getChildCount(); i++) {
-            List<Transaction> newTransactions = new ArrayList<>();
             View memberLine = whoPaysContainer.getChildAt(i);
             CheckBox memberWillPay = memberLine.findViewById(R.id.chbox_expense_edit_member);
             if (memberWillPay.isChecked()) {
                 EditText memberAmount = memberLine.findViewById(R.id.et_expense_edit_amount);
-                newTransactions.add(new Transaction(0,
-                        memberIds.get(i),
-                        expense.getId(),
-                        getFieldValue(memberAmount))
-                );
+                amountTotal += getFieldValue(memberAmount);
+                if (getFieldValue(memberAmount) > 0) {
+                    newTransactions.add(new Transaction(0,
+                            memberIds.get(i),
+                            expense.getId(),
+                            getFieldValue(memberAmount))
+                    );
+                }
             }
-
-            resultExpenseUpdate = updateExpense(new Expense(
-                    expense.getId(),
-                    memberIds.get(whoPays.getSelectedItemPosition()),
-                    groupId,
-                    currencyIds.get(selectCurrency.getSelectedItemPosition()),
-                    getReasonText(),
-                    dateDb,
-                    timeDb)
-
-            );
-
-            resultTransactionsUpdate = updateTransactions(newTransactions);
         }
+
+        // payer transaction
+        newTransactions.add(new Transaction(0,
+                memberIds.get(whoPays.getSelectedItemPosition()),
+                expense.getId(),
+                amountTotal * -1)
+        );
+
+        resultTransactionsUpdate = updateTransactions(newTransactions);
+
+        resultExpenseUpdate = updateExpense(new Expense(
+                expense.getId(),
+                memberIds.get(whoPays.getSelectedItemPosition()),
+                groupId,
+                currencyIds.get(selectCurrency.getSelectedItemPosition()),
+                getReasonText(),
+                dateDb,
+                timeDb)
+
+        );
 
         return resultExpenseUpdate & resultTransactionsUpdate;
     }
