@@ -153,6 +153,7 @@ public class TransactionRepo implements BaseColumns {
             );
             transactions.add(item);
         }
+        if (transactions.size() > 0) { cursor.close(); }
 
         return transactions;
     }
@@ -221,8 +222,8 @@ public class TransactionRepo implements BaseColumns {
                     cursor.getString(1),
                     cursor.getDouble(2)
             ));
-
         }
+        if (memberBalances.size() > 0) { cursor.close(); }
 
         return memberBalances;
     }

@@ -3,9 +3,7 @@ package cz.milandufek.dluzniceklite.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,6 +197,8 @@ public class ExpenseRepo implements BaseColumns {
             expenseItems.add(expenseItem);
         }
 
+        if (expenseItems.size() > 0) { cursor.close(); }
+
         return expenseItems;
     }
 
@@ -240,19 +240,22 @@ public class ExpenseRepo implements BaseColumns {
                 .rawQuery(query, null, null);
 
         double sumAmountInBaseCurrency = 0;
+        int iterations = 0;
         while (cursor.moveToNext()) {
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._QUANTITY));
             int exchangeRate = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._EXCHANGE_RATE));
             double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(TransactionRepo._AMOUNT));
             sumAmountInBaseCurrency += (amount / quantity * exchangeRate) * -1;
+            iterations++;
         }
 
         CurrencyRepo sqlCurrency = new CurrencyRepo();
         String currencyName = sqlCurrency.getCurrency(activeGroupCurrencyId).getName();
         int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, activeGroupCurrencyId);
-        if (sumAmount <= DebtCalculator.TOLERANCE)
-            sumAmount = 0;
+        if (sumAmount <= DebtCalculator.TOLERANCE) { sumAmount = 0; }
+
+        if (iterations > 0) { cursor.close(); }
 
         return new SummaryExpenseItem(activeGroupCurrencyId, currencyName, sumAmount);
     }

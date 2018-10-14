@@ -42,7 +42,6 @@ public class DebtCalculator {
             MemberBalance creditor = memberBalances.get(0);
             MemberBalance debtor = memberBalances.get(memberBalances.size() - 1);
 
-            // TODO tuning
             double amount;
             double creditorShouldReceive = Math.abs(creditor.getBalance());
             double debtorShouldSend = Math.abs(debtor.getBalance());

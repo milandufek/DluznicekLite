@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +62,7 @@ public class AddGroup extends AppCompatActivity {
                 LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 assert layoutInflater != null;
-                final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
+                @SuppressLint("InflateParams") final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
 
                 EditText member2remove = addView.findViewById(R.id.et_member_name);
                 member2remove.setText(member2add.getText().toString());

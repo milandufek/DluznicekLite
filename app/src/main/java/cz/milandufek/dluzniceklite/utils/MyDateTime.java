@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public final class MyDateTime {
 
-    private static final String TAG = MyDateTime.class.toString();;
+    private static final String TAG = MyDateTime.class.toString();
 
     private MyDateTime() { }
 

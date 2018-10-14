@@ -25,7 +25,6 @@ public class ListGroupFragment extends Fragment {
     private static final String TAG = "ListGroupsFragment";
 
     private Context context;
-    private GroupRVAdapter adapter;
 
     @Nullable
     @Override
@@ -41,7 +40,7 @@ public class ListGroupFragment extends Fragment {
         addGroupBtn.setOnClickListener(v -> onClickAddGroup());
 
         List<Group> groups = new GroupRepo().getAllGroups();
-        adapter = new GroupRVAdapter(context, groups);
+        GroupRVAdapter adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_main_group_list);
         recyclerView.setHasFixedSize(true);

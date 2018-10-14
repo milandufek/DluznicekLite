@@ -38,7 +38,6 @@ public class EditGroup extends AppCompatActivity {
     private Spinner selectCurrency;
     private int currencySelectedId;
     private LinearLayout container;
-    private ImageButton btnAddMember;
 
     final ArrayList<Integer> currencyIds = new ArrayList<>();
     final ArrayList<String> currencyNames = new ArrayList<>();
@@ -61,7 +60,7 @@ public class EditGroup extends AppCompatActivity {
         selectCurrency.setSelection(currencyIds.indexOf(group.getCurrency()));
 
         member2add = findViewById(R.id.et_group_member2add);
-        btnAddMember = findViewById(R.id.btn_group_member2add);
+        ImageButton btnAddMember = findViewById(R.id.btn_group_member2add);
         container = findViewById(R.id.ll_group_container);
 
         GroupMemberRepo sqlMembers = new GroupMemberRepo();
@@ -110,7 +109,7 @@ public class EditGroup extends AppCompatActivity {
             };
 
             ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
-            // do not allow to remove members who already paid something
+            // TODO do not allow to remove members who already paid something
             if (member.getActivePayments()) {
                 btnRemove.setVisibility(View.GONE);
             } else {

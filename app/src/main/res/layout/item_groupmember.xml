@@ -11,7 +11,8 @@
         android:inputType="text"
         android:maxLength="20"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@id/btn_member_remove"/>
+        android:layout_toStartOf="@id/btn_member_remove"
+        android:autofillHints="" />
 
     <ImageButton
         android:id="@+id/btn_member_remove"
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:background="?attr/actionBarItemBackground"
-        android:src="@drawable/round_remove_circle_black_36" />
+        android:src="@drawable/round_remove_circle_black_36"
+        android:contentDescription="TODO" />
 
 </RelativeLayout>

@@ -23,7 +23,8 @@
         android:padding="8dp"
         android:src="@drawable/round_remove_circle_black_18"
         app:layout_constraintEnd_toStartOf="@+id/tv_expense_ratio_value"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/tv_expense_ratio_value"
@@ -71,7 +72,8 @@
         android:padding="8dp"
         android:src="@drawable/round_add_circle_black_18"
         app:layout_constraintEnd_toStartOf="@+id/et_expense_amount"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <EditText
         android:id="@+id/et_expense_amount"
@@ -81,7 +83,8 @@
         android:text="111"
         android:textAlignment="viewEnd"
         app:layout_constraintEnd_toStartOf="@+id/tv_expense_currency"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/tv_expense_currency"

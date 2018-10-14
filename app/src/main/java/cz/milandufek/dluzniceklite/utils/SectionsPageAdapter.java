@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite.utils;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -41,7 +42,7 @@ public class SectionsPageAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
     }
 }

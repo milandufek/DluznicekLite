@@ -26,7 +26,8 @@
         android:textSize="18sp"
         android:textAlignment="textEnd"
         app:layout_constraintEnd_toStartOf="@+id/tv_expense_edit_currency"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/tv_expense_edit_currency"

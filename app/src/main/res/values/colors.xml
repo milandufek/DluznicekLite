@@ -8,42 +8,19 @@
     <color name="colorWhite">@android:color/white</color>
     <color name="colorBlack">@android:color/black</color>
     <color name="colorGray">@android:color/darker_gray</color>
-    <color name="colorBlue">@android:color/holo_blue_light</color>
-    <color name="colorGreen">@android:color/holo_green_light</color>
 
     <!-- Indigo 50 -->
-    <color name="colorPrimaryIndigo">#5C6BC0</color>
-    <color name="colorPrimaryDarkIndogi">#3949AB</color>
-    <color name="colorAccentIndigo">#8C9EFF</color>
 
     <!-- Blue 50 -->
-    <color name="colorPrimaryBlue">#42A5F5</color>
-    <color name="colorPrimaryDarkBlue">#1E88E5</color>
-    <color name="colorAccentBlue">#82B1FF</color>
 
     <!-- Green 50 -->
-    <color name="colorPrimaryGreen">#66BB6A</color>
-    <color name="colorPrimaryDarkGreen">#43A047</color>
-    <color name="colorAccentGreen">#BBFF99</color>
 
     <!-- Yellow 50 -->
-    <color name="colorPrimaryYelloy">#FFEE58</color>
-    <color name="colorPrimaryDarkYellow">#FDD835</color>
-    <color name="colorAccentYellow">#FFFF8D</color>
 
     <!-- Orange -->
-    <color name="colorPrimaryOrange">#FFA726</color>
-    <color name="colorPrimaryDarkOrange">#FB8C00</color>
-    <color name="colorAccentOrange">#FFD180</color>
 
     <!-- Red 50 -->
-    <color name="colorPrimaryRed">#FF7043</color>
-    <color name="colorPrimaryDarkRed">#F4511E</color>
-    <color name="colorAccentRed">#FF9E80</color>
 
     <!-- Grey 50 -->
-    <color name="colorPrimaryGrey">#BDBDBD</color>
-    <color name="colorPrimaryDarkGrey">#757575</color>
-    <color name="colorAccentGrey">#424242</color>
 
 </resources>

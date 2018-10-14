@@ -2,7 +2,6 @@
     <!-- TITLES -->
     <string name="app_name">Dlužníček</string>
     <string name="title_activity_main">@string/app_name</string>
-    <string name="title_activity_settings">Nastavení</string>
     <string name="title_activity_about">O aplikaci</string>
     <string name="title_add_group">Nová skupina</string>
     <string name="title_edit_group">Upravit skupinu</string>
@@ -14,10 +13,8 @@
     <string name="title_activity_export_data">Export data</string>
     <string name="tab_payments">Platby</string>
     <string name="tab_settleup">Vyrovnání</string>
-    <string name="tab_groups">Skupiny</string>
 
     <!-- GENERIC -->
-    <string name="already_exists">již existuje…</string>
     <string name="saved">Uloženo</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -25,8 +22,6 @@
     <string name="edit">Upravit</string>
     <string name="settleup">Vyrovnat dluh</string>
     <string name="settleup_part">Vyrovnat část dluhu</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
     <string name="big_dot">•</string>
 
     <!-- WARNINGS / ERRORS -->
@@ -44,17 +39,10 @@
 
     <!-- MENU -->
     <string name="save">Uložit</string>
-    <string name="action_settings">Nastavení</string>
     <string name="action_about">O aplikaci</string>
     <string name="action_manage_groups">Skupiny</string>
-    <string name="action_manage_currency">Měny</string>
-    <string name="page_groups">Skupiny</string>
-    <string name="page_payments">Platby</string>
-    <string name="reset_data">Reset data</string>
 
     <!-- SETTINGS -->
-    <string name="sound_title">Zvuky</string>
-    <string name="sound_checkbox">On / Off</string>
 
     <!-- ABOUT -->
     <string name="author">Autor: Milan Dufek</string>
@@ -62,26 +50,21 @@
 
     <!-- GROUPS -->
     <string name="group">Skupina</string>
-    <string name="toast_no_groups_found">Zatím tu žádné skupiny…</string>
     <string name="group_name">Název skupiny</string>
     <string name="group_name_hint">Váš název…</string>
     <string name="select_currency">Hlavní měna</string>
     <string name="group_member_names">Členové</string>
     <string name="group_member_names_hint">Karel</string>
-    <string name="btn_remove">Odstraň</string>
-    <string name="btn_add">Přidej</string>
     <string name="btn_add_group">Přidej skupinu</string>
     <string name="group_set_as_active">je aktivní skupina</string>
     <string name="really_want_to_delete_group">Smazat skupinu?</string>
     <string name="group_saved">Skupina uložena</string>
 
     <!-- CURRENCY -->
-    <string name="currency">Měna</string>
     <string name="currency_name">Název měny</string>
     <string name="country">Země</string>
     <string name="currency_quantity">Množství</string>
     <string name="exchange_rate">Kolik to je Kč?</string>
-    <string name="toast_default_currency_created">Primární měna vytvořena</string>
     <string name="really_want_to_delete_currency">Smazat měnu?</string>
 
     <!-- PAYMENTS -->
@@ -95,7 +78,6 @@
     <string name="manually">Ručně</string>
     <string name="payment_for_all">Platba za všechny členy</string>
     <string name="howmuch_is_null">Částka není správně</string>
-    <string name="toast_no_expense">Nejsou tu žádné výdaje</string>
     <string name="reason_empty">Výdaj…</string>
     <string name="total_spent">Celkem utraceno</string>
     <string name="remains_to_settleup">Zbývá vyrovnat</string>

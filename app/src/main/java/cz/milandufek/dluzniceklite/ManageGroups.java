@@ -17,7 +17,6 @@ import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
 public class ManageGroups extends AppCompatActivity {
 
     private Context context = this;
-    private GroupRVAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class ManageGroups extends AppCompatActivity {
 
     private void initRecyclerView() {
         List<Group> groups = new GroupRepo().getAllGroups();
-        adapter = new GroupRVAdapter(context, groups);
+        GroupRVAdapter adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);
         recyclerView.setHasFixedSize(true);

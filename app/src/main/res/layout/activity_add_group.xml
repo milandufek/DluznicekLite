@@ -6,7 +6,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/padding"
     tools:context=".AddGroup">
@@ -29,10 +29,10 @@
             android:layout_below="@+id/tv_group_name2add"
             android:hint="@string/group_name_hint"
             android:textSize="26sp"
-            android:inputType="textCapSentences" />
+            android:inputType="textCapSentences"
+            android:autofillHints="" />
 
         <TextView
-            android:id="@+id/tv_group_member2add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/et_group_name2add"
@@ -51,7 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:background="?attr/actionBarItemBackground"
-            android:src="@drawable/round_add_circle_black_36" />
+            android:src="@drawable/round_add_circle_black_36"
+            android:contentDescription="TODO" />
 
         <EditText
             android:id="@+id/et_group_member2add"
@@ -60,7 +61,8 @@
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@id/btn_group_member2add"
             android:hint="@string/group_member_names_hint"
-            android:inputType="textCapSentences" />
+            android:inputType="textCapSentences"
+            android:autofillHints="" />
 
     </RelativeLayout>
 
@@ -97,7 +99,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/spinner_group_currency"
             android:background="?attr/actionBarItemBackground"
-            android:drawableLeft="@drawable/round_check_black_36"
+            android:drawableStart="@drawable/round_check_black_36"
             android:text="@string/save" />
 
     </RelativeLayout>
