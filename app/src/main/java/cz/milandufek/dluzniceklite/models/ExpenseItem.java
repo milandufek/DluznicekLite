@@ -53,7 +53,15 @@ public final class ExpenseItem {
 
     @Override
     public String toString() {
-        return "id=" + id + " reason=" + reason + " payer=" + payer + " currency=" + currency +
-            " debtors=" + debtors + " amount=" + amount + " date=" + date + " time=" + time;
+        return ExpenseItem.class.toString() + " = { " +
+                "id=" + id +
+                ", reason=" + reason +
+                ", payer=" + payer +
+                ", currency=" + currency +
+                ", debtors=" + debtors +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", time=" + time +
+                " }";
     }
 }

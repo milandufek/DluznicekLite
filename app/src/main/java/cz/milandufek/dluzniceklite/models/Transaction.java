@@ -41,4 +41,14 @@ public final class Transaction {
     public boolean getIsSettleUpTransaction() {
         return isSettleUpTransaction;
     }
+
+    @Override
+    public String toString() {
+        return Transaction.class.toString() + " = { " +
+                "id = " + id +
+                ", debtor_id = " + debtor_id +
+                ", expense_id = " + expense_id +
+                ", amount = " + amount +
+                " }";
+    }
 }

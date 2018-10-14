@@ -5,7 +5,7 @@ public final class GroupMember {
     private int id;
     private int groupId;
     private String name, email, contact, description;
-    private boolean alreadyPaid;
+    private boolean activePayments;
 
     public GroupMember(int id, int groupId, String name, String email, String contact,
                        String description, boolean activePayments) {
@@ -15,7 +15,7 @@ public final class GroupMember {
         this.email = email;
         this.contact = contact;
         this.description = description;
-        this.alreadyPaid = activePayments;
+        this.activePayments = activePayments;
     }
 
     public int getId() {
@@ -42,7 +42,20 @@ public final class GroupMember {
         return description;
     }
 
-    public boolean getAlreadyPaid() {
-        return alreadyPaid;
+    public boolean getActivePayments() {
+        return activePayments;
+    }
+
+    @Override
+    public String toString() {
+        return GroupMember.class.toString() + " = { " +
+                "id = " + id +
+                ", groupId = " + groupId +
+                ", name = " + name +
+                ", email = " + email +
+                ", contact = " + contact +
+                ", description = " + description +
+                ", activePayments = " + activePayments +
+                " }";
     }
 }

@@ -111,7 +111,7 @@ public class EditGroup extends AppCompatActivity {
 
             ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
             // do not allow to remove members who already paid something
-            if (member.getAlreadyPaid()) {
+            if (member.getActivePayments()) {
                 btnRemove.setVisibility(View.GONE);
             } else {
                 btnRemove.setOnClickListener(removeMemberListener);

@@ -16,24 +16,20 @@ public final class SummarySettleUpItem {
         return currencyId;
     }
 
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
-    }
-
     public String getCurrencyName() {
         return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
     }
 
     public double getSumToSettleUp() {
         return sumToSettleUp;
     }
 
-    public void setSumToSettleUp(double sumToSettleUp) {
-        this.sumToSettleUp = sumToSettleUp;
+    @Override
+    public String toString() {
+        return SummarySettleUpItem.class.toString() + " = { " +
+                "currencyId = " + currencyId +
+                ", currencyName = " + currencyName +
+                ", sumToSettleUp = " + sumToSettleUp +
+                " }";
     }
-
 }

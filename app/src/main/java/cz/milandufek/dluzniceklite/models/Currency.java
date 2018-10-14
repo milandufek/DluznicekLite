@@ -1,7 +1,7 @@
 package cz.milandufek.dluzniceklite.models;
 
 /**
- *  Class for object - currency
+ * Class for object - currency
  */
 public final class Currency {
 
@@ -24,7 +24,7 @@ public final class Currency {
     }
 
     /**
-     *  Getters & Setters
+     * Getters & Setters
      */
     public int getId() {
         return id;
@@ -60,7 +60,7 @@ public final class Currency {
         info.append(" : ");
         info.append(exchangeRate);
         info.append(" \u2022 ");
-        if (! this.country.equals("")) {
+        if (!this.country.equals("")) {
             info.append(" (");
             info.append(this.country);
             info.append(" )");
@@ -70,5 +70,19 @@ public final class Currency {
 
     public String getCountry() {
         return country;
+    }
+
+    @Override
+    public String toString() {
+        return  "Currency = { " +
+                " id = " + id +
+                ", country = " + country +
+                ", name = " + name +
+                ", quantity = " + quantity +
+                ", exchangeRate = " + exchangeRate +
+                ", baseCurrency = " + baseCurrency +
+                ", isBaseCurrency = " + isBaseCurrency +
+                ", isDeletable = " + isDeletable +
+                " }";
     }
 }

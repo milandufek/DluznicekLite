@@ -56,7 +56,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_EMAIL, groupMember.getName());
         values.put(_CONTACT, groupMember.getContact());
         values.put(_DESCRIPTION, groupMember.getDescription());
-        values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
+        values.put(_ACTIVE_PAYMETS, groupMember.getActivePayments());
 
         return MyDbHelper.getInstance(context).getWritableDatabase()
                 .insert(TABLE_NAME,null, values);
@@ -81,7 +81,7 @@ public class GroupMemberRepo implements BaseColumns {
                 values.put(_EMAIL, groupMembers.get(i).getEmail());
                 values.put(_CONTACT, groupMembers.get(i).getContact());
                 values.put(_DESCRIPTION, groupMembers.get(i).getDescription());
-                values.put(_ACTIVE_PAYMETS, groupMembers.get(i).getAlreadyPaid());
+                values.put(_ACTIVE_PAYMETS, groupMembers.get(i).getActivePayments());
 
                 if(db.insert(TABLE_NAME,null, values) > -1) {
                     rowsAffected++;
@@ -149,7 +149,7 @@ public class GroupMemberRepo implements BaseColumns {
         values.put(_EMAIL, groupMember.getName());
         values.put(_CONTACT, groupMember.getContact());
         values.put(_DESCRIPTION, groupMember.getDescription());
-        values.put(_ACTIVE_PAYMETS, groupMember.getAlreadyPaid());
+        values.put(_ACTIVE_PAYMETS, groupMember.getActivePayments());
 
         int update = MyDbHelper.getInstance(context).getWritableDatabase()
                 .update(TABLE_NAME, values, selection, selectionArgs);

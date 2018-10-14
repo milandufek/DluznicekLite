@@ -1,68 +1,42 @@
 package cz.milandufek.dluzniceklite.models;
 
-public class SettleUpTransaction {
+public final class SettleUpTransaction {
 
     private String from, to;
-    private Currency currency;
-    private int fromId, toId, currencyId;
+    private Currency activeCurrency;
+    private int fromId, toId;
     private double amount;
 
-    public SettleUpTransaction() {
+    public SettleUpTransaction(String from, int fromId, String to, int toId, double amount, Currency activeCurrency) {
+        this.from = from;
+        this.fromId = fromId;
+        this.to = to;
+        this.toId = toId;
+        this.amount = amount;
+        this.activeCurrency = activeCurrency;
     }
 
     public String getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
     public String getTo() {
         return to;
     }
 
-    public void setTo(String to) {
-        this.to = to;
-    }
-
     public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+        return activeCurrency;
     }
 
     public int getFromId() {
         return fromId;
     }
 
-    public void setFromId(int fromId) {
-        this.fromId = fromId;
-    }
-
     public int getToId() {
         return toId;
     }
 
-    public void setToId(int toId) {
-        this.toId = toId;
-    }
-
-    public int getCurrencyId() {
-        return currencyId;
-    }
-
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
-    }
-
     public double getAmount() {
         return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 }

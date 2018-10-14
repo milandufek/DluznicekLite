@@ -215,12 +215,13 @@ public class TransactionRepo implements BaseColumns {
         List<MemberBalance> memberBalances = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            MemberBalance memberBalance = new MemberBalance();
-            memberBalance.setGroupId(groupId);
-            memberBalance.setMemberId(cursor.getInt(0));
-            memberBalance.setMemberName(cursor.getString(1));
-            memberBalance.setBalance(cursor.getDouble(2));
-            memberBalances.add(memberBalance);
+            memberBalances.add(new MemberBalance(
+                    groupId,
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getDouble(2)
+            ));
+
         }
 
         return memberBalances;

@@ -6,9 +6,6 @@ public final class SummaryExpenseItem {
     private String currencyName;
     private double sumSpent;
 
-    public SummaryExpenseItem() {
-    }
-
     public SummaryExpenseItem(int currencyId, String currencyName, double sumSpent) {
         this.currencyId = currencyId;
         this.currencyName = currencyName;
@@ -25,5 +22,14 @@ public final class SummaryExpenseItem {
 
     public double getSumSpent() {
         return sumSpent;
+    }
+
+    @Override
+    public String toString() {
+        return SummaryExpenseItem.class.toString() + " = { " +
+                "currencyId = " + currencyId +
+                ", currencyName = " + currencyName +
+                ", sumSpent = " + sumSpent +
+                " }";
     }
 }

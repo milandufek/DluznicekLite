@@ -17,4 +17,12 @@ public final class SummaryTransactionItem {
     public double getAmount() {
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return SummaryTransactionItem.class.toString() + " = { " +
+                "memberName = " + memberName +
+                ", amount = " + amount +
+                " }";
+    }
 }

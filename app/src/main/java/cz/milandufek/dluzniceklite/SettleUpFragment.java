@@ -69,14 +69,14 @@ public class SettleUpFragment extends Fragment {
             double amount = CurrencyOperation.exchangeAmount((double) debt.get("amount"),
                     baseCurrency.getId(), activeCurrencyId);
 
-            SettleUpTransaction transaction = new SettleUpTransaction();
-                transaction.setFrom(from.getMemberName());
-                transaction.setFromId(from.getMemberId());
-                transaction.setTo(to.getMemberName());
-                transaction.setToId(to.getMemberId());
-                transaction.setAmount(amount);
-                transaction.setCurrency(activeCurrency);
-            transactions.add(transaction);
+            transactions.add(new SettleUpTransaction(
+                    from.getMemberName(),
+                    from.getMemberId(),
+                    to.getMemberName(),
+                    to.getMemberId(),
+                    amount,
+                    activeCurrency)
+            );
         }
 
         return transactions;

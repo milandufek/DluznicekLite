@@ -35,4 +35,14 @@ public class Group {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return Group.class.toString() + " { " +
+                "id = " + id +
+                ", name = " + name +
+                ", currency = " + currency +
+                ", description = " + description +
+                " }";
+    }
 }

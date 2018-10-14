@@ -4,11 +4,15 @@ import java.util.Comparator;
 
 public class MemberBalance {
 
-    private int groupId, memberId, currencyId;
+    private int groupId, memberId;
     private String memberName;
     private double balance;
 
-    public MemberBalance() {
+    public MemberBalance(int groupId, int memberId, String memberName, double balance) {
+        this.groupId = groupId;
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.balance = balance;
     }
 
     public static Comparator<MemberBalance> SortByBalance = (o1, o2) -> Double.compare(o1.getBalance(), o2.getBalance());
@@ -17,32 +21,12 @@ public class MemberBalance {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
-
     public int getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
-    }
-
-    public int getCurrencyId() {
-        return currencyId;
-    }
-
-    public void setCurrencyId(int currencyId) {
-        this.currencyId = currencyId;
-    }
-
     public String getMemberName() {
         return memberName;
-    }
-
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
     }
 
     public double getBalance() {
@@ -55,10 +39,11 @@ public class MemberBalance {
 
     @Override
     public String toString() {
-        return "[ gID = " + groupId + " ] " +
-                "[ mID = " + memberId + " ] " +
-                "[ cId = " + currencyId + " ] " +
-                "[ name = " + memberName + " ] " +
-                "[ balance = " + balance + " ] ";
+        return MemberBalance.class.toString() + " = { " +
+                "gID = " + groupId +
+                ",mID = " + memberId +
+                ",name = " + memberName +
+                ",balance = " + balance +
+                " }";
     }
 }
