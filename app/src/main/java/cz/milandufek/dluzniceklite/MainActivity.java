@@ -21,11 +21,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.facebook.stetho.Stetho;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,8 +53,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
-        toolbar.setTitle(getActiveGroupName());
         setSupportActionBar(toolbar);
+
+        // spinner with group names
+        //TextView toolbarTitle = findViewById(R.id.main_toolbar_title);
+
+        List<Group> groups = new GroupRepo().getAllGroups();
+        if (! groups.isEmpty()) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+            List<String> groupNames = new ArrayList<>();
+            List<Integer> groupIds = new ArrayList<>();
+            for (Group group : groups) {
+                groupIds.add(group.getId());
+                groupNames.add(group.getName());
+            }
+
+            final ArrayAdapter<String> groupAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_dropdown_item, groupNames);
+            Spinner selectTitle = findViewById(R.id.spinner_main_title);
+            selectTitle.setAdapter(groupAdapter);
+            selectTitle.setSelection(groupIds.indexOf(getActiveGroupId()));
+
+            selectTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    MyPreferences sp = new MyPreferences(getApplicationContext());
+                    if (sp.getActiveGroupId() != groupIds.get(position)) {
+                        sp.setActiveGroupId(groupIds.get(position));
+                        sp.setActiveGroupName(groupNames.get(position));
+                        refreshActivity();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
+        }
+
+
 
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = findViewById(R.id.ll_group_container);
@@ -69,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Setup view pager for tab fragments
+     *
      * @param viewPager
      */
     private void setupViewPager(ViewPager viewPager) {
@@ -86,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Get active from name from SharedPreferences
+     *
      * @return String
      */
     private String getActiveGroupName() {
@@ -93,22 +137,33 @@ public class MainActivity extends AppCompatActivity {
         return sp.getActiveGroupName();
     }
 
+    private int getActiveGroupId() {
+        MyPreferences sp = new MyPreferences(this);
+        return sp.getActiveGroupId();
+    }
+
+    private void refreshActivity() {
+        Intent newActivity = new Intent(this, MainActivity.class);
+        newActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.startActivity(newActivity);
+    }
+
     private void initCurrencies() {
         List<Currency> currencies = new ArrayList<>();
-        currencies.add(new Currency(0,"CZK","Česká Republika",
-                1,1,1,true,false));
-        currencies.add(new Currency(1,"USD","USA",
-                1,20,1,false,true));
-        currencies.add(new Currency(2,"EUR","EMU",
-                1,25,1,false,true));
-        currencies.add(new Currency(3,"DNG","Vietnam",
-                1000,0.97,1,false,true));
-        currencies.add(new Currency(4,"LKR","Srí Lanka",
-                7,7,1,false,true));
-        currencies.add(new Currency(5,"GPB","Velká Británie",
-                1,29.5,1,false,true));
-        currencies.add(new Currency(6,"ISK","Island",
-                100,20.5,1,false,true));
+        currencies.add(new Currency(0, "CZK", "Česká Republika",
+                1, 1, 1, true, false));
+        currencies.add(new Currency(1, "USD", "USA",
+                1, 20, 1, false, true));
+        currencies.add(new Currency(2, "EUR", "EMU",
+                1, 25, 1, false, true));
+        currencies.add(new Currency(3, "DNG", "Vietnam",
+                1000, 0.97, 1, false, true));
+        currencies.add(new Currency(4, "LKR", "Srí Lanka",
+                7, 7, 1, false, true));
+        currencies.add(new Currency(5, "GPB", "Velká Británie",
+                1, 29.5, 1, false, true));
+        currencies.add(new Currency(6, "ISK", "Island",
+                100, 20.5, 1, false, true));
         CurrencyRepo currencyRepo = new CurrencyRepo();
         for (Currency currency : currencies) {
             long result = currencyRepo.insertCurrency(currency);
@@ -128,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
         // insert groups & members
         String groupName = "Mololockove";
-        long groupId = groupRepo.insertGroup(new Group(0,groupName, 2, "Mock mock"));
-        String[] groupMembers = { "Mock", "Lock", "Nock", "Clock", "Qock", "Lolock" };
+        long groupId = groupRepo.insertGroup(new Group(0, groupName, 2, "Mock mock"));
+        String[] groupMembers = {"Mock", "Lock", "Nock", "Clock", "Qock", "Lolock"};
         Log.d(TAG, "refillTestData: group inserted: id = " + groupId);
         for (String member : groupMembers) {
             GroupMember groupMember = new GroupMember(0, (int) groupId, member, null, null, null, false);
@@ -143,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Inflate the menu
+     *
      * @param menu
      * @return boolean
      */
@@ -154,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * hHandle activity item from menu
+     *
      * @param item
      * @return selected item
      */
@@ -189,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
     }
 }

@@ -22,18 +22,28 @@
             android:layout_weight="1"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name">
+            app:title="@string/app_name"
+            android:focusable="true"
+            android:clickable="true">
 
-            <!-- TODO spinner to select/show active group -->
+            <!--<TextView-->
+                <!--android:id="@+id/main_toolbar_title"-->
+                <!--style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:text="XXX \u25BE"-->
+                <!--android:background="?attr/selectableItemBackground"/>-->
+
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_main_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:spinnerMode="dropdown">
+                android:popupTheme="@style/AppTheme.PopupOverlay"
+                android:spinnerMode="dialog">
             </android.support.v7.widget.AppCompatSpinner>
 
         </android.support.v7.widget.Toolbar>
-
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs_main_activity"
@@ -51,6 +61,7 @@
                 android:layout_height="wrap_content" />
 
         </android.support.design.widget.TabLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
@@ -68,13 +79,5 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:elevation="0dp"
         app:srcCompat="@android:drawable/ic_input_add" />
-
-    <!--<ProgressBar-->
-    <!--android:id="@+id/progressBar"-->
-    <!--android:theme="@style/Widget.AppCompat.ProgressBar"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:indeterminate="true" />-->
 
 </android.support.design.widget.CoordinatorLayout>
