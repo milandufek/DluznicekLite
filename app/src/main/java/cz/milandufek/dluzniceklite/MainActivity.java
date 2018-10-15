@@ -8,7 +8,7 @@ import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
-import cz.milandufek.dluzniceklite.utils.SectionsPageAdapter;
+import cz.milandufek.dluzniceklite.adapters.SectionsPageAdapter;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;

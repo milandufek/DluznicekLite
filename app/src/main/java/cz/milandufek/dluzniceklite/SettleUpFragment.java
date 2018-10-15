@@ -23,7 +23,7 @@ import cz.milandufek.dluzniceklite.models.SummarySettleUpItem;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
-import cz.milandufek.dluzniceklite.utils.SettleUpRVAdapter;
+import cz.milandufek.dluzniceklite.adapters.SettleUpRVAdapter;
 
 public class SettleUpFragment extends Fragment {
 

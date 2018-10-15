@@ -11,7 +11,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.utils.CurrencyRVAdapter;
+import cz.milandufek.dluzniceklite.adapters.CurrencyRVAdapter;
 
 public class ListCurrency extends AppCompatActivity {
 

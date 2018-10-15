@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.utils.ExpenseRVAdapter;
+import cz.milandufek.dluzniceklite.adapters.ExpenseRVAdapter;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class ListExpenseFragment extends Fragment {

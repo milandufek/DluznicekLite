@@ -17,7 +17,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.utils.GroupRVAdapter;
+import cz.milandufek.dluzniceklite.adapters.GroupRVAdapter;
 
 @Deprecated
 public class ListGroupFragment extends Fragment {

@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.utils;
+package cz.milandufek.dluzniceklite.adapters;
 
 import android.content.Context;
 import android.content.Intent;

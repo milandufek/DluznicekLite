@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.utils;
+package cz.milandufek.dluzniceklite.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -24,6 +24,7 @@ import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class GroupRVAdapter
         extends RecyclerView.Adapter<GroupRVAdapter.ViewHolder> {

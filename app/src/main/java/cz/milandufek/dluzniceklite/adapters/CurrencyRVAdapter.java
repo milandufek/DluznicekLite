@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.utils;
+package cz.milandufek.dluzniceklite.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

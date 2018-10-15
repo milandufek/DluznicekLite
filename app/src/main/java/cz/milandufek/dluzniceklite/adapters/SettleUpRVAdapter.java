@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.utils;
+package cz.milandufek.dluzniceklite.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,8 @@ import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
 import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.utils.MyDateTime;
+import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 
 public class SettleUpRVAdapter
