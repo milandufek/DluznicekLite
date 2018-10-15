@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite;
 
+import cz.milandufek.dluzniceklite.adapters.TitleSpinnerAdapter;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // spinner with group names
-        //TextView toolbarTitle = findViewById(R.id.main_toolbar_title);
 
         List<Group> groups = new GroupRepo().getAllGroups();
         if (! groups.isEmpty()) {
@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 groupNames.add(group.getName());
             }
 
-            final ArrayAdapter<String> groupAdapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_spinner_dropdown_item, groupNames);
+            final TitleSpinnerAdapter groupAdapter = new TitleSpinnerAdapter(this, groupNames);
             Spinner selectTitle = findViewById(R.id.spinner_main_title);
             selectTitle.setAdapter(groupAdapter);
             selectTitle.setSelection(groupIds.indexOf(getActiveGroupId()));
