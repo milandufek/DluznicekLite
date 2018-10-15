@@ -56,41 +56,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
-        // spinner with group names
-
-        List<Group> groups = new GroupRepo().getAllGroups();
-        if (! groups.isEmpty()) {
-            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
-            List<String> groupNames = new ArrayList<>();
-            List<Integer> groupIds = new ArrayList<>();
-            for (Group group : groups) {
-                groupIds.add(group.getId());
-                groupNames.add(group.getName());
-            }
-
-            final TitleSpinnerAdapter groupAdapter = new TitleSpinnerAdapter(this, groupNames);
-            Spinner selectTitle = findViewById(R.id.spinner_main_title);
-            selectTitle.setAdapter(groupAdapter);
-            selectTitle.setSelection(groupIds.indexOf(getActiveGroupId()));
-
-            selectTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    MyPreferences sp = new MyPreferences(getApplicationContext());
-                    if (sp.getActiveGroupId() != groupIds.get(position)) {
-                        sp.setActiveGroupId(groupIds.get(position));
-                        sp.setActiveGroupName(groupNames.get(position));
-                        refreshActivity();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) { }
-            });
-        }
-
-
+        // spinner with group names and set title
+        initToolbarTitleSpinner();
 
         // Set up the ViewPager with the sections adapter.
         ViewPager viewPager = findViewById(R.id.ll_group_container);
@@ -193,6 +160,40 @@ public class MainActivity extends AppCompatActivity {
         MyPreferences preferences = new MyPreferences(this);
         preferences.setActiveGroupId((int) groupId);
         preferences.setActiveGroupName(groupName);
+    }
+
+    private void initToolbarTitleSpinner() {
+        List<Group> groups = new GroupRepo().getAllGroups();
+        if (! groups.isEmpty()) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+
+            List<String> groupNames = new ArrayList<>();
+            List<Integer> groupIds = new ArrayList<>();
+            for (Group group : groups) {
+                groupIds.add(group.getId());
+                groupNames.add(group.getName());
+            }
+
+            final TitleSpinnerAdapter groupAdapter = new TitleSpinnerAdapter(this, groupNames);
+            Spinner selectTitle = findViewById(R.id.spinner_main_title);
+            selectTitle.setAdapter(groupAdapter);
+            selectTitle.setSelection(groupIds.indexOf(getActiveGroupId()));
+
+            selectTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    MyPreferences sp = new MyPreferences(getApplicationContext());
+                    if (sp.getActiveGroupId() != groupIds.get(position)) {
+                        sp.setActiveGroupId(groupIds.get(position));
+                        sp.setActiveGroupName(groupNames.get(position));
+                        refreshActivity();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
+        }
     }
 
     /**
