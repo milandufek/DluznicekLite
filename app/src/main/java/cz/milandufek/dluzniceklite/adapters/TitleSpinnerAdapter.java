@@ -13,6 +13,10 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.R;
 
+/**
+ * Custom array adapter for title spinner using custom layout on main toolbar.
+ * Allow to select active group from the list of available groups.
+ */
 public class TitleSpinnerAdapter extends ArrayAdapter<String> {
 
     private static final int CLOSED = 0;
