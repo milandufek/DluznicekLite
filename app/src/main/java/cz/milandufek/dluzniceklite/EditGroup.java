@@ -25,6 +25,7 @@ import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
 import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 
 public class EditGroup extends AppCompatActivity {
 
@@ -49,6 +50,8 @@ public class EditGroup extends AppCompatActivity {
         setContentView(R.layout.activity_add_group);
 
         groupId = getIntent().getExtras().getInt("GROUP_ID");
+
+        setMembersWithActivePayments(groupId);
 
         Group group = new GroupRepo().getGroup(groupId);
 
@@ -109,9 +112,8 @@ public class EditGroup extends AppCompatActivity {
             };
 
             ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
-            // TODO do not allow to remove members who already paid something
             if (member.getActivePayments()) {
-                btnRemove.setVisibility(View.GONE);
+                btnRemove.setVisibility(View.INVISIBLE);
             } else {
                 btnRemove.setOnClickListener(removeMemberListener);
             }
@@ -120,9 +122,7 @@ public class EditGroup extends AppCompatActivity {
         }
 
         Button btnSave = findViewById(R.id.btn_group_add);
-        btnSave.setOnClickListener(v -> {
-            updateGroup(getGroup());
-        });
+        btnSave.setOnClickListener(v -> updateGroup(getGroup()));
     }
 
 
@@ -163,6 +163,12 @@ public class EditGroup extends AppCompatActivity {
             showText(R.string.saved);
             goBackToParentActivity();
         }
+    }
+
+    private void setMembersWithActivePayments(int groupId) {
+        new GroupMemberRepo()
+                .setMembersAsActiveDebtors(new TransactionRepo()
+                    .getActivePayersAndDebtors(groupId));
     }
 
     private void goBackToParentActivity() {

@@ -169,4 +169,35 @@ public class GroupMemberRepo implements BaseColumns {
         return MyDbHelper.getInstance(context).getWritableDatabase()
                 .delete(TABLE_NAME, selection, selectionArgs);
     }
+
+    public long setMembersAsActiveDebtors(List<Integer> membersIds) {
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
+
+        String selection = _ID + " = ?";
+
+
+        int rowsAffected = 0;
+        try {
+            db.beginTransaction();
+            for (int id : membersIds) {
+                String[] selectionArgs = { String.valueOf(id) };
+                ContentValues values = new ContentValues();
+                values.put(_ACTIVE_PAYMETS, MyNumbers.booleanToNumber(true));
+                if(db.update(TABLE_NAME, values, selection, selectionArgs) > -1) {
+                    rowsAffected++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
+
+        if (rowsAffected == membersIds.size()) {
+            return rowsAffected;
+        } else {
+            return -1;
+        }
+    }
 }

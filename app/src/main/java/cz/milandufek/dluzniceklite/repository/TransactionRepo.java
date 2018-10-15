@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.MemberBalance;
 import cz.milandufek.dluzniceklite.models.SummaryTransactionItem;
 import cz.milandufek.dluzniceklite.models.Transaction;
@@ -202,7 +203,7 @@ public class TransactionRepo implements BaseColumns {
                 CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
                 " = " +
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._CURRENCY_ID +
-        " WHERE " +
+                " WHERE " +
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
                 " = " +
                 groupId +
@@ -226,5 +227,32 @@ public class TransactionRepo implements BaseColumns {
         if (memberBalances.size() > 0) { cursor.close(); }
 
         return memberBalances;
+    }
+
+    public List<Integer> getActivePayersAndDebtors(int groupId) {
+        SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
+        String query = "SELECT DISTINCT " + _DEBTOR_ID +
+                " FROM " + TABLE_NAME +
+                " INNER JOIN " + ExpenseRepo.TABLE_NAME +
+                " ON " +
+                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
+                " = " +
+                TransactionRepo.TABLE_NAME + "." + TransactionRepo._DEBTOR_ID +
+                " WHERE " +
+                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
+                " = " + groupId +
+                ";";
+
+        Cursor cursor = db.rawQuery(query, null, null);
+
+        List<Integer> activeMemberIds = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            activeMemberIds.add(cursor.getInt(cursor.getColumnIndexOrThrow(_DEBTOR_ID)));
+        }
+
+        if (activeMemberIds.size() > 0) { cursor.close(); }
+
+        return activeMemberIds;
     }
 }
