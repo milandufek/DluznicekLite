@@ -110,7 +110,6 @@ public class EditGroup extends AppCompatActivity {
                 ((LinearLayout) addView.getParent()).removeView(addView);
             };
 
-            // TODO nevraci spravne membery
             ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
             if (membersWithActivePaymets.contains(member.getId())) {
                 btnRemove.setVisibility(View.INVISIBLE);
