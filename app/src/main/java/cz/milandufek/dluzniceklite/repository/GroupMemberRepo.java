@@ -43,11 +43,6 @@ public class GroupMemberRepo implements BaseColumns {
                 "ON DELETE CASCADE " +
             ")";
 
-    /**
-     * Insert group member into database
-     * @param groupMember
-     * @return row id
-     */
     public long insertGroupMember(GroupMember groupMember) {
         ContentValues values = new ContentValues();
         // _ID
@@ -62,11 +57,6 @@ public class GroupMemberRepo implements BaseColumns {
                 .insert(TABLE_NAME,null, values);
     }
 
-    /**
-     * Insert multiple group member into database
-     * @param groupMembers
-     * @return number of rows affected
-     */
     public long insertGroupMembers(List<GroupMember> groupMembers) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
         int rowsAffected = 0;
@@ -101,11 +91,6 @@ public class GroupMemberRepo implements BaseColumns {
         }
     }
 
-    /**
-     * Retrieve all data
-     * @param groupId
-     * @return List of group members
-     */
     public List<GroupMember> getAllGroupMembers(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = { String.valueOf(groupId) };
@@ -132,12 +117,6 @@ public class GroupMemberRepo implements BaseColumns {
         return members;
     }
 
-    /**
-     * Update a groupMember by given id ID
-     * Replace the groupMember row with @param
-     * @param groupMember
-     * @return true if success
-     */
     public boolean updateGroupMember(GroupMember groupMember) {
         String selection = _ID + " = ?";
         int id = groupMember.getId();
@@ -157,47 +136,11 @@ public class GroupMemberRepo implements BaseColumns {
         return update == 1;
     }
 
-    /**
-     * Delete item group member from database
-     * @param id
-     * @return
-     */
     public int deleteGroupMember(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
 
         return MyDbHelper.getInstance(context).getWritableDatabase()
                 .delete(TABLE_NAME, selection, selectionArgs);
-    }
-
-    public long setMembersAsActiveDebtors(List<Integer> membersIds) {
-        SQLiteDatabase db = MyDbHelper.getInstance(context).getWritableDatabase();
-
-        String selection = _ID + " = ?";
-
-
-        int rowsAffected = 0;
-        try {
-            db.beginTransaction();
-            for (int id : membersIds) {
-                String[] selectionArgs = { String.valueOf(id) };
-                ContentValues values = new ContentValues();
-                values.put(_ACTIVE_PAYMETS, MyNumbers.booleanToNumber(true));
-                if(db.update(TABLE_NAME, values, selection, selectionArgs) > -1) {
-                    rowsAffected++;
-                }
-            }
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-        } finally {
-            db.endTransaction();
-        }
-
-        if (rowsAffected == membersIds.size()) {
-            return rowsAffected;
-        } else {
-            return -1;
-        }
     }
 }

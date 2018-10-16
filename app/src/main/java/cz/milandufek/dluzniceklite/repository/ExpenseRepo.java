@@ -50,12 +50,6 @@ public class ExpenseRepo implements BaseColumns {
             "ON DELETE CASCADE " +
             ");";
 
-    /**
-     * Insert expense into database
-     *
-     * @param expense
-     * @return row id
-     */
     public long insertExpense(Expense expense) {
         ContentValues values = new ContentValues();
         // _ID
@@ -72,11 +66,6 @@ public class ExpenseRepo implements BaseColumns {
                 .insert(TABLE_NAME, null, values);
     }
 
-    /**
-     * Retrieve data
-     * @param groupId
-     * @return expenses of group
-     */
     public List<Expense> selectExpenses(int groupId) {
         String selection = _GROUP_ID + " = ?";
         String[] selectionArgs = {String.valueOf(groupId)};
@@ -111,11 +100,6 @@ public class ExpenseRepo implements BaseColumns {
         return expense;
     }
 
-    /**
-     * Delete expense from database
-     * @param id
-     * @return
-     */
     public int deleteExpense(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
@@ -142,10 +126,6 @@ public class ExpenseRepo implements BaseColumns {
         return result == 1;
     }
 
-    /**
-     * Select all expenses for group in format suitable for ExpenseItem
-     * @param groupId
-     */
     public List<ExpenseItem> getAllExpenseItems(int groupId) {
         String query = "SELECT " +
                 TABLE_NAME + "." + _ID + ", " +

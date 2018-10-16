@@ -40,11 +40,6 @@ public class CurrencyRepo implements BaseColumns {
             _IS_DELETABLE + " INTEGER " +
             ");";
 
-    /**
-     * Insert a new row_currency into the database
-     * @param currency
-     * @return row id or -1 if error
-     */
     public long insertCurrency(Currency currency) {
         ContentValues values = new ContentValues();
         // _ID
@@ -61,11 +56,6 @@ public class CurrencyRepo implements BaseColumns {
                 .insert(TABLE_NAME, null, values);
     }
 
-    /**
-     * Retrieve all data from row_currency table
-     *
-     * @return List<Currency>
-     */
     public List<Currency> getAllCurrency() {
         Cursor cursor = MyDbHelper.getInstance(context)
                 .getReadableDatabase()
@@ -79,11 +69,6 @@ public class CurrencyRepo implements BaseColumns {
         return currency;
     }
 
-    /**
-     * Select currency based on its id
-     * @param id
-     * @return
-     */
     public Currency getCurrency(int id) {
         String[] selectionArgs = {String.valueOf(id)};
 
@@ -118,12 +103,6 @@ public class CurrencyRepo implements BaseColumns {
         return currency;
     }
 
-    /**
-     * Update a item_currency by given item_currency COL_ID
-     * Replace the current row_currency with @param 'contact'
-     * @param id
-     * @return
-     */
     public int deleteCurrency(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };
@@ -132,11 +111,6 @@ public class CurrencyRepo implements BaseColumns {
                 .delete(TABLE_NAME, selection, selectionArgs);
     }
 
-    /**
-     * Update given currency in DB
-     * @param currency
-     * @return true if success
-     */
     public boolean updateCurrency(Currency currency) {
         ContentValues values = new ContentValues();
         values.put(_NAME, currency.getName());
@@ -156,8 +130,10 @@ public class CurrencyRepo implements BaseColumns {
 
     /**
      * Check if currency with @param name exists in the database
-     * @param name
+     * @param
+     *      currency CODE
      * @return
+     *      true if yes
      */
     public boolean checkIfCurrencyExists(String name) {
         String[] column = { _NAME };

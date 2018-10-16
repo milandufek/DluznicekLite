@@ -44,11 +44,6 @@ public class GroupRepo implements BaseColumns {
         );
     }
 
-    /**
-     * Insert a new item_group into the database
-     * @param group
-     * @return row id or -1 if error
-     */
     public long insertGroup(Group group) {
         Log.d(TAG, "insertGroup: inserting");
         ContentValues values = new ContentValues();
@@ -61,10 +56,6 @@ public class GroupRepo implements BaseColumns {
                 .insert(TABLE_NAME ,null, values);
     }
 
-    /**
-     * @param group
-     * @return reue if success
-     */
     public boolean updateGroup(Group group) {
         ContentValues values = new ContentValues();
         int id = group.getId();
@@ -78,10 +69,6 @@ public class GroupRepo implements BaseColumns {
         return update == 1;
     }
 
-    /**
-     * Select all groups from database
-     * @return
-     */
     public List<Group> getAllGroups() {
         List<Group> groups = new ArrayList<>();
 
@@ -112,11 +99,6 @@ public class GroupRepo implements BaseColumns {
         return group;
     }
 
-    /**
-     * Delete item_group from database
-     * @param id
-     * @return number of row affected
-     */
     public int deleteGroup(int id) {
         String selection = _ID + " = ?";
         String[] selectionArgs = { String.valueOf(id) };

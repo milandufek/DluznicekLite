@@ -44,8 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapWords"
-            android:layout_below="@+id/tv_currency_country"
-            android:autofillHints="" />
+            android:layout_below="@+id/tv_currency_country" />
 
         <TextView
             android:id="@+id/tv_currency_quantity"
@@ -61,8 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_currency_quantity"
             android:inputType="number"
-            android:text="1"
-            android:autofillHints="" />
+            android:text="1" />
 
         <TextView
             android:id="@+id/tv_currency_exchrate"
@@ -77,8 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_currency_exchrate"
-            android:inputType="numberDecimal"
-            android:autofillHints="" />
+            android:inputType="numberDecimal" />
 
         <Button
             android:id="@+id/btn_currency_add"
