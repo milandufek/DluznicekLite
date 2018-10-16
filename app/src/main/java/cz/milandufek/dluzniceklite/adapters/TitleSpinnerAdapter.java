@@ -49,11 +49,10 @@ public class TitleSpinnerAdapter extends ArrayAdapter<String> {
 
         if (currentItem != null) { toolbarTitle.setText(currentItem); }
 
-        if (state == EXPANDED) {
+        if (state == EXPANDED)
             toolbarTitle.setTextColor(getContext().getResources().getColor(R.color.colorBlack));
-        } else {
+        else
             toolbarTitle.setTextColor(getContext().getResources().getColor(R.color.colorWhite));
-        }
 
         return convertView;
     }
