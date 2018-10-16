@@ -229,7 +229,7 @@ public class TransactionRepo implements BaseColumns {
         return memberBalances;
     }
 
-    public List<Integer> getActivePayersAndDebtors(int groupId) {
+    public List<Integer> getActivePayersAndDebtorIds(int groupId) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT DISTINCT " + _DEBTOR_ID +
                 " FROM " + TABLE_NAME +
@@ -237,7 +237,7 @@ public class TransactionRepo implements BaseColumns {
                 " ON " +
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
                 " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._DEBTOR_ID +
+                TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
                 " WHERE " +
                 ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
                 " = " + groupId +

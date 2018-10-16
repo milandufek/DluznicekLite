@@ -51,8 +51,6 @@ public class EditGroup extends AppCompatActivity {
 
         groupId = getIntent().getExtras().getInt("GROUP_ID");
 
-        setMembersWithActivePayments(groupId);
-
         Group group = new GroupRepo().getGroup(groupId);
 
         groupName = findViewById(R.id.et_group_name2add);
@@ -100,6 +98,7 @@ public class EditGroup extends AppCompatActivity {
         });
 
         // add exiting members
+        List<Integer> membersWithActivePaymets = new TransactionRepo().getActivePayersAndDebtorIds(groupId);
         for (GroupMember member : groupMembers) {
             @SuppressLint("InflateParams")
             final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
@@ -111,8 +110,9 @@ public class EditGroup extends AppCompatActivity {
                 ((LinearLayout) addView.getParent()).removeView(addView);
             };
 
+            // TODO nevraci spravne membery
             ImageButton btnRemove = addView.findViewById(R.id.btn_member_remove);
-            if (member.getActivePayments()) {
+            if (membersWithActivePaymets.contains(member.getId())) {
                 btnRemove.setVisibility(View.INVISIBLE);
             } else {
                 btnRemove.setOnClickListener(removeMemberListener);
@@ -163,12 +163,6 @@ public class EditGroup extends AppCompatActivity {
             showText(R.string.saved);
             goBackToParentActivity();
         }
-    }
-
-    private void setMembersWithActivePayments(int groupId) {
-        new GroupMemberRepo()
-                .setMembersAsActiveDebtors(new TransactionRepo()
-                    .getActivePayersAndDebtors(groupId));
     }
 
     private void goBackToParentActivity() {
