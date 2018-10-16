@@ -13,7 +13,7 @@ import cz.milandufek.dluzniceklite.repository.TransactionRepo;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
-public class Summary {
+class Summary {
 
     private CurrencyRepo sqlCurrency = new CurrencyRepo();
 
@@ -27,10 +27,9 @@ public class Summary {
 
     SummarySettleUpItem initSummarySettleUp(Context context) {
         MyPreferences sp = new MyPreferences(context);
-        int groupId = sp.getActiveGroupId();
         int currencyId = sp.getActiveGroupCurrencyId();
 
-        List<MemberBalance> memberBalances = new TransactionRepo().getBalances(groupId);
+        List<MemberBalance> memberBalances = new TransactionRepo().getBalances(sp.getActiveGroupId());
 
         double sumAmountInBaseCurrency = 0;
         for(MemberBalance memberBalance : memberBalances) {
@@ -40,7 +39,7 @@ public class Summary {
 
         int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         String currencyName = sqlCurrency.getCurrency(currencyId).getName();
-        double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
+        double sumAmount = CurrencyOperations.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, currencyId);
         if (sumAmount <= DebtCalculator.TOLERANCE)
             sumAmount = 0;
 

@@ -36,9 +36,6 @@ public class ListCurrency extends AppCompatActivity {
         });
     }
 
-    /**
-     * Setup RecyclerView
-     */
     private void initRecyclerView() {
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
 

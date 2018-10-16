@@ -66,7 +66,7 @@ public class SettleUpFragment extends Fragment {
         for (HashMap debt : debts) {
             MemberBalance from = (MemberBalance) debt.get("from");
             MemberBalance to = (MemberBalance) debt.get("to");
-            double amount = CurrencyOperation.exchangeAmount((double) debt.get("amount"),
+            double amount = CurrencyOperations.exchangeAmount((double) debt.get("amount"),
                     baseCurrency.getId(), activeCurrencyId);
 
             transactions.add(new SettleUpTransaction(

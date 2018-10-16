@@ -124,7 +124,6 @@ public class EditGroup extends AppCompatActivity {
         btnSave.setOnClickListener(v -> updateGroup(getGroup()));
     }
 
-
     private void setupSpinnerWithCurrencies() {
         List<Currency> currencies = new CurrencyRepo().getAllCurrency();
         for (Currency currency : currencies) {

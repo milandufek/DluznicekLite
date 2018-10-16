@@ -4,11 +4,11 @@ import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
-public class CurrencyOperation {
+public class CurrencyOperations {
 
-    private static final String TAG = CurrencyOperation.class.toString();
+    private static final String TAG = CurrencyOperations.class.toString();
 
-    private CurrencyOperation() {
+    private CurrencyOperations() {
     }
 
     public static double exchangeAmount(double amount, int originCurrencyId, int newCurrencyId) {

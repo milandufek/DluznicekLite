@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.CurrencyOperation;
+import cz.milandufek.dluzniceklite.CurrencyOperations;
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
 import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
@@ -232,7 +232,7 @@ public class ExpenseRepo implements BaseColumns {
         CurrencyRepo sqlCurrency = new CurrencyRepo();
         String currencyName = sqlCurrency.getCurrency(activeGroupCurrencyId).getName();
         int baseCurrency = sqlCurrency.getBaseCurrency().getId();
-        double sumAmount = CurrencyOperation.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, activeGroupCurrencyId);
+        double sumAmount = CurrencyOperations.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, activeGroupCurrencyId);
         if (sumAmount <= DebtCalculator.TOLERANCE) { sumAmount = 0; }
 
         if (iterations > 0) { cursor.close(); }
