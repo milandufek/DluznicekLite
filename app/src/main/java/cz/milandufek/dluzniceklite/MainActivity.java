@@ -4,9 +4,9 @@ import cz.milandufek.dluzniceklite.adapters.TitleSpinnerAdapter;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.adapters.SectionsPageAdapter;
@@ -24,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.facebook.stetho.Stetho;
@@ -120,31 +119,31 @@ public class MainActivity extends AppCompatActivity {
                 1, 29.5, 1, false, true));
         currencies.add(new Currency(6, "ISK", "Island",
                 100, 20.5, 1, false, true));
-        CurrencyRepo currencyRepo = new CurrencyRepo();
+        CurrencySql currencySql = new CurrencySql();
         for (Currency currency : currencies) {
-            long result = currencyRepo.insertCurrency(currency);
+            long result = currencySql.insertCurrency(currency);
             Log.d(TAG, "initCurrencies: inserting currency ID: " + result);
         }
     }
 
     private void refillTestData() {
-        GroupRepo groupRepo = new GroupRepo();
-        GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
+        GroupSql groupSql = new GroupSql();
+        GroupMemberSql groupMemberSql = new GroupMemberSql();
 
         // delete all groups
-        List<Group> groups = groupRepo.getAllGroups();
+        List<Group> groups = groupSql.getAllGroups();
         for (Group group : groups) {
-            groupRepo.deleteGroup(group.getId());
+            groupSql.deleteGroup(group.getId());
         }
 
         // insert groups & members
         String groupName = "Mololockove";
-        long groupId = groupRepo.insertGroup(new Group(0, groupName, 2, "Mock mock"));
+        long groupId = groupSql.insertGroup(new Group(0, groupName, 2, "Mock mock"));
         String[] groupMembers = {"Mock", "Lock", "Nock", "Clock", "Qock", "Lolock"};
         Log.d(TAG, "refillTestData: group inserted: id = " + groupId);
         for (String member : groupMembers) {
             GroupMember groupMember = new GroupMember(0, (int) groupId, member, null, null, null, false);
-            groupMemberRepo.insertGroupMember(groupMember);
+            groupMemberSql.insertGroupMember(groupMember);
         }
 
         MyPreferences preferences = new MyPreferences(this);
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbarTitleSpinner() {
-        List<Group> groups = new GroupRepo().getAllGroups();
+        List<Group> groups = new GroupSql().getAllGroups();
         if (! groups.isEmpty()) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 

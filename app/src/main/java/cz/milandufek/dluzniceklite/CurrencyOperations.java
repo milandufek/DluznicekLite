@@ -1,7 +1,7 @@
 package cz.milandufek.dluzniceklite;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
 public class CurrencyOperations {
@@ -13,7 +13,7 @@ public class CurrencyOperations {
 
     public static double exchangeAmount(double amount, int originCurrencyId, int newCurrencyId) {
 
-        CurrencyRepo sql = new CurrencyRepo();
+        CurrencySql sql = new CurrencySql();
         double exchangedAmount;
 
         if (newCurrencyId == sql.getBaseCurrency().getId()) {

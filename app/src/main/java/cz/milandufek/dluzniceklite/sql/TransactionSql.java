@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.repository;
+package cz.milandufek.dluzniceklite.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,15 +10,14 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.MemberBalance;
 import cz.milandufek.dluzniceklite.models.SummaryTransactionItem;
 import cz.milandufek.dluzniceklite.models.Transaction;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
-public class TransactionRepo implements BaseColumns {
-    private static final String TAG = "TransactionRepo";
+public class TransactionSql implements BaseColumns {
+    private static final String TAG = "TransactionSql";
 
     private Context context;
 
@@ -38,10 +37,10 @@ public class TransactionRepo implements BaseColumns {
             _AMOUNT + " FLOAT NOT NULL, " +
             _SETTLEUP_TRANSACTION + " INTEGER DEFAULT NULL, " +
                 "FOREIGN KEY (" + _DEBTOR_ID + " ) " +
-                "REFERENCES " + GroupMemberRepo.TABLE_NAME + "(" + GroupMemberRepo._ID + ") " +
+                "REFERENCES " + GroupMemberSql.TABLE_NAME + "(" + GroupMemberSql._ID + ") " +
                 "ON DELETE CASCADE, " +
                 "FOREIGN KEY (" + _EXPENSE_ID + " ) " +
-                "REFERENCES " + ExpenseRepo.TABLE_NAME + "(" + ExpenseRepo._ID + ") " +
+                "REFERENCES " + ExpenseSql.TABLE_NAME + "(" + ExpenseSql._ID + ") " +
                 "ON DELETE CASCADE" +
             ");";
 
@@ -136,10 +135,10 @@ public class TransactionRepo implements BaseColumns {
     public List<SummaryTransactionItem> getTransactionsForExpense(int expenseId) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT "
-                + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " + _AMOUNT +
+                + GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._NAME + ", " + _AMOUNT +
                 " FROM " + TABLE_NAME +
-                " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
-                " ON " + _DEBTOR_ID + " = " + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
+                " INNER JOIN " + GroupMemberSql.TABLE_NAME +
+                " ON " + _DEBTOR_ID + " = " + GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._ID +
                 " WHERE " + _EXPENSE_ID + " = " + expenseId +
                 " AND " + _AMOUNT + " >= " + 0 +
                 ";";
@@ -149,7 +148,7 @@ public class TransactionRepo implements BaseColumns {
         List<SummaryTransactionItem> transactions = new ArrayList<>();
         while (cursor.moveToNext()) {
             SummaryTransactionItem item = new SummaryTransactionItem(
-                cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberRepo._NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(GroupMemberSql._NAME)),
                 cursor.getDouble(cursor.getColumnIndexOrThrow(_AMOUNT))
             );
             transactions.add(item);
@@ -178,37 +177,37 @@ public class TransactionRepo implements BaseColumns {
     public List<MemberBalance> getBalances(int groupId) {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT " +
-                TransactionRepo._DEBTOR_ID + ", " +
-                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + ", " +
+                TransactionSql._DEBTOR_ID + ", " +
+                GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._NAME + ", " +
                 "SUM(" +
-                    TransactionRepo._AMOUNT +
+                    TransactionSql._AMOUNT +
                     " * " +
-                    CurrencyRepo._EXCHANGE_RATE +
+                    CurrencySql._EXCHANGE_RATE +
                     " / " +
-                    CurrencyRepo._QUANTITY +
+                    CurrencySql._QUANTITY +
                 ")" + " AS balance " +
-                " FROM " + TransactionRepo.TABLE_NAME +
-                " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
+                " FROM " + TransactionSql.TABLE_NAME +
+                " INNER JOIN " + GroupMemberSql.TABLE_NAME +
                 " ON " +
-                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
+                GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._ID +
                 " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._DEBTOR_ID +
-                " INNER JOIN " + ExpenseRepo.TABLE_NAME +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._DEBTOR_ID +
+                " INNER JOIN " + ExpenseSql.TABLE_NAME +
                 " ON " +
-                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
+                ExpenseSql.TABLE_NAME + "." + ExpenseSql._ID +
                 " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
-                " INNER JOIN " + CurrencyRepo.TABLE_NAME +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._EXPENSE_ID +
+                " INNER JOIN " + CurrencySql.TABLE_NAME +
                 " ON " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._ID +
                 " = " +
-                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._CURRENCY_ID +
+                ExpenseSql.TABLE_NAME + "." + ExpenseSql._CURRENCY_ID +
                 " WHERE " +
-                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
+                ExpenseSql.TABLE_NAME + "." + ExpenseSql._GROUP_ID +
                 " = " +
                 groupId +
-                " GROUP BY " + TransactionRepo._DEBTOR_ID +
-                " ORDER BY " + TransactionRepo._DEBTOR_ID +
+                " GROUP BY " + TransactionSql._DEBTOR_ID +
+                " ORDER BY " + TransactionSql._DEBTOR_ID +
                 ";";
         Log.d(TAG, "query: " + query);
 
@@ -233,13 +232,13 @@ public class TransactionRepo implements BaseColumns {
         SQLiteDatabase db = MyDbHelper.getInstance(context).getReadableDatabase();
         String query = "SELECT DISTINCT " + _DEBTOR_ID +
                 " FROM " + TABLE_NAME +
-                " INNER JOIN " + ExpenseRepo.TABLE_NAME +
+                " INNER JOIN " + ExpenseSql.TABLE_NAME +
                 " ON " +
-                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._ID +
+                ExpenseSql.TABLE_NAME + "." + ExpenseSql._ID +
                 " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._EXPENSE_ID +
                 " WHERE " +
-                ExpenseRepo.TABLE_NAME + "." + ExpenseRepo._GROUP_ID +
+                ExpenseSql.TABLE_NAME + "." + ExpenseSql._GROUP_ID +
                 " = " + groupId +
                 ";";
 

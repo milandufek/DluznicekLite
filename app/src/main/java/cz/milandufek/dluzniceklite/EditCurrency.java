@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 
 public class EditCurrency extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class EditCurrency extends AppCompatActivity {
 
         int id = getIntent().getExtras().getInt("CURRENCY_ID");
 
-        Currency currency = new CurrencyRepo().getCurrency(id);
+        Currency currency = new CurrencySql().getCurrency(id);
 
         EditText name = findViewById(R.id.et_currency_name);
         EditText country = findViewById(R.id.et_currency_country);

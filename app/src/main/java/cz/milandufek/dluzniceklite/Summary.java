@@ -7,29 +7,29 @@ import java.util.List;
 import cz.milandufek.dluzniceklite.models.MemberBalance;
 import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
 import cz.milandufek.dluzniceklite.models.SummarySettleUpItem;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 class Summary {
 
-    private CurrencyRepo sqlCurrency = new CurrencyRepo();
+    private CurrencySql sqlCurrency = new CurrencySql();
 
     SummaryExpenseItem initSummaryExpense(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int groupId = sp.getActiveGroupId();
         int currencyId = sp.getActiveGroupCurrencyId();
 
-        return new ExpenseRepo().selectTotalSpent(groupId, currencyId, false);
+        return new ExpenseSql().selectTotalSpent(groupId, currencyId, false);
     }
 
     SummarySettleUpItem initSummarySettleUp(Context context) {
         MyPreferences sp = new MyPreferences(context);
         int currencyId = sp.getActiveGroupCurrencyId();
 
-        List<MemberBalance> memberBalances = new TransactionRepo().getBalances(sp.getActiveGroupId());
+        List<MemberBalance> memberBalances = new TransactionSql().getBalances(sp.getActiveGroupId());
 
         double sumAmountInBaseCurrency = 0;
         for(MemberBalance memberBalance : memberBalances) {

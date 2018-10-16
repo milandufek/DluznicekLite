@@ -37,10 +37,10 @@ import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.models.Transaction;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
@@ -156,7 +156,7 @@ public class AddExpense extends AppCompatActivity {
      */
     private void selectAllGroupMembers() {
         int groupId = new MyPreferences(context).getActiveGroupId();
-        List<GroupMember> allGroupMembers = new GroupMemberRepo().getAllGroupMembers(groupId);
+        List<GroupMember> allGroupMembers = new GroupMemberSql().getAllGroupMembers(groupId);
         for (GroupMember groupMember : allGroupMembers) {
             memberIds.add(groupMember.getId());
             memberNames.add(groupMember.getName());
@@ -189,7 +189,7 @@ public class AddExpense extends AppCompatActivity {
         final List<Integer> currencyIds = new ArrayList<>();
         final List<String> currencyNames = new ArrayList<>();
 
-        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrency();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());
@@ -709,8 +709,8 @@ public class AddExpense extends AppCompatActivity {
                 dateDb,
                 timeDb);
 
-        ExpenseRepo expenseRepo = new ExpenseRepo();
-        long newExpenseId = expenseRepo.insertExpense(expense);
+        ExpenseSql expenseSql = new ExpenseSql();
+        long newExpenseId = expenseSql.insertExpense(expense);
         List<Transaction> transactions = new ArrayList<>();
         double expensePerMember;
         CheckBox willPay;
@@ -752,8 +752,8 @@ public class AddExpense extends AppCompatActivity {
 
         transactions.add(transaction);
 
-        TransactionRepo transactionRepo = new TransactionRepo();
-        long resultInsertTransaction = transactionRepo.insertTransactions(transactions);
+        TransactionSql transactionSql = new TransactionSql();
+        long resultInsertTransaction = transactionSql.insertTransactions(transactions);
 
         return resultInsertTransaction > -1;
     }

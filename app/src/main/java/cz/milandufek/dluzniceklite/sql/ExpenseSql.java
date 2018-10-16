@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.repository;
+package cz.milandufek.dluzniceklite.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,9 +17,9 @@ import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
-public class ExpenseRepo implements BaseColumns {
+public class ExpenseSql implements BaseColumns {
 
-    private static final String TAG = "ExpenseRepo";
+    private static final String TAG = "ExpenseSql";
 
     private Context context;
 
@@ -43,10 +43,10 @@ public class ExpenseRepo implements BaseColumns {
             _DATE + " TEXT, " +
             _TIME + " TEXT, " +
             "FOREIGN KEY ( " + _GROUP_ID + " ) " +
-            "REFERENCES " + GroupRepo.TABLE_NAME + "(" + GroupRepo._ID + ") " +
+            "REFERENCES " + GroupSql.TABLE_NAME + "(" + GroupSql._ID + ") " +
             "ON DELETE CASCADE, " +
             "FOREIGN KEY ( " + _CURRENCY_ID + " ) " +
-            "REFERENCES " + CurrencyRepo.TABLE_NAME + "( " + CurrencyRepo._ID + " ) " +
+            "REFERENCES " + CurrencySql.TABLE_NAME + "( " + CurrencySql._ID + " ) " +
             "ON DELETE CASCADE " +
             ");";
 
@@ -130,14 +130,14 @@ public class ExpenseRepo implements BaseColumns {
         String query = "SELECT " +
                 TABLE_NAME + "." + _ID + ", " +
                 _REASON + ", " +
-                GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._NAME + " AS PAYER" + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + " AS CURRENCY" + ", " +
+                GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._NAME + " AS PAYER" + ", " +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._NAME + " AS CURRENCY" + ", " +
                 _DATE + ", " + _TIME +
                 " FROM " + TABLE_NAME +
-                " INNER JOIN " + GroupMemberRepo.TABLE_NAME +
-                " ON " + _PAYER_ID + " = " + GroupMemberRepo.TABLE_NAME + "." + GroupMemberRepo._ID +
-                " INNER JOIN " + CurrencyRepo.TABLE_NAME +
-                " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
+                " INNER JOIN " + GroupMemberSql.TABLE_NAME +
+                " ON " + _PAYER_ID + " = " + GroupMemberSql.TABLE_NAME + "." + GroupMemberSql._ID +
+                " INNER JOIN " + CurrencySql.TABLE_NAME +
+                " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " + CurrencySql.TABLE_NAME + "." + CurrencySql._ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                 " ORDER BY " + _DATE + " DESC, " + _TIME + " DESC" +
                 ";";
@@ -150,7 +150,7 @@ public class ExpenseRepo implements BaseColumns {
         while (cursor.moveToNext()) {
             int expenseId = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
 
-            List<SummaryTransactionItem> transactions = new TransactionRepo()
+            List<SummaryTransactionItem> transactions = new TransactionSql()
                     .getTransactionsForExpense(expenseId);
 
             double sum = 0;
@@ -194,25 +194,25 @@ public class ExpenseRepo implements BaseColumns {
     public SummaryExpenseItem selectTotalSpent(int groupId, int activeGroupCurrencyId, boolean includeSettleUps) {
 
         String query = "SELECT " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._QUANTITY + ", " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._EXCHANGE_RATE + ", " +
-                "SUM(" + TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + ") AS " + TransactionRepo._AMOUNT +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._ID + ", " +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._NAME + ", " +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._QUANTITY + ", " +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._EXCHANGE_RATE + ", " +
+                "SUM(" + TransactionSql.TABLE_NAME + "." + TransactionSql._AMOUNT + ") AS " + TransactionSql._AMOUNT +
                 " FROM " + TABLE_NAME +
-                " INNER JOIN " + CurrencyRepo.TABLE_NAME +
+                " INNER JOIN " + CurrencySql.TABLE_NAME +
                 " ON " + TABLE_NAME + "." + _CURRENCY_ID + " = " +
-                CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._ID +
-                " INNER JOIN " + TransactionRepo.TABLE_NAME +
+                CurrencySql.TABLE_NAME + "." + CurrencySql._ID +
+                " INNER JOIN " + TransactionSql.TABLE_NAME +
                 " ON " + TABLE_NAME + "." + _ID + " = " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._EXPENSE_ID +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._EXPENSE_ID +
                 " WHERE " + TABLE_NAME + "." + _GROUP_ID + " = " + groupId +
                 " AND " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._AMOUNT + " <= " + 0 +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._AMOUNT + " <= " + 0 +
                 " AND " +
-                TransactionRepo.TABLE_NAME + "." + TransactionRepo._SETTLEUP_TRANSACTION +
+                TransactionSql.TABLE_NAME + "." + TransactionSql._SETTLEUP_TRANSACTION +
                 " <= " + MyNumbers.booleanToNumber(includeSettleUps) +
-                " GROUP BY " + CurrencyRepo.TABLE_NAME + "." + CurrencyRepo._NAME +
+                " GROUP BY " + CurrencySql.TABLE_NAME + "." + CurrencySql._NAME +
                 ";";
 
         Cursor cursor = MyDbHelper.getInstance(context)
@@ -222,14 +222,14 @@ public class ExpenseRepo implements BaseColumns {
         double sumAmountInBaseCurrency = 0;
         int iterations = 0;
         while (cursor.moveToNext()) {
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._QUANTITY));
-            int exchangeRate = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencyRepo._EXCHANGE_RATE));
-            double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(TransactionRepo._AMOUNT));
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencySql._QUANTITY));
+            int exchangeRate = cursor.getInt(cursor.getColumnIndexOrThrow(CurrencySql._EXCHANGE_RATE));
+            double amount = cursor.getDouble(cursor.getColumnIndexOrThrow(TransactionSql._AMOUNT));
             sumAmountInBaseCurrency += (amount / quantity * exchangeRate) * -1;
             iterations++;
         }
 
-        CurrencyRepo sqlCurrency = new CurrencyRepo();
+        CurrencySql sqlCurrency = new CurrencySql();
         String currencyName = sqlCurrency.getCurrency(activeGroupCurrencyId).getName();
         int baseCurrency = sqlCurrency.getBaseCurrency().getId();
         double sumAmount = CurrencyOperations.exchangeAmount(sumAmountInBaseCurrency, baseCurrency, activeGroupCurrencyId);

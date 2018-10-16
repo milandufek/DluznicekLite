@@ -22,10 +22,10 @@ import java.util.List;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 
 public class EditGroup extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public class EditGroup extends AppCompatActivity {
 
         groupId = getIntent().getExtras().getInt("GROUP_ID");
 
-        Group group = new GroupRepo().getGroup(groupId);
+        Group group = new GroupSql().getGroup(groupId);
 
         groupName = findViewById(R.id.et_group_name2add);
         groupName.setText(group.getName());
@@ -64,7 +64,7 @@ public class EditGroup extends AppCompatActivity {
         ImageButton btnAddMember = findViewById(R.id.btn_group_member2add);
         container = findViewById(R.id.ll_group_container);
 
-        GroupMemberRepo sqlMembers = new GroupMemberRepo();
+        GroupMemberSql sqlMembers = new GroupMemberSql();
         List<GroupMember> groupMembers = sqlMembers.getAllGroupMembers(groupId);
 
         LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
@@ -98,7 +98,7 @@ public class EditGroup extends AppCompatActivity {
         });
 
         // add exiting members
-        List<Integer> membersWithActivePaymets = new TransactionRepo().getActivePayersAndDebtorIds(groupId);
+        List<Integer> membersWithActivePaymets = new TransactionSql().getActivePayersAndDebtorIds(groupId);
         for (GroupMember member : groupMembers) {
             @SuppressLint("InflateParams")
             final View addView = layoutInflater.inflate(R.layout.item_groupmember, null);
@@ -125,7 +125,7 @@ public class EditGroup extends AppCompatActivity {
     }
 
     private void setupSpinnerWithCurrencies() {
-        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrency();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());
@@ -156,7 +156,7 @@ public class EditGroup extends AppCompatActivity {
     }
 
     private void updateGroup(Group group) {
-        GroupRepo sql = new GroupRepo();
+        GroupSql sql = new GroupSql();
         if (group != null && sql.updateGroup(group)) {
             showText(R.string.saved);
             goBackToParentActivity();

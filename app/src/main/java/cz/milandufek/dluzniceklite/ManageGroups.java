@@ -14,7 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
 import cz.milandufek.dluzniceklite.adapters.GroupRVAdapter;
 
 public class ManageGroups extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class ManageGroups extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_groups);
 
-        List<Group> groups = new GroupRepo().getAllGroups();
+        List<Group> groups = new GroupSql().getAllGroups();
         GroupRVAdapter adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = findViewById(R.id.rv_group_list);

@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.adapters.CurrencyRVAdapter;
 
 public class ListCurrency extends AppCompatActivity {
@@ -37,7 +37,7 @@ public class ListCurrency extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrency();
 
         CurrencyRVAdapter adapter = new CurrencyRVAdapter(this, currencies);
 

@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class AddGroup extends AppCompatActivity {
@@ -98,7 +98,7 @@ public class AddGroup extends AppCompatActivity {
             showText(getString(R.string.group) + " " + groupName + " " + getString(R.string.warning_already_exists));
         } else {
             // save group
-            GroupRepo repo = new GroupRepo();
+            GroupSql repo = new GroupSql();
             Group group = new Group(0, groupName, currencySelectedId,null);
             long newGroupId = repo.insertGroup(group);
             if (newGroupId != -1) {
@@ -112,7 +112,7 @@ public class AddGroup extends AppCompatActivity {
             }
 
             // save group members
-            GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
+            GroupMemberSql groupMemberSql = new GroupMemberSql();
             List<String> groupMemberNames = getAllMembers();
             List<GroupMember> groupMembersToInsert = new ArrayList<>();
             for (String member : groupMemberNames) {
@@ -122,7 +122,7 @@ public class AddGroup extends AppCompatActivity {
                 );
                 groupMembersToInsert.add(groupMember);
             }
-            groupMemberRepo.insertGroupMembers(groupMembersToInsert);
+            groupMemberSql.insertGroupMembers(groupMembersToInsert);
 
             // set group as active
             setGroupAsActive(group);
@@ -140,7 +140,7 @@ public class AddGroup extends AppCompatActivity {
         final ArrayList<Integer> currencyIds = new ArrayList<>();
         final ArrayList<String> currencyNames = new ArrayList<>();
 
-        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrency();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());
@@ -180,7 +180,7 @@ public class AddGroup extends AppCompatActivity {
      */
     private boolean checkIfGroupExists(String groupName) {
         ArrayList<String> groupsInDb = new ArrayList<>();
-        List<Group> groups = new GroupRepo().getAllGroups();
+        List<Group> groups = new GroupSql().getAllGroups();
         for (Group group : groups) {
             groupsInDb.add(group.getName());
         }

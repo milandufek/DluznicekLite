@@ -18,7 +18,7 @@ import java.util.List;
 
 import cz.milandufek.dluzniceklite.EditCurrency;
 import cz.milandufek.dluzniceklite.R;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.models.Currency;
 
 public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.ViewHolder> {
@@ -85,7 +85,7 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
                 .setTitle(R.string.really_want_to_delete_currency)
                 .setMessage(currency.get(position).getName())
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    CurrencyRepo db = new CurrencyRepo();
+                    CurrencySql db = new CurrencySql();
                     db.deleteCurrency(currencyId);
                     currency.remove(position);
                     notifyItemRemoved(position);

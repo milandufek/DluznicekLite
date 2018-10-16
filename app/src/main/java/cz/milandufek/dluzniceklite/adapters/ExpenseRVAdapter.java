@@ -20,7 +20,7 @@ import cz.milandufek.dluzniceklite.EditExpense;
 import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.ExpenseItem;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
 
 public class ExpenseRVAdapter
         extends RecyclerView.Adapter<ExpenseRVAdapter.ViewHolder> {
@@ -115,7 +115,7 @@ public class ExpenseRVAdapter
                 .setTitle(R.string.really_want_to_delete_expense)
                 .setMessage(expensesItems.get(h.getAdapterPosition()).getReason())
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    ExpenseRepo repo = new ExpenseRepo();
+                    ExpenseSql repo = new ExpenseSql();
                     repo.deleteExpense(id);
                     expensesItems.remove(h.getAdapterPosition());
                     notifyItemRemoved(h.getAdapterPosition());

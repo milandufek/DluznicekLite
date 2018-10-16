@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import cz.milandufek.dluzniceklite.models.MemberBalance;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 
 import static java.util.Collections.sort;
 
@@ -27,7 +27,7 @@ public class DebtCalculator {
     public synchronized List<HashMap<String,Object>> calculateDebts(int groupId) {
         Log.d(TAG, "calculateDebts method started");
 
-        List<MemberBalance> memberBalances = new ArrayList<>(new TransactionRepo().getBalances(groupId));
+        List<MemberBalance> memberBalances = new ArrayList<>(new TransactionSql().getBalances(groupId));
         List<HashMap<String,Object>> debts = new ArrayList<>();
 
         int resolvedMembers = 0;

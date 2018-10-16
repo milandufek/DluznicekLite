@@ -20,7 +20,7 @@ import cz.milandufek.dluzniceklite.models.MemberBalance;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.models.SummarySettleUpItem;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.utils.DebtCalculator;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.adapters.SettleUpRVAdapter;
@@ -57,8 +57,8 @@ public class SettleUpFragment extends Fragment {
         MyPreferences sp = new MyPreferences(context);
         int activeCurrencyId = sp.getActiveGroupCurrencyId();
         int activeGroupId = sp.getActiveGroupId();
-        Currency baseCurrency = new CurrencyRepo().getBaseCurrency();
-        Currency activeCurrency = new CurrencyRepo().getCurrency(activeCurrencyId);
+        Currency baseCurrency = new CurrencySql().getBaseCurrency();
+        Currency activeCurrency = new CurrencySql().getCurrency(activeCurrencyId);
 
         List<HashMap<String, Object>> debts = new DebtCalculator()
                 .calculateDebts(activeGroupId);

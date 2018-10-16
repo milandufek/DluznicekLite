@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
 import cz.milandufek.dluzniceklite.adapters.ExpenseRVAdapter;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class ListExpenseFragment extends Fragment {
+
     private static final String TAG = "ListExpenseFragment";
 
     private Context context;
@@ -35,7 +36,7 @@ public class ListExpenseFragment extends Fragment {
         setupSummaryView(view);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_expense_list);
-        ExpenseRVAdapter adapter = new ExpenseRVAdapter(context, new ExpenseRepo().getAllExpenseItems(groupId));
+        ExpenseRVAdapter adapter = new ExpenseRVAdapter(context, new ExpenseSql().getAllExpenseItems(groupId));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));

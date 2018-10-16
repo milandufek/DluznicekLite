@@ -6,7 +6,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import cz.milandufek.dluzniceklite.models.Currency;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
 
 class CurrencyOnClickListener implements View.OnClickListener {
 
@@ -61,7 +61,7 @@ class CurrencyOnClickListener implements View.OnClickListener {
             showText(R.string.warning_currency_empty);
         } else if (currencyName.length() < 3) {
             showText(R.string.warning_code_not_3_chars);
-        } else if (action == ADD && new CurrencyRepo().checkIfCurrencyExists(currencyName)) {
+        } else if (action == ADD && new CurrencySql().checkIfCurrencyExists(currencyName)) {
             showText(R.string.warning_currency_exists);
         } else if (currencyExchangeRate.isEmpty()) {
             showText(R.string.warning_exrate_empty);
@@ -78,7 +78,7 @@ class CurrencyOnClickListener implements View.OnClickListener {
     }
 
     private void addCurrency(Currency currency) {
-        CurrencyRepo sql = new CurrencyRepo();
+        CurrencySql sql = new CurrencySql();
         if (currency != null && sql.insertCurrency(currency) > 0) {
             showText(R.string.saved);
             goBackToParentActivity();
@@ -86,7 +86,7 @@ class CurrencyOnClickListener implements View.OnClickListener {
     }
 
     private void editCurrency(Currency currency) {
-        CurrencyRepo sql = new CurrencyRepo();
+        CurrencySql sql = new CurrencySql();
         if (currency != null && sql.updateCurrency(currency)) {
             showText(R.string.saved);
             goBackToParentActivity();

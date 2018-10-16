@@ -22,8 +22,8 @@ import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
 public class GroupRVAdapter
@@ -57,7 +57,7 @@ public class GroupRVAdapter
         final int groupId = groups.get(position).getId();
         final int groupCurrencyId = groups.get(position).getCurrency();
 
-        List<GroupMember> allGroupMembers = new GroupMemberRepo().getAllGroupMembers(groupId);
+        List<GroupMember> allGroupMembers = new GroupMemberSql().getAllGroupMembers(groupId);
         StringBuilder groupInfo = new StringBuilder();
         groupInfo.append("(");
         groupInfo.append(allGroupMembers.size());
@@ -128,7 +128,7 @@ public class GroupRVAdapter
                 .setMessage(groupNameText)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     int groupId = groups.get(position).getId();
-                    GroupRepo repo = new GroupRepo();
+                    GroupSql repo = new GroupSql();
                     repo.deleteGroup(groupId);
 
                     groups.remove(position);
@@ -148,7 +148,7 @@ public class GroupRVAdapter
      * Change id and name of active group to first in the list
      */
     private void changeActiveGroupToFirstAvailable() {
-        List<Group> groups = new GroupRepo().getAllGroups();
+        List<Group> groups = new GroupSql().getAllGroups();
 
         MyPreferences sp = new MyPreferences(context);
         sp.setActiveGroupId(groups.get(0).getId());

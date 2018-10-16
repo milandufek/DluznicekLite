@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.repository;
+package cz.milandufek.dluzniceklite.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,9 +12,9 @@ import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 
-public class CurrencyRepo implements BaseColumns {
+public class CurrencySql implements BaseColumns {
 
-    private static final String TAG = "CurrencyRepo";
+    private static final String TAG = "CurrencySql";
     private Context context;
 
     public static final String TABLE_NAME = "currencies";

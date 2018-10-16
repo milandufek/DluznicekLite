@@ -33,10 +33,10 @@ import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.models.Transaction;
-import cz.milandufek.dluzniceklite.repository.CurrencyRepo;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.repository.GroupMemberRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.CurrencySql;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
+import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
@@ -74,10 +74,10 @@ public class EditExpense extends AppCompatActivity {
 
         groupId = new MyPreferences(this).getActiveGroupId();
 
-        members = new GroupMemberRepo().getAllGroupMembers(groupId);
-        expense = new ExpenseRepo().getExpense(expenseId);
+        members = new GroupMemberSql().getAllGroupMembers(groupId);
+        expense = new ExpenseSql().getExpense(expenseId);
         Log.d(TAG, "onCreate: expense ID = " + expenseId);
-        transactions = new TransactionRepo().getTransactions(expenseId);
+        transactions = new TransactionSql().getTransactions(expenseId);
 
         setupSpinnerWithMembers();
         setupSpinnerWithCurrencies();
@@ -143,7 +143,7 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private void setupSpinnerWithCurrencies() {
-        List<Currency> currencies = new CurrencyRepo().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrency();
         List<String> currencyNames = getCurrencyNames(currencies);
         currencyIds = getCurrencyIds(currencies);
         final ArrayAdapter<String> spinnerWithCurrencies = new ArrayAdapter<>(
@@ -419,11 +419,11 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private boolean updateExpense(Expense expense) {
-        return new ExpenseRepo().updateExpense(expense);
+        return new ExpenseSql().updateExpense(expense);
     }
 
     private boolean updateTransactions(List<Transaction> transactions) {
-        TransactionRepo sql = new TransactionRepo();
+        TransactionSql sql = new TransactionSql();
         sql.deleteTransactions(expense.getId());
         return sql.insertTransactions(transactions) > 0;
     }

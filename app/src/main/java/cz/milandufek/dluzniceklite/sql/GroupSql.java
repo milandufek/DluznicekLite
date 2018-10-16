@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite.repository;
+package cz.milandufek.dluzniceklite.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,8 +12,8 @@ import java.util.List;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 
-public class GroupRepo implements BaseColumns {
-    private static final String TAG = "GroupRepo";
+public class GroupSql implements BaseColumns {
+    private static final String TAG = "GroupSql";
 
     private Context context;
 
@@ -30,7 +30,7 @@ public class GroupRepo implements BaseColumns {
             _CURRENCY_ID + " INTEGER NOT NULL, " +
             _DESCRIPTION + " TEXT, " +
                 "FOREIGN KEY(" + _CURRENCY_ID + ") " +
-                "REFERENCES " + CurrencyRepo.TABLE_NAME + " (" + CurrencyRepo._ID + ") " +
+                "REFERENCES " + CurrencySql.TABLE_NAME + " (" + CurrencySql._ID + ") " +
                 "ON DELETE CASCADE " +
             ");";
 

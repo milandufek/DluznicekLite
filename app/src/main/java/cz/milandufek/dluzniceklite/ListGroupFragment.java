@@ -16,7 +16,7 @@ import android.widget.Button;
 import java.util.List;
 
 import cz.milandufek.dluzniceklite.models.Group;
-import cz.milandufek.dluzniceklite.repository.GroupRepo;
+import cz.milandufek.dluzniceklite.sql.GroupSql;
 import cz.milandufek.dluzniceklite.adapters.GroupRVAdapter;
 
 @Deprecated
@@ -39,7 +39,7 @@ public class ListGroupFragment extends Fragment {
         Button addGroupBtn = view.findViewById(R.id.btn_group_list_add);
         addGroupBtn.setOnClickListener(v -> onClickAddGroup());
 
-        List<Group> groups = new GroupRepo().getAllGroups();
+        List<Group> groups = new GroupSql().getAllGroups();
         GroupRVAdapter adapter = new GroupRVAdapter(context, groups);
 
         RecyclerView recyclerView = view.findViewById(R.id.rv_main_group_list);

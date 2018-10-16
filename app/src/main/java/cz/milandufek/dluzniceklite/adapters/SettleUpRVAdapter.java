@@ -21,8 +21,8 @@ import cz.milandufek.dluzniceklite.R;
 import cz.milandufek.dluzniceklite.models.Expense;
 import cz.milandufek.dluzniceklite.models.SettleUpTransaction;
 import cz.milandufek.dluzniceklite.models.Transaction;
-import cz.milandufek.dluzniceklite.repository.ExpenseRepo;
-import cz.milandufek.dluzniceklite.repository.TransactionRepo;
+import cz.milandufek.dluzniceklite.sql.ExpenseSql;
+import cz.milandufek.dluzniceklite.sql.TransactionSql;
 import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
@@ -108,12 +108,12 @@ public class SettleUpRVAdapter
                 finalSettleUp ? context.getString(R.string.settleup_reason) : context.getString(R.string.settleup_part_reason),
                 MyDateTime.getDateToday(),
                 MyDateTime.getTimeNow());
-        long settleUpExpenseId = new ExpenseRepo().insertExpense(settleUpExpense);
+        long settleUpExpenseId = new ExpenseSql().insertExpense(settleUpExpense);
 
         Transaction transactionSender = new Transaction(0, senderId, (int) settleUpExpenseId, amount * -1, true);
         Transaction transactionReceiver = new Transaction(0, receiverId, (int) settleUpExpenseId, amount, true);
 
-        TransactionRepo sql = new TransactionRepo();
+        TransactionSql sql = new TransactionSql();
         long idTransactionSender = sql.insertTransaction(transactionSender);
         long idTransactionReceiver = sql.insertTransaction(transactionReceiver);
 

@@ -25,11 +25,11 @@ public class AboutActivity extends AppCompatActivity {
                 SQLiteDatabase db = DbHelper.getInstance(context).getWritableDatabase();
                 try {
                     db.beginTransaction();
-                    db.delete(CurrencyRepo.TABLE_NAME, null, null);
-                    db.delete(TransactionRepo.TABLE_NAME, null, null);
-                    db.delete(ExpenseRepo.TABLE_NAME, null, null);
-                    db.delete(GroupMemberRepo.TABLE_NAME, null, null);
-                    db.delete(GroupRepo.TABLE_NAME, null, null);
+                    db.delete(CurrencySql.TABLE_NAME, null, null);
+                    db.delete(TransactionSql.TABLE_NAME, null, null);
+                    db.delete(ExpenseSql.TABLE_NAME, null, null);
+                    db.delete(GroupMemberSql.TABLE_NAME, null, null);
+                    db.delete(GroupSql.TABLE_NAME, null, null);
                     db.delete("sqlite_sequence", null, null);
                     db.setTransactionSuccessful();
                 } catch (Exception e) {
@@ -56,15 +56,15 @@ public class AboutActivity extends AppCompatActivity {
                         100,20.5,1,0,1));
                 currencies.add(new Currency(7,"BTC","Nikde",
                         1,100000,1,0,1));
-                CurrencyRepo currencyRepo = new CurrencyRepo();
+                CurrencySql currencyRepo = new CurrencySql();
                 for (int i = 0; currencies.size() > i; i++) {
                     currencyRepo.insertCurrency(currencies.get(i));
                 }
 
                 // insert groups & members
                 List<GroupMember> groupMembers = new ArrayList<>();
-                GroupRepo groupRepo = new GroupRepo();
-                GroupMemberRepo groupMemberRepo = new GroupMemberRepo();
+                GroupSql groupRepo = new GroupSql();
+                GroupMemberSql groupMemberRepo = new GroupMemberSql();
                 long gId;
 
                 Group group = new Group(1, "Běžci", 1,"Prostě běžci...");
@@ -119,10 +119,10 @@ public class AboutActivity extends AppCompatActivity {
 
 
                 // expenses & transactions
-                ExpenseRepo expenseRepo = new ExpenseRepo();
+                ExpenseSql expenseRepo = new ExpenseSql();
 
                 List<Transaction> transactions = new ArrayList<>();
-                TransactionRepo transactionRepo = new TransactionRepo();
+                TransactionSql transactionRepo = new TransactionSql();
                 Expense expense;
                 long expensesId;
 
