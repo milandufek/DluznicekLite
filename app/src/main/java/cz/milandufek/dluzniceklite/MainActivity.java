@@ -93,16 +93,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
     }
 
-    /**
-     * Get active from name from SharedPreferences
-     *
-     * @return String
-     */
-    private String getActiveGroupName() {
-        MyPreferences sp = new MyPreferences(this);
-        return sp.getActiveGroupName();
-    }
-
     private int getActiveGroupId() {
         MyPreferences sp = new MyPreferences(this);
         return sp.getActiveGroupId();
@@ -242,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getActiveGroupName();
     }
 
     @Override
