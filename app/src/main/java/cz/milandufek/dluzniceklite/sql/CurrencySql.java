@@ -131,7 +131,7 @@ public class CurrencySql implements BaseColumns {
     /**
      * Check if currency with @param name exists in the database
      * @param
-     *      currency CODE
+     *      name CODE
      * @return
      *      true if yes
      */

@@ -1,6 +1,9 @@
 package cz.milandufek.dluzniceklite.models;
 
-public final class SummaryExpenseItem {
+import java.util.Observable;
+import java.util.Observer;
+
+public final class SummaryExpenseItem implements Observer {
 
     private int currencyId;
     private String currencyName;
@@ -22,6 +25,11 @@ public final class SummaryExpenseItem {
 
     public double getSumSpent() {
         return sumSpent;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        // TODO
     }
 
     @Override

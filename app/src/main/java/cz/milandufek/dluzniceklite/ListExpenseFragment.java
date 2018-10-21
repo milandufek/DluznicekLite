@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import cz.milandufek.dluzniceklite.models.SummaryExpenseItem;
 import cz.milandufek.dluzniceklite.sql.ExpenseSql;
 import cz.milandufek.dluzniceklite.adapters.ExpenseRVAdapter;
