@@ -25,4 +25,14 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="ToolbarButton">
+        <!--<item name="app:titleTextColor=">@color/colorWhite</item>-->
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:background">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorBlack</item>
+    </style>
+
 </resources>

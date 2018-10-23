@@ -209,10 +209,8 @@ public class TransactionSql implements BaseColumns {
                 " GROUP BY " + TransactionSql._DEBTOR_ID +
                 " ORDER BY " + TransactionSql._DEBTOR_ID +
                 ";";
-        Log.d(TAG, "query: " + query);
 
         Cursor cursor = db.rawQuery(query, null, null);
-
         List<MemberBalance> memberBalances = new ArrayList<>();
 
         while (cursor.moveToNext()) {

@@ -206,9 +206,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
-        int id = item.getItemId();
 
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.action_manage_groups:
                 intent = new Intent(this, ManageGroups.class);
                 break;

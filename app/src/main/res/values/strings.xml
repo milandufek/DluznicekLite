@@ -62,6 +62,7 @@
 
     <!-- CURRENCY -->
     <string name="currency_name">Název měny</string>
+    <string name="currency_code_hint">EUR</string>
     <string name="country">Země</string>
     <string name="currency_quantity">Množství</string>
     <string name="exchange_rate">Kolik to je Kč?</string>

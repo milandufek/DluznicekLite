@@ -1,6 +1,8 @@
 package cz.milandufek.dluzniceklite;
 
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -8,11 +10,11 @@ import android.widget.Toast;
 import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.sql.CurrencySql;
 
-class CurrencyOnClickListener implements View.OnClickListener {
+class CurrencyOnClickListener implements View.OnClickListener, MenuItem.OnMenuItemClickListener {
 
     private static final String TAG = CurrencyOnClickListener.class.toString();
 
-    static final int ADD  = 1;
+    static final int ADD = 1;
     static final int EDIT = 2;
 
     private AppCompatActivity activity;
@@ -23,22 +25,35 @@ class CurrencyOnClickListener implements View.OnClickListener {
 
     CurrencyOnClickListener(AppCompatActivity activity, int action) {
         this.activity = activity;
-        this.action   = action;
+        this.action = action;
         this.currencyId = 0;
     }
 
     CurrencyOnClickListener(AppCompatActivity activity, int action, int currencyId) {
         this.activity = activity;
-        this.action   = action;
+        this.action = action;
         this.currencyId = currencyId;
     }
 
     @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        bindWidgets();
+
+        switch (action) {
+            case ADD:
+                addCurrency(getCurrency());
+                break;
+            case EDIT:
+                editCurrency(getCurrency());
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
     public void onClick(View v) {
-        name = activity.findViewById(R.id.et_currency_name);
-        country = activity.findViewById(R.id.et_currency_country);
-        quantity = activity.findViewById(R.id.et_currency_quantity);
-        exchangeRate = activity.findViewById(R.id.et_currency_exchrate);
+        bindWidgets();
 
         switch (action) {
             case ADD:
@@ -71,10 +86,17 @@ class CurrencyOnClickListener implements View.OnClickListener {
             currency = new Currency(currencyId, currencyName, currencyCountry,
                     Integer.valueOf(currencyQuantity),
                     Double.parseDouble(currencyExchangeRate),
-                    0,false, true);
+                    0, false, true);
         }
 
         return currency;
+    }
+
+    private void bindWidgets() {
+        name = activity.findViewById(R.id.et_currency_name);
+        country = activity.findViewById(R.id.et_currency_country);
+        quantity = activity.findViewById(R.id.et_currency_quantity);
+        exchangeRate = activity.findViewById(R.id.et_currency_exchrate);
     }
 
     private void addCurrency(Currency currency) {
@@ -96,6 +118,7 @@ class CurrencyOnClickListener implements View.OnClickListener {
     public void showText(int resourceId, int duration) {
         Toast.makeText(activity, activity.getString(resourceId), duration).show();
     }
+
     public void showText(int resourceId) {
         showText(resourceId, Toast.LENGTH_SHORT);
     }

@@ -3,6 +3,8 @@ package cz.milandufek.dluzniceklite;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 
 public class AddCurrency extends AppCompatActivity {
@@ -18,6 +20,18 @@ public class AddCurrency extends AppCompatActivity {
         // save button
         Button btnAdd = findViewById(R.id.btn_currency_add);
         btnAdd.setOnClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_save_btn, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        item.setOnMenuItemClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
+        return false;
     }
 
     @Override

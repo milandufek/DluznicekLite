@@ -1,91 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding"
     android:fitsSystemWindows="true"
     tools:context=".AddCurrency">
 
-    <RelativeLayout
+    <EditText
+        android:id="@+id/et_currency_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar_main"
-        android:padding="@dimen/padding" >
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/currency_code_hint"
+        android:inputType="textCapCharacters"
+        android:maxLength="3"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_currency_name"
-            android:text="@string/currency_name"
-            android:textColor="@color/colorBlack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/et_currency_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_currency_name"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/country"
+        android:inputType="textCapWords"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_currency_name" />
 
-        <EditText
-            android:id="@+id/et_currency_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_currency_name"
-            android:inputType="textCapCharacters"
-            android:textSize="26sp"
-            android:maxLength="3"
-            android:hint="EUR"
-            android:autofillHints="" />
+    <TextView
+        android:id="@+id/tv_currency_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_currency_country"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/currency_quantity"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_currency_country" />
 
-        <TextView
-            android:id="@+id/tv_currency_country"
-            android:text="@string/country"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/et_currency_name" />
+    <EditText
+        android:id="@+id/et_currency_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:inputType="number"
+        android:text="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_currency_quantity" />
 
-        <EditText
-            android:id="@+id/et_currency_country"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapWords"
-            android:layout_below="@+id/tv_currency_country" />
+    <TextView
+        android:id="@+id/tv_currency_exchrate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/exchange_rate"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_currency_quantity" />
 
-        <TextView
-            android:id="@+id/tv_currency_quantity"
-            android:text="@string/currency_quantity"
-            android:textColor="@color/colorBlack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/et_currency_country" />
+    <EditText
+        android:id="@+id/et_currency_exchrate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_currency_exchrate" />
 
-        <EditText
-            android:id="@+id/et_currency_quantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_currency_quantity"
-            android:inputType="number"
-            android:text="1" />
-
-        <TextView
-            android:id="@+id/tv_currency_exchrate"
-            android:text="@string/exchange_rate"
-            android:textColor="@color/colorBlack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/et_currency_quantity" />
-
-        <EditText
-            android:id="@+id/et_currency_exchrate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_currency_exchrate"
-            android:inputType="numberDecimal" />
-
-        <Button
-            android:id="@+id/btn_currency_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:drawableStart="@drawable/round_check_black_36"
-            android:background="?attr/actionBarItemBackground"
-            android:text="@string/save"
-            android:layout_below="@+id/et_currency_exchrate" />
-    </RelativeLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+    <!-- TODO button on the bar -->
+    <Button
+        android:id="@+id/btn_currency_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?attr/actionBarItemBackground"
+        android:drawableStart="@drawable/round_check_black_36"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_currency_exchrate" />
+</android.support.constraint.ConstraintLayout>
