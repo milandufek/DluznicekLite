@@ -670,7 +670,8 @@ public class AddExpense extends AppCompatActivity {
         if (! howMuchText.equals("")) {
             if (Double.parseDouble(howMuchText) > 0) {
                 forAllInfoText.append(" x ");
-                forAllInfoText.append(Double.parseDouble(howMuchText) / memberNames.size());
+                forAllInfoText.append(MyNumbers
+                        .roundIt(Double.parseDouble(howMuchText) / memberNames.size(), 2));
                 forAllInfoText.append(" ");
                 forAllInfoText.append(currencySelectedName);
             }
