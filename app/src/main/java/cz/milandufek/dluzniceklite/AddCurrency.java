@@ -22,17 +22,17 @@ public class AddCurrency extends AppCompatActivity {
         btnAdd.setOnClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_save_btn, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        item.setOnMenuItemClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
-        return false;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.toolbar_save_btn, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        item.setOnMenuItemClickListener(new CurrencyOnClickListener(this, CurrencyOnClickListener.ADD));
+//        return true;
+//    }
 
     @Override
     protected void onPause() {
