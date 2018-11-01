@@ -17,9 +17,6 @@ public class ListCurrency extends AppCompatActivity {
 
     private static final String TAG = "ListCurrency";
 
-    // TODO load data from CNB page
-    // http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=22.06.2018
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

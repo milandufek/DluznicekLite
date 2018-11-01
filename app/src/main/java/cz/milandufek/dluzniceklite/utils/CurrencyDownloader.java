@@ -9,15 +9,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public final class CurrencyDownloader extends AsyncTask {
 
     private static final String TAG = "CurrencyDownloader";
-
     private static final String LINK_MASK = "http://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt?date=";
 
     private CurrencyDownloader() { }
+
+    // TODO load data from CNB page
 
     @Override
     protected Object doInBackground(Object[] objects) {
