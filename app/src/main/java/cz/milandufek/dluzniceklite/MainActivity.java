@@ -3,8 +3,7 @@ package cz.milandufek.dluzniceklite;
 import cz.milandufek.dluzniceklite.adapters.TitleSpinnerAdapter;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.sql.GroupSql;
-import cz.milandufek.dluzniceklite.utils.CsvReader;
-import cz.milandufek.dluzniceklite.utils.CurrencyDownloader;
+import cz.milandufek.dluzniceklite.utils.Init;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.adapters.SectionsPageAdapter;
@@ -17,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

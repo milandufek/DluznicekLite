@@ -1,4 +1,4 @@
-package cz.milandufek.dluzniceklite;
+package cz.milandufek.dluzniceklite.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,19 +12,18 @@ import cz.milandufek.dluzniceklite.models.GroupMember;
 import cz.milandufek.dluzniceklite.sql.CurrencySql;
 import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
 import cz.milandufek.dluzniceklite.sql.GroupSql;
-import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
-class Init {
+public class Init {
 
     private static final String TAG = "Init";
 
     private Context context;
 
-    Init(Context context) {
+    public Init(Context context) {
         this.context = context;
     }
 
-    void initCurrencies() {
+    public void initCurrencies() {
         List<Currency> currencies = new ArrayList<>();
         currencies.add(new Currency(0, "CZK", "Česká Republika",
                 1, 1, 1, true, false));
@@ -47,7 +46,7 @@ class Init {
         }
     }
 
-    void refillTestData() {
+    public void refillTestData() {
         GroupSql groupSql = new GroupSql();
         GroupMemberSql groupMemberSql = new GroupMemberSql();
 
