@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -62,7 +63,11 @@ public class CurrencyRVAdapter extends RecyclerView.Adapter<CurrencyRVAdapter.Vi
                         return true;
 
                     case R.id.action_delete_item:
-                        onClickDelete(holder.getAdapterPosition(), currencyId);
+                        if (currencyId > 1) {
+                            onClickDelete(holder.getAdapterPosition(), currencyId);
+                        } else {
+                            Toast.makeText(context, "Hlavní měna nelze smazat", Toast.LENGTH_SHORT).show();
+                        }
                         return true;
 
                     default:

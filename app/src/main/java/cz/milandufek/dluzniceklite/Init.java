@@ -20,14 +20,18 @@ class Init {
 
     private Context context;
 
+    Init(Context context) {
+        this.context = context;
+    }
+
     void initCurrencies() {
         List<Currency> currencies = new ArrayList<>();
         currencies.add(new Currency(0, "CZK", "Česká Republika",
                 1, 1, 1, true, false));
         currencies.add(new Currency(1, "USD", "USA",
-                1, 20, 1, false, true));
+                1, 22.9, 1, false, true));
         currencies.add(new Currency(2, "EUR", "EMU",
-                1, 25, 1, false, true));
+                1, 26, 1, false, true));
         currencies.add(new Currency(3, "DNG", "Vietnam",
                 1000, 0.97, 1, false, true));
         currencies.add(new Currency(4, "LKR", "Srí Lanka",

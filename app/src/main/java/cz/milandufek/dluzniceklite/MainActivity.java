@@ -1,12 +1,10 @@
 package cz.milandufek.dluzniceklite;
 
 import cz.milandufek.dluzniceklite.adapters.TitleSpinnerAdapter;
-import cz.milandufek.dluzniceklite.models.Currency;
 import cz.milandufek.dluzniceklite.models.Group;
-import cz.milandufek.dluzniceklite.models.GroupMember;
-import cz.milandufek.dluzniceklite.sql.CurrencySql;
-import cz.milandufek.dluzniceklite.sql.GroupMemberSql;
 import cz.milandufek.dluzniceklite.sql.GroupSql;
+import cz.milandufek.dluzniceklite.utils.CsvReader;
+import cz.milandufek.dluzniceklite.utils.CurrencyDownloader;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 import cz.milandufek.dluzniceklite.adapters.SectionsPageAdapter;
@@ -48,10 +46,15 @@ public class MainActivity extends AppCompatActivity {
 
         // refill SQLite test data on first start
         if (new MyPreferences(this).checkFirstStart()) {
-            Init init = new Init();
+            Init init = new Init(getApplicationContext());
             init.initCurrencies();
             init.refillTestData();
         }
+
+        // TEST
+//        List cnbCurrencies;
+//        cnbCurrencies = new CsvReader(new CurrencyDownloader().downloadCurrencyExchangeRates()).read();
+//        Log.d(TAG, "onCreate: cnbCurrencies = " + cnbCurrencies.toString());
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);

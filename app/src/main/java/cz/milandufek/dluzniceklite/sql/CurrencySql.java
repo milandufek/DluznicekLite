@@ -1,5 +1,6 @@
 package cz.milandufek.dluzniceklite.sql;
 
+import android.arch.lifecycle.LiveData;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -61,6 +62,7 @@ public class CurrencySql implements BaseColumns {
                 .getReadableDatabase()
                 .query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
 
+        //LiveData<List<Currency>> currency = new LiveData< ArrayList<>()>;
         List<Currency> currency = new ArrayList<>();
         while (cursor.moveToNext()) {
             currency.add(buildCurrency(cursor));

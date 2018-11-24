@@ -64,9 +64,9 @@ public class SettleUpRVAdapter
                     case R.id.action_settleup_item:
                         onClickSettleUp(holder, position);
                         return true;
-                    case R.id.action_settleup_part_item:
-                        //return onClickSettleUpPartially(holder);
-                        return true;
+//                    case R.id.action_settleup_part_item:
+//                        return onClickSettleUpPartially(holder);
+//                        return true;
                     default:
                         return false;
                 }
