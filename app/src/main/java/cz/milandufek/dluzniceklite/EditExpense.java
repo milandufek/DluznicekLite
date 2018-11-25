@@ -85,6 +85,7 @@ public class EditExpense extends AppCompatActivity {
         // set amount
         howMuch = findViewById(R.id.et_payment_edit_howmuch);
         howMuch.setText(String.valueOf(MyNumbers.roundIt(sumTransactionAmount(transactions), 3)));
+        // TODO make it editable again
         unsetEditTextFocusable(howMuch);
 
 
