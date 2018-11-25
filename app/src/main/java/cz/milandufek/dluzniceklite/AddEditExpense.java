@@ -45,10 +45,16 @@ import cz.milandufek.dluzniceklite.utils.MyDateTime;
 import cz.milandufek.dluzniceklite.utils.MyNumbers;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
 
-public class AddExpense extends AppCompatActivity {
-    private static final String TAG = "AddExpense";
+public class AddEditExpense extends AppCompatActivity {
+
+    private static final String TAG = "AddEditExpense";
+
+    public static final int ACTION_ADD  = 1;
+    public static final int ACTION_EDIT = 2;
 
     private Context context = this;
+    private int action;
+
     private int whoPaysIdSelected;
     private int currencySelectedId;
     private String currencySelectedName;
@@ -149,6 +155,10 @@ public class AddExpense extends AppCompatActivity {
                 }
             }
         });
+
+        if (action == ACTION_EDIT) {
+            // TODO...load data
+        }
     }
 
     /**
@@ -397,7 +407,6 @@ public class AddExpense extends AppCompatActivity {
 
         for (int i = 0; i < getCountMembers(); i++) {
             View memberLine = whoPaysContainer.getChildAt(i);
-
             CheckBox childPayerCheckBox = memberLine.findViewById(R.id.chbox_expense_member);
             if (childPayerCheckBox.isChecked()) {
                 TextView childRatioValue  = memberLine.findViewById(R.id.tv_expense_ratio_value);

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import cz.milandufek.dluzniceklite.AddEditExpense;
 import cz.milandufek.dluzniceklite.EditExpense;
 import cz.milandufek.dluzniceklite.MainActivity;
 import cz.milandufek.dluzniceklite.R;
@@ -106,6 +107,7 @@ public class ExpenseRVAdapter
     private void onClickEdit(final int id) {
         Intent intent = new Intent(context, EditExpense.class);
         intent.putExtra("EXPENSE_ID", id);
+        intent.putExtra("ACTION", AddEditExpense.ACTION_EDIT);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         context.startActivity(intent);
     }

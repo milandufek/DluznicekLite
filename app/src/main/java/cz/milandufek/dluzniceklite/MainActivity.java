@@ -3,8 +3,6 @@ package cz.milandufek.dluzniceklite;
 import cz.milandufek.dluzniceklite.adapters.TitleSpinnerAdapter;
 import cz.milandufek.dluzniceklite.models.Group;
 import cz.milandufek.dluzniceklite.sql.GroupSql;
-import cz.milandufek.dluzniceklite.utils.CsvReader;
-import cz.milandufek.dluzniceklite.utils.CurrencyDownloader;
 import cz.milandufek.dluzniceklite.utils.Init;
 import cz.milandufek.dluzniceklite.utils.MyDbHelper;
 import cz.milandufek.dluzniceklite.utils.MyPreferences;
@@ -18,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         // Floating Button (add payment)
         FloatingActionButton fab = findViewById(R.id.fab_payment_add);
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddExpense.class);
+            Intent intent = new Intent(MainActivity.this, AddEditExpense.class);
+            intent.putExtra("ACTION", AddEditExpense.ACTION_ADD);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
         });

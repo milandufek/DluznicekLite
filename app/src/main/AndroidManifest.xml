@@ -59,7 +59,7 @@
 
         <!-- payments -->
         <activity
-            android:name=".AddExpense"
+            android:name=".AddEditExpense"
             android:label="@string/title_add_payment"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
