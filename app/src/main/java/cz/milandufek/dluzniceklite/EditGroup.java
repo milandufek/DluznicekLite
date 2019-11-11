@@ -125,7 +125,7 @@ public class EditGroup extends AppCompatActivity {
     }
 
     private void setupSpinnerWithCurrencies() {
-        List<Currency> currencies = new CurrencySql().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrencies();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());

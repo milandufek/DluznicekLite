@@ -34,7 +34,7 @@ public class ListCurrency extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        List<Currency> currencies = new CurrencySql().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrencies();
 
         CurrencyRVAdapter adapter = new CurrencyRVAdapter(this, currencies);
 

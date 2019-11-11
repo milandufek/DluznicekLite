@@ -143,7 +143,7 @@ public class EditExpense extends AppCompatActivity {
     }
 
     private void setupSpinnerWithCurrencies() {
-        List<Currency> currencies = new CurrencySql().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrencies();
         List<String> currencyNames = getCurrencyNames(currencies);
         currencyIds = getCurrencyIds(currencies);
         final ArrayAdapter<String> spinnerWithCurrencies = new ArrayAdapter<>(

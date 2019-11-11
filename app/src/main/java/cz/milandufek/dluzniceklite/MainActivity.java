@@ -49,10 +49,6 @@ public class MainActivity extends AppCompatActivity {
             init.refillTestData();
         }
 
-        // TODO currency auto loading
-//        List cnbCurrencies = new CsvReader(new CurrencyDownloader().downloadCurrencyExchangeRates()).read();
-//        Log.d(TAG, "onCreate: cnbCurrencies = " + cnbCurrencies.toString());
-
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 

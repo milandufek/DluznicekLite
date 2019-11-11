@@ -17,6 +17,6 @@ public class CurrencyRepo {
 
     public CurrencyRepo(Application application) {
 //        CurrencySql sql = new CurrencySql();
-//        allCurrencies = sql.getAllCurrency();
+//        allCurrencies = sql.getAllCurrencies();
     }
 }

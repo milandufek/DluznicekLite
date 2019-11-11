@@ -140,7 +140,7 @@ public class AddGroup extends AppCompatActivity {
         final ArrayList<Integer> currencyIds = new ArrayList<>();
         final ArrayList<String> currencyNames = new ArrayList<>();
 
-        List<Currency> currencies = new CurrencySql().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrencies();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());

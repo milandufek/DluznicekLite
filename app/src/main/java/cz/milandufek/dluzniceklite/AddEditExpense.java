@@ -199,7 +199,7 @@ public class AddEditExpense extends AppCompatActivity {
         final List<Integer> currencyIds = new ArrayList<>();
         final List<String> currencyNames = new ArrayList<>();
 
-        List<Currency> currencies = new CurrencySql().getAllCurrency();
+        List<Currency> currencies = new CurrencySql().getAllCurrencies();
         for (Currency currency : currencies) {
             currencyIds.add(currency.getId());
             currencyNames.add(currency.getName());

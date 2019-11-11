@@ -57,7 +57,7 @@ public class CurrencySql implements BaseColumns {
                 .insert(TABLE_NAME, null, values);
     }
 
-    public List<Currency> getAllCurrency() {
+    public List<Currency> getAllCurrencies() {
         Cursor cursor = MyDbHelper.getInstance(context)
                 .getReadableDatabase()
                 .query(TABLE_NAME, ALL_COLS, null, null, null, null, _ID);
